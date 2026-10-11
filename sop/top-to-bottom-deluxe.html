@@ -160,6 +160,10 @@ button:focus-visible, a:focus-visible, input:focus-visible { outline: 3px solid 
 .areas.two-col .cl { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; }
 .cl i { width: 30px; height: 30px; border-radius: 8px; border: 1px solid rgba(0,0,0,.12); }
 .tag { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); }
+.xgrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 8px; }
+.x { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; font-size: 14px; line-height: 1.45; min-width: 0; }
+.x.inc { border-color: var(--brand); }
+.xtag { display: inline-block; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; background: var(--accent-soft); color: var(--accent); padding: 1px 6px; border-radius: 5px; }
 .tbl { overflow-x: auto; }
 .tbl table { border-collapse: collapse; width: 100%; font-size: 14px; min-width: 520px; }
 .tbl th, .tbl td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
@@ -782,7 +786,7 @@ const CLIENT = { en: {
 
     { icon: "info", t: "What's not included", lead: "To keep your visit focused and safe, these items are not part of Top to Bottom Deluxe. Ask us if you would like to add any of them.",
       notIncluded: ["Inside the oven", "Inside the refrigerator", "Inside cabinets and drawers", "Washing blinds (we vacuum them)", "Anything above 2-step ladder reach", "Moving heavy furniture", "Laundry and dishes", "Exterior windows"],
-      tip: "Not sure if something is covered? Ask before your visit and we will tell you exactly what to expect." },
+      tip: "Inside the oven, inside the refrigerator and other items are available as optional upgrades. See the next page for prices." },
 
     { icon: "shield", t: "Our promise", lead: "We want you to love your home when we leave.",
       html: `<div class="blk do"><h3>${icon("check")}What you can count on</h3><ol>
@@ -1154,13 +1158,471 @@ const REG_CLIENT = { en: {
 
     { icon: "info", t: "What's not included", lead: "These items are not part of Regular Cleaning. Ask us if you would like to add any of them.",
       notIncluded: ["Washing or putting away dishes", "Loading or unloading the dishwasher", "Inside the fridge", "Inside the oven", "Inside cabinets", "Laundry", "Hand-washed baseboards, cabinet fronts, ceiling fan blades and light fixtures (part of Top to Bottom Deluxe)"],
-      tip: "If your home hasn't had a professional clean in a while, we recommend starting with a Top to Bottom Deluxe Cleaning. Regular visits then keep it that way." },
+      tip: "Dishwashing, fridge and oven interiors, baseboards, blinds and the Deep Care Upgrade are available as optional upgrades (next page). If your home hasn't had a professional clean in a while, we recommend starting with a Top to Bottom Deluxe Cleaning." },
 
     { icon: "shield", t: "Our promise", lead: "Same team method, same quality, every visit.",
       html: `<div class="blk do"><h3>${icon("check")}What you can count on</h3><ol>
         <li>Every item on the list, on every visit.</li>
         <li>Color-coded cloths, so a bathroom cloth never touches your kitchen.</li>
         <li>Your belongings treated with care and put back where they were.</li>
+        <li>If something was missed, tell us and we will make it right.</li></ol></div>` }
+  ]
+}};
+
+/* =========================================================
+   OPTIONAL UPGRADES — shared by every service
+   inc = services where the item is already part of the scope
+   ========================================================= */
+const EXTRAS = [
+  { price: "$50", inc: ["move"],
+    en: { n: "Refrigerator interior care", d: "Shelves, drawers and walls inside the fridge cleaned.", c: "Take out one shelf of food at a time, wipe shelves, drawers and walls with the green cloth, dry with the yellow cloth and put everything back in the same place." },
+    pt: { n: "Geladeira por dentro", c: "Tire a comida de uma prateleira por vez, limpe prateleiras, gavetas e paredes com o pano verde, seque com o amarelo e coloque tudo de volta no mesmo lugar." },
+    es: { n: "Refrigerador por dentro", c: "Saca la comida de una repisa a la vez, limpia repisas, cajones y paredes con el trapo verde, seca con el amarillo y regresa todo al mismo lugar." } },
+  { price: "$30", inc: ["move"],
+    en: { n: "Oven interior care", d: "Inside of the oven and racks degreased and scrubbed.", c: "Oven OFF and cool. Spray degreaser inside, let it sit, scrub with the green side of the sponge, wipe all residue out. Clean the racks in the sink." },
+    pt: { n: "Forno por dentro", c: "Forno DESLIGADO e frio. Borrife desengordurante por dentro, deixe agir, esfregue com o lado verde da esponja e tire todo o resíduo. Limpe as grades na pia." },
+    es: { n: "Horno por dentro", c: "Horno APAGADO y frío. Rocía desengrasante por dentro, deja actuar, talla con el lado verde de la esponja y quita todo el residuo. Limpia las parrillas en el fregadero." } },
+  { price: "$10 per window", inc: ["move"],
+    en: { n: "Interior window care", d: "Inside glass, frame and sill of each window.", c: "Dust frame and sill first. Glass cleaner on the glass, wipe with the orange cloth, then polish with the purple cloth until there are no streaks." },
+    pt: { n: "Janelas por dentro", c: "Tire o pó do batente e do parapeito primeiro. Limpa-vidros no vidro, passe o pano laranja e dê polimento com o roxo até não ficar marca." },
+    es: { n: "Ventanas por dentro", c: "Quita el polvo del marco y la repisa primero. Limpiavidrios en el vidrio, pasa el trapo naranja y pule con el morado hasta que no queden marcas." } },
+  { price: "starting at $30", inc: [],
+    en: { n: "Patio / balcony care", d: "Swept, cobwebs removed, railings and outdoor furniture wiped.", c: "Remove cobwebs, wipe railings and outdoor furniture, then sweep the floor from the far side toward the door." },
+    pt: { n: "Pátio / varanda", c: "Tire as teias, limpe o guarda-corpo e os móveis de fora, depois varra do fundo em direção à porta." },
+    es: { n: "Patio / balcón", c: "Quita las telarañas, limpia el barandal y los muebles de afuera, luego barre desde el fondo hacia la puerta." } },
+  { price: "$15", inc: [],
+    en: { n: "Dishwashing", d: "Dishes in the sink washed, dried and put away or left on the rack.", c: "Wash, rinse and dry the dishes in the sink. Put them away if you know where they go, or leave them neat on the rack." },
+    pt: { n: "Lavar louça", c: "Lave, enxágue e seque a louça da pia. Guarde se souber onde vai, ou deixe arrumada no escorredor." },
+    es: { n: "Lavar platos", c: "Lava, enjuaga y seca los platos del fregadero. Guárdalos si sabes dónde van, o déjalos ordenados en el escurridor." } },
+  { price: "$30–$60", inc: [],
+    en: { n: "Garage sweeping", d: "Garage floor swept and cobwebs removed.", c: "Remove cobwebs, then sweep the garage floor from the back toward the door. Bag the debris." },
+    pt: { n: "Varrer a garagem", c: "Tire as teias, depois varra o chão da garagem do fundo em direção à porta. Ensaque a sujeira." },
+    es: { n: "Barrer el garaje", c: "Quita las telarañas, luego barre el piso del garaje desde el fondo hacia la puerta. Embolsa la basura." } },
+  { price: "$10 per room", inc: ["deluxe", "move"],
+    en: { n: "Baseboards", d: "Baseboards dusted and hand wiped.", c: "Dust or vacuum first, then hand wipe with the damp orange cloth and dry with the purple cloth." },
+    pt: { n: "Rodapés", c: "Tire o pó ou aspire primeiro, depois passe o pano laranja úmido à mão e seque com o roxo." },
+    es: { n: "Zócalos", c: "Quita el polvo o aspira primero, luego limpia a mano con el trapo naranja húmedo y seca con el morado." } },
+  { price: "$10 each", inc: ["deluxe", "move"],
+    en: { n: "Blinds", d: "Slats dusted or vacuumed on both sides.", c: "Close the slats facing down, dust or vacuum top to bottom, turn them and repeat." },
+    pt: { n: "Persianas", c: "Feche as lâminas para baixo, tire o pó ou aspire de cima para baixo, vire e repita." },
+    es: { n: "Persianas", c: "Cierra las láminas hacia abajo, quita el polvo o aspira de arriba hacia abajo, voltéalas y repite." } },
+  { price: "Double the Standard Service rate", inc: [], only: "regular",
+    en: { n: "Deep Care Upgrade", d: "For Regular Cleaning: adds baseboards, blinds and detailed attention to your visit.", c: "Regular visit plus baseboards, blinds and detailed attention. Follow the Deluxe steps for those items." },
+    pt: { n: "Upgrade Deep Care", c: "Visita regular + rodapés, persianas e atenção aos detalhes. Siga os passos da Deluxe para esses itens." },
+    es: { n: "Mejora Deep Care", c: "Visita regular + zócalos, persianas y atención al detalle. Sigue los pasos de Deluxe para esos puntos." } }
+];
+const EXTRAS_UI = {
+  en: { h: "Extras (upgrades)", lead: "Only do an extra when it is on the job order. Items marked INCLUDED are already part of this service.", inc: "Included" },
+  pt: { h: "Extras (upgrades)", lead: "Só faça um extra quando ele estiver na ordem de serviço. Itens marcados INCLUÍDO já fazem parte deste serviço.", inc: "Incluído" },
+  es: { h: "Extras (mejoras)", lead: "Solo haz un extra cuando esté en la orden de trabajo. Los puntos marcados INCLUIDO ya son parte de este servicio.", inc: "Incluido" }
+};
+function extrasCleanerHTML(lang) {
+  const U = EXTRAS_UI[lang];
+  return `<div class="blk"><h3>${icon("star")}${esc(U.h)}</h3><p class="small" style="margin-bottom:10px">${esc(U.lead)}</p>
+    <div class="xgrid">${EXTRAS.filter(x => !x.only || x.only === state.service).map(x => { const inc = x.inc.includes(state.service);
+      return `<div class="x${inc ? " inc" : ""}"><b>${esc(x[lang].n)}</b>${inc ? ` <span class="xtag">${esc(U.inc)}</span>` : ""}<br><span class="small">${esc(x[lang].c)}</span></div>`; }).join("")}</div></div>`;
+}
+function extrasClientHTML() {
+  return `<div class="blk do tbl"><table><thead><tr><th>Upgrade</th><th>What it covers</th><th>Price</th></tr></thead><tbody>${EXTRAS.filter(x => !x.only || x.only === state.service).map(x => {
+    const inc = x.inc.includes(state.service);
+    return `<tr><td><b>${esc(x.en.n)}</b></td><td>${esc(x.en.d)}</td><td>${inc ? `<span class="xtag">Included in this service</span>` : esc(x.price)}</td></tr>`; }).join("")}</tbody></table></div>`;
+}
+const UPGRADES_STEP = { icon: "star", t: "Optional upgrades", lead: "Optional service upgrades are available, if needed. Add them when you book, or ask us before your visit.", upgrades: true,
+  tip: "Upgrades are done only when they are on your booking, so our team has the time to do them well." };
+
+/* =========================================================
+   MOVE IN / OUT — CLEANER SOP (EN / PT / ES)
+   ========================================================= */
+const MOVE_META = [
+  { id: "m-arrive", icon: "door", band: [] },
+  { id: "m-basics", icon: "star", band: [0,1,2,3,4], colors: true },
+  { id: "m-prep", icon: "spray", band: [2,3] },
+  { id: "m-high", icon: "fan", band: [0,1] },
+  { id: "m-windows", icon: "blinds", band: [1,2] },
+  { id: "m-cabinets", icon: "frame", band: [1,2] },
+  { id: "m-kitchen", icon: "kitchen", band: [1,2,3] },
+  { id: "m-bath", icon: "bath", band: [1,2,3,4] },
+  { id: "m-base", icon: "base", band: [2,3] },
+  { id: "m-trash", icon: "trash", band: [3] },
+  { id: "m-floors", icon: "floor", band: [4] },
+  { id: "m-final", icon: "check", band: [] }
+];
+
+const MOVE_CLEANER = {
+en: {
+  title: "Move In/Out · Cleaner SOP",
+  intro: "Move In/Out Cleaning is done in an empty home, before someone moves in or after they move out. The next person sees every corner, so every surface counts, including inside the fridge and the oven.",
+  steps: [
+    { t: "Arrive & before photos", lead: "Empty homes have no one to answer questions. Your photos and notes protect the client and the company.",
+      do: ["Arrive on time, in uniform. Use the lockbox or access code the office gave you.",
+           "Check that water and power are on. No water or power? Call the office before you start.",
+           "Take BEFORE photos of every room, including inside the fridge, oven, bathrooms and closets.",
+           "Walk every room. Note damage, stains and anything left behind. Send photos to the office.",
+           "Check how dirty the fridge and oven are. Very heavy build-up? Tell the office right away.",
+           "Bring all supplies in. Set the caddy on a towel."],
+      avoid: ["Never throw away items left behind unless they are clearly trash. Ask the office.", "Never leave the door unlocked while you carry supplies."],
+      done: ["Water and power checked", "Before photos of every room", "Damage and left items reported"] },
+
+    { t: "What's included & golden rules", lead: "Know the full scope. In an empty home, nothing hides the dirt.",
+      do: ["Floors: tile and hardwood swept and damp mopped. Carpets and hardwood vacuumed.",
+           "Dust and wipe down: all cabinets (outside), countertops, ledges, ceiling fans.",
+           "All appliances scrubbed free of dirt, grease and grime. Fridge inside and outside, oven inside and on top, microwave inside.",
+           "Bathrooms: sinks, toilets, showers and bathtubs.",
+           "Windows: blinds dusted, window glass cleaned.",
+           "Baseboards and doors cleaned and disinfected with Clorox or Lysol. Trash removed (if applicable).",
+           "TOP TO BOTTOM, DRY BEFORE WET, RIGHT CLOTH IN THE RIGHT PLACE (see below)."],
+      avoid: ["Never mix Clorox or Lysol with any other product."],
+      done: ["I know every item included", "I know the cloth colors", "I know fridge and oven inside are included"] },
+
+    { t: "Prep: let products work", lead: "Start the hardest jobs first so the product softens the grime while you work.",
+      do: ["Turn on all lights. Open a window for air if the weather allows.",
+           "Oven: make sure it is OFF and cool. Spray degreaser inside, on the door glass and on the racks. Let it sit.",
+           "Fridge: confirm it is empty. Take out shelves and drawers and put them in the sink or tub to soak in warm soapy water.",
+           "Bathrooms: spray tubs, showers, sinks and inside the toilets. Let the product sit 5–10 minutes.",
+           "Put on gloves for oven and bathroom products."],
+      avoid: ["Never spray degreaser on a hot oven.", "Never mix two products in the same area."],
+      done: ["Oven sprayed and soaking", "Fridge shelves and drawers soaking", "Bathrooms sprayed"] },
+
+    { t: "High work: ceiling fans & ledges", lead: "Start at the room farthest from the exit. High first.",
+      do: ["Ceiling fans: turn OFF, wait until they stop. Set the 2-step ladder steady.",
+           "Slide an old pillowcase over each blade to catch the dust, then hand wipe each blade with the damp orange cloth.",
+           "High ledges and shelves: dust first, then wipe with the damp orange cloth.",
+           "Only clean what you reach from the 2-step ladder. Too high? Note it for the office."],
+      avoid: ["Never stand on the top step or on counters.", "Never spray directly on fans or electrical parts."],
+      done: ["Ceiling fans clean on both sides", "High ledges dust-free"] },
+
+    { t: "Windows & blinds", lead: "Dust the blinds, then clean the glass.",
+      do: ["Blinds: close the slats facing down, dust top to bottom, turn them and repeat.",
+           "Window sills and tracks: vacuum loose dirt with the crevice tool, then wipe with the damp orange cloth.",
+           "Window glass: spray glass cleaner, wipe with the orange cloth, polish with the purple cloth until there are no streaks."],
+      avoid: ["Don't wash blinds with water.", "Don't climb on window sills."],
+      done: ["Blinds dusted on both sides", "Sills and tracks clean", "Glass with no streaks"] },
+
+    { t: "Cabinets, countertops & ledges", lead: "In an empty home every cabinet front shows. Wipe them all.",
+      do: ["All cabinets (outside): dust, then wipe fronts, edges and handles. Kitchen with the green cloth, bathroom with the pink cloth, other rooms with the orange cloth.",
+           "Dry and polish with the matching dry cloth (yellow, blue or purple).",
+           "Countertops: wipe and dry in every room.",
+           "Ledges: wipe every ledge, shelf and closet shelf you can reach."],
+      avoid: ["Don't use a bathroom cloth on kitchen cabinets."],
+      done: ["Every cabinet front clean and dry", "Countertops clean", "Ledges clean"] },
+
+    { t: "Kitchen & all appliances", lead: "Appliances must be scrubbed free of dirt, grease and grime, inside and out.",
+      do: ["Fridge inside: wipe the walls, ceiling and door seals with the green cloth. Wash, rinse and dry the soaked shelves and drawers, then put them back.",
+           "Fridge outside: top, front, sides and handles. Stainless: polish with the yellow cloth, with the grain.",
+           "Oven inside: scrub the soaked oven with the green side of the sponge, wipe out all residue. Scrub the racks, rinse, dry, put back.",
+           "Oven on top (stovetop): scrub grates or drip pans and the stovetop.",
+           "Microwave inside: steam a bowl of water for 2 minutes, wipe inside, turntable and door.",
+           "All other appliances (dishwasher, range hood): scrub the outside free of grease and grime.",
+           "Countertops and sink: wipe, scrub and dry."],
+      avoid: ["Stainless steel and glass cooktops: only the yellow side of the sponge.", "Never leave degreaser residue inside the oven."],
+      done: ["Fridge clean inside and out", "Oven clean inside", "Stovetop scrubbed", "Microwave clean inside", "All appliances free of grease"] },
+
+    { t: "Bathrooms", lead: "The product has been working since prep. Scrub top to bottom, toilet last.",
+      do: ["Shower and bathtub: scrub walls top to bottom with the blue non-abrasive sponge, grout with the brush, rinse well.",
+           "Sinks: clean with the pink cloth, dry and shine faucets with the blue/turquoise cloth.",
+           "Toilets (last, pink cloth): outside top to bottom — tank, lid, seat both sides, hinges, base. Then inside with the brush, under the rim.",
+           "Repeat in every bathroom."],
+      avoid: ["Pink and blue cloths and the blue sponge never leave the bathroom."],
+      done: ["Showers and tubs scrubbed and rinsed", "Sinks shining", "Toilets clean inside and out"] },
+
+    { t: "Baseboards & doors: clean and disinfect", lead: "Every baseboard and every door gets cleaned and disinfected with Clorox or Lysol.",
+      do: ["Baseboards: vacuum or dust first.",
+           "Then wipe with Clorox or Lysol disinfecting wipes or spray on the cloth, room by room, all around.",
+           "Doors: wipe both sides, the top edge, the frame and around the knob.",
+           "Door knobs and light switches: disinfect.",
+           "Let the disinfectant stay wet for the time on the label."],
+      avoid: ["Never mix Clorox and Lysol or any other product.", "Never use liquid bleach on painted or wood doors. Use disinfecting wipes or spray made for surfaces.", "Gloves on."],
+      done: ["All baseboards disinfected", "All doors, frames and knobs disinfected", "Light switches disinfected"] },
+
+    { t: "Trash", lead: "Remove trash if there is any.",
+      do: ["Collect trash from every room, closet and cabinet.", "Take it to the outside bin or the place the office told you.", "Leave a clean liner in the kitchen can if there is one."],
+      avoid: ["Items that are not clearly trash (furniture, boxes, belongings): photo and ask the office."],
+      done: ["No trash left in the home"] },
+
+    { t: "Floors (always last)", lead: "Empty rooms show every corner. Include closets.",
+      do: ["Carpets: vacuum the whole room, edges and closets, with the crevice tool along the walls.",
+           "Hardwood: vacuum first.",
+           "Tile and hardwood: sweep, then damp mop from the farthest corner toward the door.",
+           "Change the mop water as soon as it looks dirty."],
+      avoid: ["Hardwood: damp mop only, never leave water standing.", "Never walk back over a wet floor."],
+      done: ["Carpets vacuumed, closets included", "Tile and hardwood swept and mopped"] },
+
+    { t: "After photos & lock up", lead: "Your after photos show the client exactly what was done.",
+      do: ["Walk every room top to bottom and fix anything you missed.",
+           "Take AFTER photos of every room, from the same spots as the before photos, including inside the fridge and oven.",
+           "Put fridge shelves and oven racks back. Close every cabinet.",
+           "Turn off lights, close and lock windows.",
+           "Collect ALL your supplies. Lock the door, return the key to the lockbox, message the office: job done."],
+      done: ["After photos of every room", "Lights off, windows locked", "Nothing of mine left behind", "Office told"] }
+  ]
+},
+pt: {
+  title: "Move In/Out · SOP da Cleaner",
+  intro: "A limpeza Move In/Out é feita numa casa vazia, antes de alguém se mudar ou depois que alguém saiu. A próxima pessoa vê cada canto, então toda superfície conta, inclusive dentro da geladeira e do forno.",
+  steps: [
+    { t: "Chegada e fotos do antes", lead: "Em casa vazia não tem ninguém para responder perguntas. Suas fotos e anotações protegem o cliente e a empresa.",
+      do: ["Chegue no horário, de uniforme. Use a caixa de chave (lockbox) ou o código que o escritório passou.",
+           "Confira se tem água e luz. Sem água ou luz? Ligue para o escritório antes de começar.",
+           "Tire fotos do ANTES de todos os cômodos, inclusive dentro da geladeira, do forno, banheiros e closets.",
+           "Passe por todos os cômodos. Anote danos, manchas e o que ficou para trás. Mande as fotos ao escritório.",
+           "Veja o quanto a geladeira e o forno estão sujos. Sujeira muito pesada? Avise o escritório na hora.",
+           "Leve todo o material. Coloque o caddy sobre uma toalha."],
+      avoid: ["Nunca jogue fora objetos deixados na casa, a não ser que seja claramente lixo. Pergunte ao escritório.", "Nunca deixe a porta destrancada enquanto carrega o material."],
+      done: ["Água e luz conferidas", "Fotos do antes de todos os cômodos", "Danos e objetos deixados avisados"] },
+
+    { t: "O que está incluído e regras de ouro", lead: "Saiba o escopo completo. Em casa vazia, nada esconde a sujeira.",
+      do: ["Pisos: cerâmica e madeira varridos e com mop úmido. Carpetes e madeira aspirados.",
+           "Tirar o pó e passar pano: todos os armários (por fora), bancadas, parapeitos/beirais, ventiladores de teto.",
+           "Todos os eletrodomésticos esfregados sem sujeira, gordura e encardido. Geladeira por dentro e por fora, forno por dentro e em cima, micro-ondas por dentro.",
+           "Banheiros: pias, vasos, boxes e banheiras.",
+           "Janelas: pó das persianas, vidros limpos.",
+           "Rodapés e portas limpos e desinfetados com Clorox ou Lysol. Lixo removido (se houver).",
+           "DE CIMA PARA BAIXO, SECO ANTES DO MOLHADO, PANO CERTO NO LUGAR CERTO (veja abaixo)."],
+      avoid: ["Nunca misture Clorox ou Lysol com outro produto."],
+      done: ["Sei todos os itens incluídos", "Sei as cores dos panos", "Sei que geladeira e forno por dentro estão incluídos"] },
+
+    { t: "Preparação: deixe o produto agir", lead: "Comece pelos trabalhos mais pesados para o produto amolecer a sujeira enquanto você trabalha.",
+      do: ["Acenda todas as luzes. Abra uma janela para ventilar se o tempo permitir.",
+           "Forno: confira se está DESLIGADO e frio. Borrife desengordurante por dentro, no vidro da porta e nas grades. Deixe agir.",
+           "Geladeira: confirme que está vazia. Tire prateleiras e gavetas e coloque de molho na pia ou banheira com água morna e sabão.",
+           "Banheiros: borrife banheiras, boxes, pias e dentro dos vasos. Deixe agir 5–10 minutos.",
+           "Use luvas com produtos de forno e banheiro."],
+      avoid: ["Nunca borrife desengordurante com o forno quente.", "Nunca misture dois produtos no mesmo lugar."],
+      done: ["Forno borrifado e de molho", "Prateleiras e gavetas da geladeira de molho", "Banheiros borrifados"] },
+
+    { t: "Parte alta: ventiladores e beirais", lead: "Comece pelo cômodo mais longe da saída. Alto primeiro.",
+      do: ["Ventiladores de teto: DESLIGUE e espere parar. Coloque a escada de 2 degraus firme.",
+           "Encaixe uma fronha velha em cada pá para pegar o pó, depois passe o pano laranja úmido à mão em cada pá.",
+           "Beirais e prateleiras altas: tire o pó primeiro, depois passe o pano laranja úmido.",
+           "Limpe só o que alcança da escada de 2 degraus. Muito alto? Anote para o escritório."],
+      avoid: ["Nunca suba no último degrau nem em bancadas.", "Nunca borrife direto em ventiladores ou partes elétricas."],
+      done: ["Ventiladores limpos dos dois lados", "Beirais altos sem pó"] },
+
+    { t: "Janelas e persianas", lead: "Tire o pó das persianas, depois limpe os vidros.",
+      do: ["Persianas: feche as lâminas para baixo, tire o pó de cima para baixo, vire e repita.",
+           "Parapeitos e trilhos: aspire a sujeira solta com o bocal fino, depois passe o pano laranja úmido.",
+           "Vidros: borrife limpa-vidros, passe o pano laranja e dê polimento com o roxo até não ficar marca."],
+      avoid: ["Não lave persianas com água.", "Não suba nos parapeitos."],
+      done: ["Persianas sem pó dos dois lados", "Parapeitos e trilhos limpos", "Vidros sem marcas"] },
+
+    { t: "Armários, bancadas e beirais", lead: "Em casa vazia toda frente de armário aparece. Limpe todas.",
+      do: ["Todos os armários (por fora): tire o pó, depois limpe frentes, bordas e puxadores. Cozinha com o pano verde, banheiro com o rosa, outros cômodos com o laranja.",
+           "Seque e dê polimento com o pano seco da mesma área (amarelo, azul ou roxo).",
+           "Bancadas: limpe e seque em todos os cômodos.",
+           "Beirais: limpe todo beiral, prateleira e prateleira de closet que alcançar."],
+      avoid: ["Não use pano de banheiro nos armários da cozinha."],
+      done: ["Todas as frentes de armário limpas e secas", "Bancadas limpas", "Beirais limpos"] },
+
+    { t: "Cozinha e todos os eletrodomésticos", lead: "Os eletrodomésticos têm que ficar sem sujeira, gordura e encardido, por dentro e por fora.",
+      do: ["Geladeira por dentro: limpe paredes, teto e borrachas da porta com o pano verde. Lave, enxágue e seque as prateleiras e gavetas que estavam de molho e recoloque.",
+           "Geladeira por fora: em cima, frente, laterais e puxadores. Inox: polimento com o pano amarelo, no sentido das linhas.",
+           "Forno por dentro: esfregue com o lado verde da esponja e tire todo o resíduo. Esfregue as grades, enxágue, seque e recoloque.",
+           "Forno em cima (fogão): esfregue as grades ou pratinhos e a mesa do fogão.",
+           "Micro-ondas por dentro: aqueça uma tigela com água por 2 minutos, limpe dentro, prato giratório e porta.",
+           "Todos os outros eletrodomésticos (lava-louças, coifa): esfregue por fora até tirar gordura e encardido.",
+           "Bancadas e pia: limpe, esfregue e seque."],
+      avoid: ["Inox e cooktop de vidro: só o lado amarelo da esponja.", "Nunca deixe resíduo de desengordurante dentro do forno."],
+      done: ["Geladeira limpa por dentro e por fora", "Forno limpo por dentro", "Fogão esfregado", "Micro-ondas limpo por dentro", "Todos os eletrodomésticos sem gordura"] },
+
+    { t: "Banheiros", lead: "O produto está agindo desde a preparação. Esfregue de cima para baixo, vaso por último.",
+      do: ["Box e banheira: esfregue as paredes de cima para baixo com a esponja azul não abrasiva, rejunte com a escova, enxágue bem.",
+           "Pias: limpe com o pano rosa, seque e dê brilho nas torneiras com o pano azul/turquesa.",
+           "Vasos (por último, pano rosa): por fora de cima para baixo — caixa, tampa, assento dos dois lados, dobradiças, base. Depois por dentro com a escova, embaixo da borda.",
+           "Repita em todos os banheiros."],
+      avoid: ["Panos rosa e azul e a esponja azul nunca saem do banheiro."],
+      done: ["Boxes e banheiras esfregados e enxaguados", "Pias brilhando", "Vasos limpos por dentro e por fora"] },
+
+    { t: "Rodapés e portas: limpar e desinfetar", lead: "Todo rodapé e toda porta são limpos e desinfetados com Clorox ou Lysol.",
+      do: ["Rodapés: aspire ou tire o pó primeiro.",
+           "Depois passe lenço desinfetante Clorox ou Lysol, ou borrife o spray no pano, cômodo por cômodo, em volta toda.",
+           "Portas: limpe os dois lados, a borda de cima, o batente e em volta da maçaneta.",
+           "Maçanetas e interruptores: desinfete.",
+           "Deixe o desinfetante molhado pelo tempo escrito no rótulo."],
+      avoid: ["Nunca misture Clorox com Lysol ou outro produto.", "Nunca use água sanitária líquida em porta pintada ou de madeira. Use lenço ou spray desinfetante próprio para superfícies.", "Use luvas."],
+      done: ["Todos os rodapés desinfetados", "Todas as portas, batentes e maçanetas desinfetados", "Interruptores desinfetados"] },
+
+    { t: "Lixo", lead: "Remova o lixo, se houver.",
+      do: ["Recolha o lixo de todos os cômodos, closets e armários.", "Leve para a lixeira de fora ou para o lugar que o escritório indicou.", "Deixe um saco limpo na lixeira da cozinha, se houver."],
+      avoid: ["O que não é claramente lixo (móveis, caixas, objetos): tire foto e pergunte ao escritório."],
+      done: ["Nenhum lixo na casa"] },
+
+    { t: "Pisos (sempre por último)", lead: "Cômodo vazio mostra cada canto. Inclua os closets.",
+      do: ["Carpetes: aspire o cômodo todo, bordas e closets, com o bocal fino junto às paredes.",
+           "Madeira: aspire primeiro.",
+           "Cerâmica e madeira: varra, depois passe o mop úmido do canto mais longe em direção à porta.",
+           "Troque a água do mop assim que ficar suja."],
+      avoid: ["Madeira: mop só úmido, nunca deixe água parada.", "Nunca volte pisando no chão molhado."],
+      done: ["Carpetes aspirados, closets incluídos", "Cerâmica e madeira varridas e com mop"] },
+
+    { t: "Fotos do depois e fechar a casa", lead: "Suas fotos do depois mostram ao cliente exatamente o que foi feito.",
+      do: ["Passe em todos os cômodos de cima para baixo e arrume o que faltou.",
+           "Tire fotos do DEPOIS de todos os cômodos, dos mesmos lugares das fotos do antes, inclusive dentro da geladeira e do forno.",
+           "Recoloque prateleiras da geladeira e grades do forno. Feche todos os armários.",
+           "Apague as luzes, feche e tranque as janelas.",
+           "Recolha TODO o seu material. Tranque a porta, devolva a chave na lockbox e avise o escritório: trabalho concluído."],
+      done: ["Fotos do depois de todos os cômodos", "Luzes apagadas, janelas trancadas", "Nada meu ficou para trás", "Escritório avisado"] }
+  ]
+},
+es: {
+  title: "Move In/Out · SOP de la Cleaner",
+  intro: "La limpieza Move In/Out se hace en una casa vacía, antes de que alguien se mude o después de que alguien se fue. La siguiente persona ve cada rincón, así que cada superficie cuenta, incluso dentro del refrigerador y del horno.",
+  steps: [
+    { t: "Llegada y fotos del antes", lead: "En una casa vacía no hay nadie que responda preguntas. Tus fotos y notas protegen al cliente y a la empresa.",
+      do: ["Llega a tiempo, con uniforme. Usa la caja de llaves (lockbox) o el código que te dio la oficina.",
+           "Revisa que haya agua y luz. ¿No hay agua o luz? Llama a la oficina antes de empezar.",
+           "Toma fotos del ANTES de todos los cuartos, incluso dentro del refrigerador, el horno, los baños y los clósets.",
+           "Recorre todos los cuartos. Anota daños, manchas y lo que quedó. Envía las fotos a la oficina.",
+           "Mira qué tan sucios están el refrigerador y el horno. ¿Suciedad muy pesada? Avisa a la oficina enseguida.",
+           "Mete todo el material. Pon el caddy sobre una toalla."],
+      avoid: ["Nunca tires objetos que quedaron en la casa, a menos que sea claramente basura. Pregunta a la oficina.", "Nunca dejes la puerta sin llave mientras cargas el material."],
+      done: ["Agua y luz revisadas", "Fotos del antes de todos los cuartos", "Daños y objetos dejados reportados"] },
+
+    { t: "Qué está incluido y reglas de oro", lead: "Conoce todo el alcance. En una casa vacía, nada esconde la suciedad.",
+      do: ["Pisos: cerámica y madera barridos y trapeados con trapeador húmedo. Alfombras y madera aspiradas.",
+           "Quitar polvo y limpiar: todos los gabinetes (por fuera), mostradores, repisas/bordes, ventiladores de techo.",
+           "Todos los electrodomésticos tallados sin suciedad, grasa ni mugre. Refrigerador por dentro y por fuera, horno por dentro y arriba, microondas por dentro.",
+           "Baños: lavabos, inodoros, regaderas y tinas.",
+           "Ventanas: polvo de las persianas, vidrios limpios.",
+           "Zócalos y puertas limpios y desinfectados con Clorox o Lysol. Basura retirada (si hay).",
+           "DE ARRIBA HACIA ABAJO, SECO ANTES QUE MOJADO, TRAPO CORRECTO EN EL LUGAR CORRECTO (ver abajo)."],
+      avoid: ["Nunca mezcles Clorox o Lysol con otro producto."],
+      done: ["Conozco todos los puntos incluidos", "Conozco los colores de los trapos", "Sé que refrigerador y horno por dentro están incluidos"] },
+
+    { t: "Preparación: deja que el producto actúe", lead: "Empieza por los trabajos más pesados para que el producto afloje la mugre mientras trabajas.",
+      do: ["Prende todas las luces. Abre una ventana para ventilar si el clima lo permite.",
+           "Horno: confirma que está APAGADO y frío. Rocía desengrasante por dentro, en el vidrio de la puerta y en las parrillas. Deja actuar.",
+           "Refrigerador: confirma que está vacío. Saca repisas y cajones y ponlos a remojar en el fregadero o la tina con agua tibia y jabón.",
+           "Baños: rocía tinas, regaderas, lavabos y dentro de los inodoros. Deja actuar 5–10 minutos.",
+           "Usa guantes con productos de horno y baño."],
+      avoid: ["Nunca rocíes desengrasante con el horno caliente.", "Nunca mezcles dos productos en el mismo lugar."],
+      done: ["Horno rociado y en remojo", "Repisas y cajones del refrigerador en remojo", "Baños rociados"] },
+
+    { t: "Lo alto: ventiladores y bordes", lead: "Empieza por el cuarto más lejos de la salida. Lo alto primero.",
+      do: ["Ventiladores de techo: APÁGALOS y espera a que paren. Pon la escalera de 2 escalones firme.",
+           "Mete una funda vieja en cada aspa para atrapar el polvo, luego limpia a mano cada aspa con el trapo naranja húmedo.",
+           "Bordes y repisas altas: quita el polvo primero, luego pasa el trapo naranja húmedo.",
+           "Solo limpia lo que alcanzas desde la escalera de 2 escalones. ¿Muy alto? Anótalo para la oficina."],
+      avoid: ["Nunca te pares en el último escalón ni en los mostradores.", "Nunca rocíes directo en ventiladores o partes eléctricas."],
+      done: ["Ventiladores limpios por los dos lados", "Bordes altos sin polvo"] },
+
+    { t: "Ventanas y persianas", lead: "Quita el polvo de las persianas, luego limpia los vidrios.",
+      do: ["Persianas: cierra las láminas hacia abajo, quita el polvo de arriba hacia abajo, voltéalas y repite.",
+           "Repisas y rieles: aspira la suciedad suelta con la boquilla fina, luego pasa el trapo naranja húmedo.",
+           "Vidrios: rocía limpiavidrios, pasa el trapo naranja y pule con el morado hasta que no queden marcas."],
+      avoid: ["No laves las persianas con agua.", "No te subas a las repisas de las ventanas."],
+      done: ["Persianas sin polvo por los dos lados", "Repisas y rieles limpios", "Vidrios sin marcas"] },
+
+    { t: "Gabinetes, mostradores y bordes", lead: "En una casa vacía se ve cada frente de gabinete. Límpialos todos.",
+      do: ["Todos los gabinetes (por fuera): quita el polvo, luego limpia frentes, bordes y manijas. Cocina con el trapo verde, baño con el rosa, otros cuartos con el naranja.",
+           "Seca y pule con el trapo seco de la misma área (amarillo, azul o morado).",
+           "Mostradores: limpia y seca en todos los cuartos.",
+           "Bordes: limpia cada borde, repisa y repisa de clóset que alcances."],
+      avoid: ["No uses trapo del baño en los gabinetes de la cocina."],
+      done: ["Todos los frentes de gabinete limpios y secos", "Mostradores limpios", "Bordes limpios"] },
+
+    { t: "Cocina y todos los electrodomésticos", lead: "Los electrodomésticos deben quedar sin suciedad, grasa ni mugre, por dentro y por fuera.",
+      do: ["Refrigerador por dentro: limpia paredes, techo y empaques de la puerta con el trapo verde. Lava, enjuaga y seca las repisas y cajones en remojo y regrésalos.",
+           "Refrigerador por fuera: arriba, frente, lados y manijas. Acero inoxidable: pule con el trapo amarillo, a favor de las líneas.",
+           "Horno por dentro: talla con el lado verde de la esponja y quita todo el residuo. Talla las parrillas, enjuaga, seca y regrésalas.",
+           "Horno arriba (estufa): talla las parrillas o platillos y la superficie de la estufa.",
+           "Microondas por dentro: calienta un tazón con agua 2 minutos, limpia por dentro, plato giratorio y puerta.",
+           "Todos los demás electrodomésticos (lavaplatos, campana): talla por fuera hasta quitar grasa y mugre.",
+           "Mostradores y fregadero: limpia, talla y seca."],
+      avoid: ["Acero inoxidable y estufas de vidrio: solo el lado amarillo de la esponja.", "Nunca dejes residuo de desengrasante dentro del horno."],
+      done: ["Refrigerador limpio por dentro y por fuera", "Horno limpio por dentro", "Estufa tallada", "Microondas limpio por dentro", "Todos los electrodomésticos sin grasa"] },
+
+    { t: "Baños", lead: "El producto está actuando desde la preparación. Talla de arriba hacia abajo, inodoro al final.",
+      do: ["Regadera y tina: talla las paredes de arriba hacia abajo con la esponja azul no abrasiva, juntas con el cepillo, enjuaga bien.",
+           "Lavabos: limpia con el trapo rosa, seca y da brillo a las llaves con el trapo azul/turquesa.",
+           "Inodoros (al final, trapo rosa): por fuera de arriba hacia abajo — tanque, tapa, asiento por los dos lados, bisagras, base. Luego por dentro con el cepillo, debajo del borde.",
+           "Repite en todos los baños."],
+      avoid: ["Los trapos rosa y azul y la esponja azul nunca salen del baño."],
+      done: ["Regaderas y tinas talladas y enjuagadas", "Lavabos brillando", "Inodoros limpios por dentro y por fuera"] },
+
+    { t: "Zócalos y puertas: limpiar y desinfectar", lead: "Cada zócalo y cada puerta se limpia y desinfecta con Clorox o Lysol.",
+      do: ["Zócalos: aspira o quita el polvo primero.",
+           "Luego pasa toallitas desinfectantes Clorox o Lysol, o rocía el spray en el trapo, cuarto por cuarto, todo alrededor.",
+           "Puertas: limpia los dos lados, el borde de arriba, el marco y alrededor de la perilla.",
+           "Perillas y apagadores: desinfecta.",
+           "Deja el desinfectante mojado el tiempo que dice la etiqueta."],
+      avoid: ["Nunca mezcles Clorox con Lysol u otro producto.", "Nunca uses cloro líquido en puertas pintadas o de madera. Usa toallitas o spray desinfectante para superficies.", "Usa guantes."],
+      done: ["Todos los zócalos desinfectados", "Todas las puertas, marcos y perillas desinfectados", "Apagadores desinfectados"] },
+
+    { t: "Basura", lead: "Retira la basura, si hay.",
+      do: ["Recoge la basura de todos los cuartos, clósets y gabinetes.", "Llévala al bote de afuera o al lugar que indicó la oficina.", "Deja una bolsa limpia en el bote de la cocina, si hay."],
+      avoid: ["Lo que no es claramente basura (muebles, cajas, objetos): toma foto y pregunta a la oficina."],
+      done: ["No queda basura en la casa"] },
+
+    { t: "Pisos (siempre al final)", lead: "Un cuarto vacío muestra cada rincón. Incluye los clósets.",
+      do: ["Alfombras: aspira todo el cuarto, bordes y clósets, con la boquilla fina junto a las paredes.",
+           "Madera: aspira primero.",
+           "Cerámica y madera: barre, luego trapea con trapeador húmedo desde la esquina más lejana hacia la puerta.",
+           "Cambia el agua del trapeador en cuanto se vea sucia."],
+      avoid: ["Madera: trapeador solo húmedo, nunca dejes agua encharcada.", "Nunca vuelvas a pisar el piso mojado."],
+      done: ["Alfombras aspiradas, clósets incluidos", "Cerámica y madera barridas y trapeadas"] },
+
+    { t: "Fotos del después y cerrar la casa", lead: "Tus fotos del después le muestran al cliente exactamente lo que se hizo.",
+      do: ["Recorre todos los cuartos de arriba hacia abajo y arregla lo que faltó.",
+           "Toma fotos del DESPUÉS de todos los cuartos, desde los mismos lugares que las del antes, incluso dentro del refrigerador y el horno.",
+           "Regresa las repisas del refrigerador y las parrillas del horno. Cierra todos los gabinetes.",
+           "Apaga las luces, cierra y asegura las ventanas.",
+           "Recoge TODO tu material. Cierra con llave, regresa la llave a la lockbox y avisa a la oficina: trabajo terminado."],
+      done: ["Fotos del después de todos los cuartos", "Luces apagadas, ventanas aseguradas", "No dejé nada mío", "Oficina avisada"] }
+  ]
+}
+};
+
+/* =========================================================
+   MOVE IN / OUT — CLIENT GUIDE (EN)
+   ========================================================= */
+const MOVE_CLIENT = { en: {
+  title: "Move In/Out · Client Guide",
+  intro: "Everything you need to know about your Move In/Out Cleaning.",
+  steps: [
+    { icon: "home", t: "What is Move In/Out Cleaning?", lead: "A complete clean of an empty home, so it is ready for the next person. Perfect before you move in, after you move out, or before a home is listed or handed back to a landlord.",
+      html: `<div class="two">
+        <div class="blk do"><h3>${icon("users")}Who it's for</h3><ul><li>Tenants getting a home ready to hand back</li><li>Buyers and renters moving into a new home</li><li>Landlords and property managers between tenants</li><li>Realtors getting a home ready to show</li></ul></div>
+        <div class="blk tip"><h3>${icon("clean")}What makes it different</h3><p>With no furniture in the way, we clean every room edge to edge. <b>Inside the refrigerator and inside the oven are included</b>, and baseboards and doors are disinfected.</p></div></div>
+        <div class="blk"><h3>${icon("clip")}Before and after photos</h3><p>Our team photographs every room before and after the clean, so you have a record of the home's condition.</p></div>` },
+
+    { icon: "list", t: "What's included", lead: "Every item below is part of your Move In/Out Cleaning.",
+      groups: [
+        ["Floors", ["Tile and hardwood floors swept and damp mopped", "Carpets and hardwood floors vacuumed, closets included"]],
+        ["Dusting & wipe down", ["All cabinets (outside)", "Countertops", "Ledges", "Ceiling fans"]],
+        ["Kitchen & appliances", ["All appliances scrubbed free of dirt, grease and grime", "Refrigerator inside and outside", "Oven inside and on top (stovetop)", "Microwave inside"]],
+        ["Bathrooms", ["Sinks", "Toilets", "Showers", "Bathtubs"]],
+        ["Windows", ["Blinds dusted", "Window glass cleaned"]],
+        ["Disinfecting & trash", ["Baseboards cleaned and disinfected with Clorox/Lysol", "Doors cleaned and disinfected with Clorox/Lysol", "Trash removed (if applicable)"]]
+      ] },
+
+    { icon: "calendar", t: "How your cleaning day works", lead: "Here is what happens from the moment our team arrives.",
+      timeline: [
+        ["Arrival & before photos", "We enter with the access you provide, check that water and power are on, and photograph every room."],
+        ["Prep", "Products go on the oven, fridge parts and bathrooms so they can loosen grime while we work."],
+        ["High work & windows", "Ceiling fans, high ledges, blinds and window glass."],
+        ["Cabinets & counters", "Every cabinet front, countertop and ledge, room by room."],
+        ["Kitchen & appliances", "Fridge and oven inside and out, microwave, stovetop and every appliance."],
+        ["Bathrooms", "Showers, tubs, sinks and toilets."],
+        ["Baseboards & doors", "Cleaned and disinfected with Clorox/Lysol."],
+        ["Trash & floors", "Trash removed, then every floor vacuumed, swept and mopped."],
+        ["After photos & lock up", "Final check, after photos of every room, and the home locked as you instructed."]
+      ] },
+
+    { icon: "clip", t: "How to prepare", lead: "Move In/Out Cleaning works best in an empty home.",
+      checklist: ["Move out all furniture, boxes and belongings before we arrive", "Empty the refrigerator and freezer completely", "Make sure water and power (and hot water) are on", "Give us access: key, lockbox code or door code", "Tell us where to put trash and whether there is an outside bin", "Let us know about parking at the property", "Tell us about any damage you already know about"],
+      tip: "Items left in the home are not thrown away unless they are clearly trash. We will ask you first." },
+
+    { icon: "info", t: "What's not included", lead: "To keep your visit focused, these items are not part of Move In/Out Cleaning.",
+      notIncluded: ["Inside cabinets and drawers", "Washing walls", "Carpet shampoo or steam cleaning", "Exterior windows", "Removing furniture or belongings left behind", "Anything above 2-step ladder reach", "Patio, balcony and garage (available as upgrades)"],
+      tip: "Not sure if something is covered? Ask before your visit and we will tell you exactly what to expect." },
+
+    UPGRADES_STEP,
+
+    { icon: "shield", t: "Our promise", lead: "A home that is ready for its next chapter.",
+      html: `<div class="blk do"><h3>${icon("check")}What you can count on</h3><ol>
+        <li>A trained team following the same step-by-step method in every home.</li>
+        <li>Color-coded cloths, so a bathroom cloth never touches your kitchen.</li>
+        <li>Before and after photos of every room.</li>
         <li>If something was missed, tell us and we will make it right.</li></ol></div>` }
   ]
 }};
@@ -1176,7 +1638,7 @@ const SCORE = {
 const TRAINER = {
 pt: {
   title: "SOP do Treinador",
-  intro: "Guia para quem treina novas cleaners (ou para a VA que organiza o treinamento) nos serviços Top to Bottom Deluxe e Limpeza Regular.",
+  intro: "Guia para quem treina novas cleaners (ou para a VA que organiza o treinamento) nos serviços Top to Bottom Deluxe, Limpeza Regular e Move In/Out.",
   steps: [
     { icon: "target", t: "Objetivo do treinamento", lead: "No fim do treinamento, a nova cleaner faz uma limpeza Top to Bottom Deluxe sozinha, na ordem certa, com segurança e nota mínima de 90% na avaliação.",
       blocks: [
@@ -1235,6 +1697,20 @@ pt: {
         { k: "do", h: "Como treinar a Regular", list: ["Use as mesmas 5 fases, com o SOP Regular da aba Cleaners.", "Faça a trainee explicar o que está e o que NÃO está incluído antes do primeiro trabalho.", "Na fase de prática, confira cada banheiro antes de ela seguir: Clorox bem enxaguado."] },
         { k: "avoid", h: "Segurança com Clorox", list: ["Teste: “Com o que o Clorox nunca pode ser misturado?” (amônia, vinagre, qualquer outro limpador).", "Luvas e ventilação sempre.", "Nunca em pedra natural. Mancha tecido."] }
       ] },
+    { icon: "home", t: "Move In/Out: o que muda", lead: "Casa vazia, sem cliente para perguntar. Ensine a trainee a documentar tudo e a não esquecer o que só existe neste serviço.",
+      table: { head: ["Item", "Move In/Out"], rows: [
+        ["Casa", "Vazia. Conferir água e luz antes de começar"],
+        ["Fotos", "Antes e depois de TODOS os cômodos, inclusive geladeira e forno por dentro"],
+        ["Geladeira e forno", "Incluídos por dentro e por fora"],
+        ["Rodapés e portas", "Limpos e desinfetados com Clorox ou Lysol"],
+        ["Armários", "Só por fora"],
+        ["Janelas", "Pó das persianas e vidros limpos"],
+        ["Lixo", "Remover se houver. Objetos que não são lixo: foto e perguntar ao escritório"]
+      ] },
+      blocks: [
+        { k: "do", h: "Como treinar a Move In/Out", list: ["Use as mesmas 5 fases, com o SOP Move In/Out da aba Cleaners.", "Na prática guiada, confira as fotos do antes antes de a trainee começar a limpar.", "Confira geladeira e forno por dentro antes de liberar a cozinha.", "Na avaliação, compare as fotos do antes e do depois."] },
+        { k: "avoid", h: "Segurança", list: ["Nunca desengordurante com o forno quente.", "Nunca água sanitária líquida em porta pintada ou de madeira: lenço ou spray desinfetante.", "Nunca misturar Clorox com Lysol ou outro produto."] }
+      ] },
     { icon: "calendar", t: "Tarefas da VA", lead: "A VA organiza o treinamento para que o treinador só se preocupe em ensinar.",
       blocks: [
         { k: "do", h: "Antes do treinamento", list: ["Confirmar documentos, uniforme e kit da nova cleaner.", "Mandar o link do SOP da Cleaner no idioma dela.", "Escolher o treinador e os trabalhos 1 a 4 (casas com clientes que aceitam trainee).", "Avisar os clientes que haverá uma pessoa em treinamento."] },
@@ -1245,7 +1721,7 @@ pt: {
 },
 en: {
   title: "Trainer SOP",
-  intro: "Guide for the person who trains new cleaners (or the VA who organizes training) on the Top to Bottom Deluxe and Regular Cleaning services.",
+  intro: "Guide for the person who trains new cleaners (or the VA who organizes training) on the Top to Bottom Deluxe, Regular Cleaning and Move In/Out services.",
   steps: [
     { icon: "target", t: "Training goal", lead: "By the end of training, the new cleaner performs a Top to Bottom Deluxe clean alone, in the right order, safely, with a score of at least 90% on the evaluation.",
       blocks: [
@@ -1304,6 +1780,20 @@ en: {
         { k: "do", h: "How to train Regular", list: ["Use the same 5 phases, with the Regular SOP in the Cleaners tab.", "Have the trainee explain what IS and is NOT included before the first job.", "During practice, check each bathroom before they move on: Clorox rinsed well."] },
         { k: "avoid", h: "Clorox safety", list: ["Test: “What can Clorox never be mixed with?” (ammonia, vinegar, any other cleaner).", "Gloves and ventilation, always.", "Never on natural stone. It stains fabric."] }
       ] },
+    { icon: "home", t: "Move In/Out: what changes", lead: "An empty home with no client to ask. Teach the trainee to document everything and to remember what only this service includes.",
+      table: { head: ["Item", "Move In/Out"], rows: [
+        ["Home", "Empty. Check water and power before starting"],
+        ["Photos", "Before and after of EVERY room, including inside the fridge and oven"],
+        ["Fridge and oven", "Included inside and out"],
+        ["Baseboards and doors", "Cleaned and disinfected with Clorox or Lysol"],
+        ["Cabinets", "Outside only"],
+        ["Windows", "Blinds dusted and glass cleaned"],
+        ["Trash", "Removed if any. Items that aren't trash: photo and ask the office"]
+      ] },
+      blocks: [
+        { k: "do", h: "How to train Move In/Out", list: ["Use the same 5 phases, with the Move In/Out SOP in the Cleaners tab.", "During guided practice, check the before photos before the trainee starts cleaning.", "Check the fridge and oven inside before signing off the kitchen.", "On the evaluation, compare the before and after photos."] },
+        { k: "avoid", h: "Safety", list: ["Never degreaser on a hot oven.", "Never liquid bleach on painted or wood doors: use disinfecting wipes or spray.", "Never mix Clorox with Lysol or any other product."] }
+      ] },
     { icon: "calendar", t: "VA tasks", lead: "The VA organizes training so the trainer only has to teach.",
       blocks: [
         { k: "do", h: "Before training", list: ["Confirm the new cleaner's documents, uniform and kit.", "Send the Cleaner SOP link in their language.", "Choose the trainer and jobs 1 to 4 (homes with clients who accept a trainee).", "Tell those clients a trainee will be present."] },
@@ -1322,8 +1812,10 @@ const TRACKS = {
 };
 const SERVICES = {
   deluxe:  { name: "Top to Bottom Deluxe", cleaner: CLEANER, client: CLIENT, meta: CLEANER_META },
-  regular: { name: "Regular Cleaning", cleaner: REG_CLEANER, client: REG_CLIENT, meta: REG_META }
+  regular: { name: "Regular Cleaning", cleaner: REG_CLEANER, client: REG_CLIENT, meta: REG_META },
+  move:    { name: "Move In/Out Cleaning", cleaner: MOVE_CLEANER, client: MOVE_CLIENT, meta: MOVE_META }
 };
+[CLIENT, REG_CLIENT].forEach(c => c.en.steps.splice(c.en.steps.length - 1, 0, UPGRADES_STEP));
 const dataOf = v => v === "trainer" ? TRAINER : SERVICES[state.service][v];
 const metaOf = () => SERVICES[state.service].meta;
 
@@ -1332,9 +1824,9 @@ const store = {
   get(k, d) { try { const v = localStorage.getItem("tsd:" + k); return v === null ? d : JSON.parse(v); } catch (e) { return d; } },
   set(k, v) { try { localStorage.setItem("tsd:" + k, JSON.stringify(v)); } catch (e) {} }
 };
-const state = { service: store.get("service", "deluxe") === "regular" ? "regular" : "deluxe", view: "home", lang: { cleaner: store.get("lang:cleaner", "en"), client: "en", trainer: store.get("lang:trainer", "pt") }, step: { cleaner: 0, client: 0, trainer: 0 } };
+const state = { service: ["regular", "move"].includes(store.get("service", "deluxe")) ? store.get("service", "deluxe") : "deluxe", view: "home", lang: { home: ["pt", "es"].includes(store.get("lang:home", "en")) ? store.get("lang:home", "en") : "en", cleaner: store.get("lang:cleaner", "en"), client: "en", trainer: store.get("lang:trainer", "pt") }, step: { cleaner: 0, client: 0, trainer: 0, home: 0 } };
 let checks = store.get("checks", {});
-const homeLang = () => state.lang.cleaner;
+const homeLang = () => state.lang.home;
 
 const esc = s => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 const app = document.getElementById("app");
@@ -1347,65 +1839,75 @@ function renderHeader() {
     `<button class="tab" type="button" data-view="${k}" aria-current="${state.view === k}">${esc(label)}</button>`).join("");
   const svc = document.getElementById("svc");
   svc.innerHTML = state.view === "cleaner" || state.view === "client" ? Object.entries(SERVICES).map(([k, v]) =>
-    `<button class="svc" type="button" data-service="${k}" aria-pressed="${state.service === k}">${k === "deluxe" ? "Deluxe" : "Regular"}</button>`).join("") : "";
-  const langs = state.view === "home" ? [] : TRACKS[state.view].langs;
+    `<button class="svc" type="button" data-service="${k}" aria-pressed="${state.service === k}">${SVC_LABEL[k]}</button>`).join("") : "";
+  const langs = state.view === "home" ? ["en", "pt", "es"] : TRACKS[state.view].langs;
   document.getElementById("langs").innerHTML = langs.length > 1 ? langs.map(l =>
     `<button class="lang" type="button" data-lang="${l}" aria-pressed="${state.lang[state.view] === l}">${l.toUpperCase()}</button>`).join("") : "";
 }
 
 /* ---------- home ---------- */
 const LOGO = "data:image/png;base64,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";
+const HOME = {
+  en: { eyebrow: "Standard Operating Procedures", h1: "How we clean, step by step", p: "Pick a service and a guide. Cleaners learn exactly how to do it, clients see exactly what they get, and trainers know exactly how to teach it.",
+        ladder: ["Fans, lights, vents, cobwebs", "Blinds, windows, pictures", "Furniture, counters, beds", "Woodwork, baseboards, trash", "Stairs & floors"], arrow: "↓ always top to bottom, floors last",
+        svc: "Service", both: "All services", train: "Training", open: "Open guide →", fc: "For Cleaners", fcl: "For Clients", ft: "For Trainers & VA",
+        s: { deluxe: ["Our deep clean. Everything done by hand, with focus on removing build-up.", "The full deep-clean method, room by room, with checklists you can tick off on the job.", "What's included, how the day works, how to prepare and optional upgrades."],
+             regular: ["Recurring maintenance, weekly or monthly. Keeps up with the basics.", "The regular-visit routine: tidy, dust, kitchen, bathrooms with Clorox, beds, trash, floors.", "What's included, how to prepare (dishes in the dishwasher, sheets on the bed) and optional upgrades."],
+             move: ["An empty home, cleaned edge to edge. Fridge and oven inside included.", "Before and after photos, appliances inside and out, baseboards and doors disinfected.", "What's included, how to prepare the empty home and optional upgrades."] },
+        t: "Training path, teaching method, safety, common mistakes, a live quality scorecard and what changes for Regular and Move In/Out." },
+  pt: { eyebrow: "Procedimentos Operacionais Padrão", h1: "Como limpamos, passo a passo", p: "Escolha um serviço e um guia. As cleaners aprendem exatamente como fazer, os clientes veem exatamente o que recebem e os treinadores sabem exatamente como ensinar.",
+        ladder: ["Ventiladores, luminárias, saídas de ar, teias", "Persianas, janelas, quadros", "Móveis, bancadas, camas", "Madeiras, rodapés, lixo", "Escadas e pisos"], arrow: "↓ sempre de cima para baixo, chão por último",
+        svc: "Serviço", both: "Todos os serviços", train: "Treinamento", open: "Abrir guia →", fc: "Para Cleaners", fcl: "Para Clientes", ft: "Para Treinadores e VA",
+        s: { deluxe: ["Nossa limpeza profunda. Tudo feito à mão, com foco em remover sujeira acumulada.", "O método completo da limpeza profunda, cômodo por cômodo, com checklists para marcar no trabalho.", "O que está incluído, como funciona o dia, como se preparar e upgrades opcionais."],
+             regular: ["Manutenção recorrente, semanal ou mensal. Mantém o básico em dia.", "A rotina da visita regular: arrumar, pó, cozinha, banheiros com Clorox, camas, lixo, pisos.", "O que está incluído, como se preparar (louça na lava-louças, lençóis na cama) e upgrades opcionais."],
+             move: ["Casa vazia, limpa de ponta a ponta. Geladeira e forno por dentro incluídos.", "Fotos do antes e depois, eletrodomésticos por dentro e por fora, rodapés e portas desinfetados.", "O que está incluído, como preparar a casa vazia e upgrades opcionais."] },
+        t: "Caminho de treinamento, método de ensino, segurança, erros comuns, avaliação de qualidade e o que muda na Regular e na Move In/Out." },
+  es: { eyebrow: "Procedimientos Operativos Estándar", h1: "Cómo limpiamos, paso a paso", p: "Elige un servicio y una guía. Las cleaners aprenden exactamente cómo hacerlo, los clientes ven exactamente lo que reciben y los entrenadores saben exactamente cómo enseñarlo.",
+        ladder: ["Ventiladores, lámparas, rejillas, telarañas", "Persianas, ventanas, cuadros", "Muebles, mostradores, camas", "Madera, zócalos, basura", "Escaleras y pisos"], arrow: "↓ siempre de arriba hacia abajo, el piso al final",
+        svc: "Servicio", both: "Todos los servicios", train: "Entrenamiento", open: "Abrir guía →", fc: "Para Cleaners", fcl: "Para Clientes", ft: "Para Entrenadores y VA",
+        s: { deluxe: ["Nuestra limpieza profunda. Todo hecho a mano, enfocado en quitar la suciedad acumulada.", "El método completo de limpieza profunda, cuarto por cuarto, con listas para marcar en el trabajo.", "Qué está incluido, cómo funciona el día, cómo prepararse y mejoras opcionales."],
+             regular: ["Mantenimiento recurrente, semanal o mensual. Mantiene lo básico al día.", "La rutina de la visita regular: ordenar, polvo, cocina, baños con Clorox, camas, basura, pisos.", "Qué está incluido, cómo prepararse (platos en el lavaplatos, sábanas sobre la cama) y mejoras opcionales."],
+             move: ["Casa vacía, limpia de punta a punta. Refrigerador y horno por dentro incluidos.", "Fotos del antes y después, electrodomésticos por dentro y por fuera, zócalos y puertas desinfectados.", "Qué está incluido, cómo preparar la casa vacía y mejoras opcionales."] },
+        t: "Ruta de entrenamiento, método de enseñanza, seguridad, errores comunes, evaluación de calidad y qué cambia en Regular y Move In/Out." }
+};
+const SVC_LABEL = { deluxe: "Deluxe", regular: "Regular", move: "Move In/Out" };
 function renderHome() {
-  const bandsEN = UI.en.bands;
+  const H = HOME[state.lang.home] || HOME.en, bands = UI[state.lang.home].bands;
   const card = (svc, view, ic, h, p, ls) => `
       <button class="card" type="button" data-service="${svc}" data-view="${view}">
         <span class="ic">${icon(ic)}</span>
-        <h2>${h}</h2>
-        <p>${p}</p>
+        <h2>${esc(h)}</h2>
+        <p>${esc(p)}</p>
         <span class="pills">${ls.map(l => `<span class="pill">${l}</span>`).join("")}</span>
-        <span class="go">Open guide →</span>
+        <span class="go">${esc(H.open)}</span>
       </button>`;
-  const scope = svc => SERVICES[svc].client.en.steps[1].groups.flatMap(g => g[1]).map(i => `<li>${esc(i)}</li>`).join("");
+  const svcBlock = (k, i) => `
+  <div class="svc-sec">
+    <div class="svc-head"><span class="eyebrow">${esc(H.svc)} ${i}</span><h2>${esc(SERVICES[k].name)}</h2><p class="small">${esc(H.s[k][0])}</p></div>
+    <section class="cards">
+      ${card(k, "cleaner", "clean", H.fc, H.s[k][1], ["EN", "PT", "ES"])}
+      ${card(k, "client", "home", H.fcl, H.s[k][2], ["EN"])}
+    </section>
+  </div>`;
   app.innerHTML = `
   <section class="hero">
     <div>
-      <div class="hero-brand"><img src="${LOGO}" alt="Top&amp;Shine logo"><div class="eyebrow">Standard Operating Procedures</div></div>
-      <h1>How we clean, step by step</h1>
-      <p>Pick a service and a guide. Cleaners learn exactly how to do it, clients see exactly what they get, and trainers know exactly how to teach it.</p>
+      <div class="hero-brand"><img src="${LOGO}" alt="Top&amp;Shine logo"><div class="eyebrow">${esc(H.eyebrow)}</div></div>
+      <h1>${esc(H.h1)}</h1>
+      <p>${esc(H.p)}</p>
     </div>
-    <div class="tb" aria-label="Cleaning order from top to bottom">
-      ${["Fans, lights, vents, cobwebs", "Blinds, windows, pictures", "Furniture, counters, beds", "Woodwork, baseboards, trash", "Stairs & floors"].map((t, i) =>
-        `<div class="tb-row"><span>${bandsEN[i]}</span><i style="width:${100 - i * 9}%">${t}</i></div>`).join("")}
-      <div class="tb-arrow">↓ always top to bottom, floors last</div>
+    <div class="tb" aria-label="${esc(H.arrow)}">
+      ${H.ladder.map((t, i) => `<div class="tb-row"><span>${esc(bands[i])}</span><i style="width:${100 - i * 9}%">${esc(t)}</i></div>`).join("")}
+      <div class="tb-arrow">${esc(H.arrow)}</div>
     </div>
   </section>
+  ${svcBlock("deluxe", 1)}${svcBlock("regular", 2)}${svcBlock("move", 3)}
   <div class="svc-sec">
-    <div class="svc-head"><span class="eyebrow">Service 1</span><h2>Top to Bottom Deluxe</h2><p class="small">Our deep clean. Everything done by hand, with focus on removing build-up.</p></div>
+    <div class="svc-head"><span class="eyebrow">${esc(H.both)}</span><h2>${esc(H.train)}</h2></div>
     <section class="cards">
-      ${card("deluxe", "cleaner", "clean", "For Cleaners", "The full deep-clean method, room by room, with checklists you can tick off on the job.", ["EN", "PT", "ES"])}
-      ${card("deluxe", "client", "home", "For Clients", "What's included, how the day works, how to prepare and what to expect.", ["EN"])}
+      ${card(state.service, "trainer", "users", H.ft, H.t, ["PT", "EN"])}
     </section>
-  </div>
-  <div class="svc-sec">
-    <div class="svc-head"><span class="eyebrow">Service 2</span><h2>Regular Cleaning</h2><p class="small">Recurring maintenance, weekly or monthly. Keeps up with the basics.</p></div>
-    <section class="cards">
-      ${card("regular", "cleaner", "clean", "For Cleaners", "The regular-visit routine: tidy, dust, kitchen, bathrooms with Clorox, beds, trash, floors.", ["EN", "PT", "ES"])}
-      ${card("regular", "client", "home", "For Clients", "What's included, how to prepare (dishes in the dishwasher, sheets on the bed) and what's not included.", ["EN"])}
-    </section>
-  </div>
-  <div class="svc-sec">
-    <div class="svc-head"><span class="eyebrow">Both services</span><h2>Training</h2></div>
-    <section class="cards">
-      ${card(state.service, "trainer", "users", "For Trainers & VA", "Training path, teaching method, safety, common mistakes, a live quality scorecard and what changes for Regular.", ["PT", "EN"])}
-    </section>
-  </div>
-  <section class="scope">
-    <h2>Service scope at a glance</h2>
-    <div class="two">
-      <div><h3 class="scope-h">Top to Bottom Deluxe</h3><ul>${scope("deluxe")}</ul></div>
-      <div><h3 class="scope-h">Regular Cleaning</h3><ul>${scope("regular")}</ul></div>
-    </div>
-  </section>`;
+  </div>`;
 }
 
 /* ---------- track ---------- */
@@ -1426,7 +1928,7 @@ function stepBody(track, lang, idx, s, L) {
   if (track === "cleaner") {
     const meta = metaOf()[idx];
     if (s.do) h += `<div class="blk do"><h3>${icon("list")}${L.do}</h3>${list(s.do, true)}</div>`;
-    if (meta.colors) h += clothHTML(lang);
+    if (meta.colors) h += clothHTML(lang) + extrasCleanerHTML(lang);
     if (s.tools) h += `<div class="blk"><h3>${icon("kit")}${L.tools}</h3><div class="chips">${s.tools.map(t => `<span>${esc(t)}</span>`).join("")}</div></div>`;
     const side = [];
     if (s.avoid) side.push(`<div class="blk avoid"><h3>${icon("warn")}${L.avoid}</h3>${list(s.avoid)}</div>`);
@@ -1438,6 +1940,7 @@ function stepBody(track, lang, idx, s, L) {
     if (s.groups) h += `<div class="two">${s.groups.map(([g, items]) => `<div class="blk do"><h3>${icon("check")}${esc(g)}</h3>${list(items)}</div>`).join("")}</div>`;
     if (s.timeline) h += `<div class="blk do"><ol class="timeline">${s.timeline.map(([a, b]) => `<li><div><b>${esc(a)}</b><br><span class="small">${esc(b)}</span></div></li>`).join("")}</ol></div>`;
     if (s.checklist) h += `<div class="blk done"><h3>${icon("check")}Before we arrive</h3>${checkList(state.service + "-client-prep", s.checklist)}</div>`;
+    if (s.upgrades) h += extrasClientHTML();
     if (s.notIncluded) h += `<div class="blk avoid"><h3>${icon("x")}Not part of this service</h3><div class="chips">${s.notIncluded.map(t => `<span>${esc(t)}</span>`).join("")}</div></div>`;
     if (s.tip) h += `<div class="blk tip"><h3>${icon("bulb")}Good to know</h3><p>${esc(s.tip)}</p></div>`;
   } else {
@@ -1522,7 +2025,7 @@ function render() {
 }
 function go(view) {
   state.view = view;
-  try { history.replaceState(null, "", view === "home" ? location.pathname : "#" + (view !== "trainer" && state.service === "regular" ? "regular-" : "") + view); } catch (e) {}
+  try { history.replaceState(null, "", view === "home" ? location.pathname : "#" + (view !== "trainer" && state.service !== "deluxe" ? state.service + "-" : "") + view); } catch (e) {}
   render(); window.scrollTo({ top: 0 });
 }
 
@@ -1532,6 +2035,7 @@ document.addEventListener("click", e => {
   if (t.id === "brand") return go("home");
   if (t.dataset.service) { if (state.service !== t.dataset.service) { state.service = t.dataset.service; store.set("service", state.service); state.step.cleaner = state.step.client = 0; } if (!t.dataset.view) return go(state.view); }
   if (t.dataset.view) return go(t.dataset.view);
+  if (t.dataset.lang && state.view === "home") { const l = t.dataset.lang; state.lang.cleaner = l; store.set("lang:cleaner", l); if (TRACKS.trainer.langs.includes(l)) { state.lang.trainer = l; store.set("lang:trainer", l); } }
   if (t.dataset.lang) { state.lang[state.view] = t.dataset.lang; store.set("lang:" + state.view, t.dataset.lang); return render(); }
   if (t.dataset.step) { state.step[state.view] = +t.dataset.step; render(); return window.scrollTo({ top: 0 }); }
   if (t.dataset.nav) {
@@ -1559,7 +2063,7 @@ document.addEventListener("keydown", e => {
 });
 
 let h = (location.hash || "").slice(1);
-if (h.startsWith("regular-")) { state.service = "regular"; h = h.slice(8); }
+const hm = h.match(/^(regular|move)-(.+)$/); if (hm) { state.service = hm[1]; h = hm[2]; }
 if (TRACKS[h]) state.view = h;
 render();
 </script>
