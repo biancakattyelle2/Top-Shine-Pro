@@ -11,20 +11,26 @@ const store = {
   set(k, v) { try { localStorage.setItem("tsp:" + PAGE.key + ":" + k, JSON.stringify(v)); } catch (e) {} }
 };
 const esc = s => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-const savedLang = store.get("lang", PAGE.langs[0]);
-const state = { service: PAGE.service, lang: PAGE.langs.includes(savedLang) ? savedLang : PAGE.langs[0], step: 0, mode: store.get("mode", "steps") === "all" ? "all" : "steps" };
-let checks = store.get("checks", {});
 const app = document.getElementById("app");
+let PAGE, DATA, META, SCORE, state, checks;
 const VU = () => Object.assign({}, VIEW_UI.en, VIEW_UI[state.lang]);
 
-/* client pages always offer the upgrades table before "Our promise" */
-if (PAGE.audience === "client" && typeof UPGRADES_STEP !== "undefined")
-  Object.values(DATA).forEach(d => { if (!d.steps.some(s => s.upgrades)) d.steps.splice(d.steps.length - 1, 0, UPGRADES_STEP); });
+/* Show one guide. A standalone page loads its own entry once; the owner's index swaps entries. */
+function loadPage(entry) {
+  ({ page: PAGE, DATA, META, SCORE } = entry);
+  const savedLang = store.get("lang", PAGE.langs[0]);
+  state = { service: PAGE.service, lang: PAGE.langs.includes(savedLang) ? savedLang : PAGE.langs[0], step: 0, mode: store.get("mode", "steps") === "all" ? "all" : "steps" };
+  checks = store.get("checks", {});
+  /* client pages always offer the upgrades table before "Our promise" */
+  if (PAGE.audience === "client" && typeof UPGRADES_STEP !== "undefined")
+    Object.values(DATA).forEach(d => { if (!d.steps.some(s => s.upgrades)) d.steps.splice(d.steps.length - 1, 0, UPGRADES_STEP); });
+  render();
+}
 
 function renderHeader() {
-  document.getElementById("pname").textContent = PAGE.name[state.lang] || PAGE.name.en;
-  document.getElementById("plabel").textContent = PAGE.label[state.lang] || PAGE.label.en;
-  document.title = (PAGE.name.en) + " " + PAGE.label.en;
+  const pn = document.getElementById("pname"), pl = document.getElementById("plabel");
+  if (pn) pn.textContent = PAGE.name[state.lang] || PAGE.name.en;
+  if (pl) pl.textContent = PAGE.label[state.lang] || PAGE.label.en;
   document.getElementById("langs").innerHTML = PAGE.langs.length > 1 ? PAGE.langs.map(l =>
     `<button class="lang" type="button" data-lang="${l}" aria-pressed="${state.lang === l}">${l.toUpperCase()}</button>`).join("") : "";
 }
@@ -199,4 +205,3 @@ document.addEventListener("keydown", e => {
   if (e.key === "ArrowRight") document.querySelector('[data-nav="1"]')?.click();
   if (e.key === "ArrowLeft") document.querySelector('[data-nav="-1"]')?.click();
 });
-render();

@@ -11,7 +11,8 @@ One separate page per cleaning type and audience, so each person only sees what 
 | Small Commercial | `dist/commercial-cleaner.html` | `dist/commercial-client.html` |
 | Airbnb | `dist/airbnb-cleaner.html` | `dist/airbnb-client.html` (host guide) |
 
-Plus `dist/trainer.html` (PT · EN) and `dist/index.html`, the owner's index with every link.
+Plus `dist/trainer.html` (PT · EN) and `dist/index.html`, the owner's page: every guide can be read there
+without opening another link, with the link to send for each one at the top.
 Published links are in `links.json`.
 
 ## Editing

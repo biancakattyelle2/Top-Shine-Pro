@@ -46,8 +46,14 @@ HEAD = """<title>{title}</title>
 </style>
 """
 
-def build_page(p, css, house, common, engine):
+def entry(p):
+    """A page's data wrapped in its own scope, so several pages can live in one file."""
     cfg = {k: p[k] for k in ("key", "audience", "service", "langs", "name", "label")}
+    return ("(function () {\n" + read("data", p["data"]) +
+            "\nreturn { page: " + json.dumps(cfg, ensure_ascii=False) +
+            ", DATA, META: typeof META !== \"undefined\" ? META : null, SCORE: typeof SCORE !== \"undefined\" ? SCORE : null };\n})()")
+
+def build_page(p, css, house, common, engine):
     body = f"""<header class="bar">
   <div class="bar-in">
     <div class="brand">
@@ -60,20 +66,21 @@ def build_page(p, css, house, common, engine):
 <main class="wrap" id="app"></main>
 <script>
 {common}
-const PAGE = {json.dumps(cfg, ensure_ascii=False)};
-{read("data", p["data"])}
 {engine}
+const ENTRY = {entry(p)};
+loadPage(ENTRY);
 </script>
 """
     return HEAD.format(title=p["title"], css=css) + body
 
-def build_index(ps, css, links):
+def build_index(ps, css, links, common, engine):
+    """The owner's index: every guide readable in place, with the link to send for each."""
     tpl = read("index.html")
-    entries = {p["key"]: links.get(p["key"], "") for p in ps}
+    entries = "const ENTRIES = {\n" + ",\n".join(json.dumps(p["key"]) + ": " + entry(p) for p in ps) + "\n};"
     return (HEAD.format(title="Tipos de Limpezas/ SOP&#39;s", css=css) + tpl
+            .replace("/*COMMON*/", common).replace("/*ENGINE*/", engine).replace("/*ENTRIES*/", entries)
             .replace("/*LOGO*/", json.dumps(read("logo-full.txt").strip()))
-            .replace("/*LINKS*/", json.dumps(entries))
-            .replace("/*SERVICES*/", json.dumps(SERVICES, ensure_ascii=False)))
+            .replace("/*LINKS*/", json.dumps({p["key"]: links.get(p["key"], "") for p in ps})))
 
 def main():
     os.makedirs(DIST, exist_ok=True)
@@ -86,7 +93,7 @@ def main():
     lp = os.path.join(ROOT, "links.json")
     links = json.load(open(lp)) if os.path.exists(lp) else {}
     with open(os.path.join(DIST, "index.html"), "w", encoding="utf-8") as f:
-        f.write(build_index(ps, css, links))
+        f.write(build_index(ps, css, links, common, engine))
     print("built", len(ps) + 1, "pages in", DIST)
 
 if __name__ == "__main__":

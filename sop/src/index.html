@@ -1,115 +1,91 @@
 <style>
-.hub-hero { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 20px; align-items: center; padding-block: 8px 20px; }
-.hub-hero img { width: 104px; height: auto; background: #ffffff; border-radius: 16px; padding: 8px; border: 1px solid var(--line); }
-.hub-hero h1 { font-size: clamp(30px, 5vw, 46px); margin-top: 6px; }
-.hub-hero p { color: var(--muted); max-width: 62ch; margin: 8px 0 0; font-size: 16px; }
-.rules { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin-bottom: 8px; }
-.rule { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; display: grid; grid-template-columns: 40px minmax(0, 1fr); gap: 12px; align-items: center; }
-.rule .ic { width: 40px; height: 40px; border-radius: 10px; background: var(--accent-soft); color: var(--accent); display: grid; place-items: center; }
-.rule .ic svg { width: 22px; height: 22px; }
-.rule b { font-family: var(--font-display); font-size: 16px; display: block; }
-.rule span { font-size: 14px; color: var(--muted); }
-.group { margin-top: 26px; display: grid; gap: 12px; }
-.group > h2 { font-size: 22px; }
-.svc-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
-.svc-card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 18px 20px; display: grid; gap: 12px; align-content: start; min-width: 0; }
-.svc-card h3 { font-size: 20px; color: var(--ink); }
-.svc-card p { margin: 0; color: var(--muted); font-size: 14px; }
-.lk { display: grid; grid-template-columns: minmax(0, 1fr) auto auto; gap: 8px; align-items: center; padding: 10px 12px; border-radius: 10px; background: var(--surface-2); }
-.lk b { font-size: 15px; display: block; }
-.lk small { color: var(--muted); font-size: 12px; letter-spacing: .04em; }
-.lk a, .lk button { font: inherit; font-size: 13px; font-weight: 700; border-radius: 8px; padding: 7px 12px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); text-decoration: none; cursor: pointer; white-space: nowrap; }
-.lk a { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
-.lk .none { font-size: 13px; color: var(--muted); grid-column: 2 / -1; }
-.lk.cl .who { color: var(--accent); }
-.note { margin-top: 26px; background: var(--shine-soft); border-radius: 12px; padding: 14px 18px; font-size: 14px; }
+.picker { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 16px 18px; display: grid; gap: 14px; margin-bottom: 20px; }
+.pick-row { display: grid; grid-template-columns: 120px minmax(0, 1fr); gap: 10px; align-items: start; }
+.pick-row > span { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); padding-top: 8px; }
+.chips2 { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip { border: 1px solid var(--line); background: var(--surface); border-radius: 999px; padding: 7px 14px; font: inherit; font-size: 14px; font-weight: 700; color: var(--ink); cursor: pointer; }
+.chip:hover { border-color: var(--brand); }
+.chip[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+.chip small { font-weight: 600; opacity: .8; margin-left: 4px; font-size: 11px; letter-spacing: .04em; }
+.sendbar { display: grid; grid-template-columns: minmax(0, 1fr) auto auto; gap: 8px; align-items: center; background: var(--surface-2); border-radius: 12px; padding: 10px 12px; }
+.sendbar b { display: block; font-size: 14px; }
+.sendbar code { display: block; font-size: 13px; color: var(--accent); overflow-wrap: anywhere; user-select: all; }
+.sendbar small { display: block; color: var(--muted); font-size: 12px; margin-top: 2px; }
+.sendbar a, .sendbar button, .all-links button { font: inherit; font-size: 13px; font-weight: 700; border-radius: 8px; padding: 8px 12px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); text-decoration: none; cursor: pointer; white-space: nowrap; }
+.sendbar button.main { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+details.all-links { margin-top: 2px; }
+details.all-links summary { cursor: pointer; font-weight: 700; color: var(--accent); font-size: 14px; }
+.all-links table { width: 100%; border-collapse: collapse; font-size: 14px; margin-top: 8px; }
+.all-links td { padding: 6px 8px; border-bottom: 1px solid var(--line); vertical-align: middle; }
+.all-links td:last-child { text-align: right; white-space: nowrap; }
+.hub-title { display: flex; align-items: center; gap: 14px; margin-bottom: 16px; }
+.hub-title img { width: 64px; height: auto; background: #ffffff; border-radius: 12px; padding: 5px; border: 1px solid var(--line); }
+.hub-title h1 { font-size: clamp(26px, 4vw, 36px); }
+.hub-title p { margin: 2px 0 0; color: var(--muted); font-size: 14px; }
 @media (max-width: 860px) {
-  .hub-hero { grid-template-columns: 1fr; }
-  .rules, .svc-grid { grid-template-columns: 1fr; }
-  .lk { grid-template-columns: minmax(0, 1fr) auto; }
-  .lk b, .lk small { grid-column: 1 / -1; }
+  .pick-row { grid-template-columns: 1fr; gap: 6px; }
+  .pick-row > span { padding-top: 0; }
+  .sendbar { grid-template-columns: 1fr 1fr; }
+  .sendbar > div { grid-column: 1 / -1; }
 }
 </style>
 <header class="bar">
   <div class="bar-in">
     <div class="brand">
       <span class="brand-mark" id="mark"></span>
-      <span><b>Top&amp;Shine</b><small id="sub"></small></span>
+      <span><b id="pname"></b><small>Top&amp;Shine · <span id="plabel"></span></small></span>
     </div>
     <div class="langs" id="langs" role="group" aria-label="Language"></div>
   </div>
 </header>
-<main class="wrap" id="app"></main>
+<div class="wrap" style="padding-bottom:0">
+  <div class="hub-title"><img id="logo" alt="Top&amp;Shine logo"><div><h1>Tipos de Limpezas / SOP's</h1><p>Veja tudo aqui mesmo. Para mandar, copie o link da página certa.</p></div></div>
+  <section class="picker" id="picker"></section>
+</div>
+<main class="wrap" id="app" style="padding-top:0"></main>
 <script>
+/*COMMON*/
+/*ENGINE*/
+/*ENTRIES*/
 const LOGO = /*LOGO*/;
 const LINKS = /*LINKS*/;
-const SVC = /*SERVICES*/;
-const T = {
-  en: { sub: "Cleaning Types", eyebrow: "Owner's index", h1: "Cleaning Types", p: "Every cleaning type has its own separate pages. Send each person only the page that is meant for them.",
-        rules: [["Cleaners", "get only the Cleaner SOP (EN · PT · ES)"], ["Clients", "get only the Client Guide (EN)"], ["Trainers & VA", "get the Trainer SOP (PT · EN)"]],
-        groups: { res: "Residential", con: "Construction", com: "Commercial", tr: "Training" },
-        open: "Open", copy: "Copy link", copied: "Copied", none: "Not published yet",
-        cleaner: "Cleaner SOP", client: "Client Guide", host: "Host Guide", trainer: "Trainer SOP", trainerName: "Cleaner Training", trainerDesc: "How to train new cleaners for every cleaning type, safety, scorecard and VA tasks.",
-        d: { regular: "Recurring maintenance, weekly or monthly.", deluxe: "Our deep clean (Top to Bottom), done by hand.", move: "Empty home, edge to edge. Fridge and oven inside included.", airbnb: "Turnover between guests, staged like the listing.", post: "Dust and residue removed after a renovation or new build.", commercial: "Offices, shops, salons and studios." },
-        note: "Each page is private until you share it. Open the page and use its Share menu to give access to the person who needs it." },
-  pt: { sub: "Tipos de Limpeza", eyebrow: "Índice da dona", h1: "Tipos de Limpeza", p: "Cada tipo de limpeza tem suas páginas separadas. Mande para cada pessoa só a página que é para ela.",
-        rules: [["Cleaners", "recebem só o SOP da Cleaner (EN · PT · ES)"], ["Clientes", "recebem só o Guia do Cliente (EN)"], ["Treinadores e VA", "recebem o SOP do Treinador (PT · EN)"]],
-        groups: { res: "Residencial", con: "Construção", com: "Comercial", tr: "Treinamento" },
-        open: "Abrir", copy: "Copiar link", copied: "Copiado", none: "Ainda não publicado",
-        cleaner: "SOP da Cleaner", client: "Guia do Cliente", host: "Guia do Anfitrião", trainer: "SOP do Treinador", trainerName: "Treinamento de Cleaners", trainerDesc: "Como treinar novas cleaners em todos os tipos de limpeza, segurança, avaliação e tarefas da VA.",
-        d: { regular: "Manutenção recorrente, semanal ou mensal.", deluxe: "Nossa limpeza profunda (Top to Bottom), feita à mão.", move: "Casa vazia, de ponta a ponta. Geladeira e forno por dentro incluídos.", airbnb: "Troca entre hóspedes, montada igual ao anúncio.", post: "Poeira e resíduos removidos depois de reforma ou construção.", commercial: "Escritórios, lojas, salões e estúdios." },
-        note: "Cada página é privada até você compartilhar. Abra a página e use o menu Share (Compartilhar) para dar acesso à pessoa que precisa." },
-  es: { sub: "Tipos de Limpieza", eyebrow: "Índice de la dueña", h1: "Tipos de Limpieza", p: "Cada tipo de limpieza tiene sus páginas separadas. Envía a cada persona solo la página que es para ella.",
-        rules: [["Cleaners", "reciben solo el SOP de la Cleaner (EN · PT · ES)"], ["Clientes", "reciben solo la Guía del Cliente (EN)"], ["Entrenadores y VA", "reciben el SOP del Entrenador (PT · EN)"]],
-        groups: { res: "Residencial", con: "Construcción", com: "Comercial", tr: "Entrenamiento" },
-        open: "Abrir", copy: "Copiar enlace", copied: "Copiado", none: "Aún no publicado",
-        cleaner: "SOP de la Cleaner", client: "Guía del Cliente", host: "Guía del Anfitrión", trainer: "SOP del Entrenador", trainerName: "Entrenamiento de Cleaners", trainerDesc: "Cómo entrenar nuevas cleaners en todos los tipos de limpieza, seguridad, evaluación y tareas de la VA.",
-        d: { regular: "Mantenimiento recurrente, semanal o mensual.", deluxe: "Nuestra limpieza profunda (Top to Bottom), hecha a mano.", move: "Casa vacía, de punta a punta. Refrigerador y horno por dentro incluidos.", airbnb: "Cambio entre huéspedes, montada igual al anuncio.", post: "Polvo y residuos quitados después de una remodelación o construcción.", commercial: "Oficinas, tiendas, salones y estudios." },
-        note: "Cada página es privada hasta que la compartas. Abre la página y usa su menú Share (Compartir) para dar acceso a la persona que la necesita." }
+const HUB = {
+  services: [["regular", "Regular"], ["deluxe", "Deluxe"], ["move", "Move In/Out"], ["airbnb", "Airbnb"], ["post", "Pós-obra"], ["commercial", "Comercial pequeno"], ["trainer", "Treinamento"]],
+  aud: { cleaner: ["Cleaner", "EN · PT · ES"], client: ["Cliente", "EN"] },
+  who: { cleaner: "a cleaner", client: "o cliente", trainer: "a treinadora ou VA" }
 };
-const ICON = {
-  clean: '<path d="M12 2v6M12 16v6M2 12h6M16 12h6M5 5l3 3M16 16l3 3M19 5l-3 3M8 16l-3 3"/>',
-  home: '<path d="M3 11l9-8 9 8"/><path d="M5 10v11h14V10"/><path d="M10 21v-6h4v6"/>',
-  users: '<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><circle cx="17" cy="9" r="2.5"/><path d="M16 14a5 5 0 0 1 6 5"/>'
-};
-const ic = n => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICON[n]}</svg>`;
-const esc = s => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-let lang = "pt";
-try { const v = localStorage.getItem("tsp:index:lang"); if (T[v]) lang = v; } catch (e) {}
+let hubSvc = "regular", hubAud = "cleaner";
+try { const v = JSON.parse(localStorage.getItem("tsp:hub") || "null"); if (v && v.svc) { hubSvc = v.svc; hubAud = v.aud || "cleaner"; } } catch (e) {}
+const hubKey = () => hubSvc === "trainer" ? "trainer" : hubSvc + "-" + hubAud;
+const pageName = k => { const p = ENTRIES[k].page; return (p.name.pt || p.name.en) + " · " + (p.label.pt || p.label.en); };
 
-function linkRow(key, who, langs, cls) {
-  const url = LINKS[key], L = T[lang];
-  return `<div class="lk ${cls}"><div><b class="who">${esc(who)}</b><small>${langs}</small></div>${url
-    ? `<a href="${esc(url)}" target="_blank" rel="noopener">${esc(L.open)}</a><button type="button" data-copy="${esc(url)}">${esc(L.copy)}</button>`
-    : `<span class="none">${esc(L.none)}</span>`}</div>`;
+function renderPicker() {
+  const key = hubKey(), url = LINKS[key] || "", who = HUB.who[hubSvc === "trainer" ? "trainer" : hubAud];
+  document.getElementById("picker").innerHTML = `
+    <div class="pick-row"><span>Tipo de limpeza</span><div class="chips2">${HUB.services.map(([k, n]) => `<button class="chip" type="button" data-hsvc="${k}" aria-pressed="${hubSvc === k}">${n}</button>`).join("")}</div></div>
+    ${hubSvc === "trainer" ? "" : `<div class="pick-row"><span>Para quem</span><div class="chips2">${Object.entries(HUB.aud).map(([k, [n, l]]) => `<button class="chip" type="button" data-haud="${k}" aria-pressed="${hubAud === k}">${n}<small>${l}</small></button>`).join("")}</div></div>`}
+    <div class="sendbar">
+      <div><b>Link para mandar para ${who}</b>${url ? `<code>${esc(url)}</code><small>Quem abrir este link vê só esta página. Libere o acesso no menu Share da página.</small>` : `<small>Ainda não publicado.</small>`}</div>
+      ${url ? `<button class="main" type="button" data-hlink="${esc(url)}">Copiar link</button><a href="${esc(url)}" target="_blank" rel="noopener">Abrir sozinha</a>` : ""}
+    </div>
+    <details class="all-links"><summary>Ver todos os links</summary><table>${Object.keys(ENTRIES).map(k => `<tr><td>${esc(pageName(k))}</td><td>${LINKS[k] ? `<button type="button" data-hlink="${esc(LINKS[k])}">Copiar link</button>` : "—"}</td></tr>`).join("")}</table></details>`;
 }
-function card(svc) {
-  const L = T[lang];
-  return `<div class="svc-card"><h3>${esc(SVC[svc][lang] || SVC[svc].en)}</h3><p>${esc(L.d[svc])}</p>
-    ${linkRow(svc + "-cleaner", L.cleaner, "EN · PT · ES", "cn")}
-    ${linkRow(svc + "-client", svc === "airbnb" ? L.host : L.client, "EN", "cl")}</div>`;
-}
-function render() {
-  const L = T[lang];
-  document.getElementById("mark").innerHTML = `<img src="${LOGO}" alt="" style="width:30px">`;
-  document.getElementById("sub").textContent = L.sub;
-  document.getElementById("langs").innerHTML = ["en", "pt", "es"].map(l => `<button class="lang" type="button" data-lang="${l}" aria-pressed="${l === lang}">${l.toUpperCase()}</button>`).join("");
-  document.getElementById("app").innerHTML = `
-    <section class="hub-hero"><img src="${LOGO}" alt="Top&amp;Shine logo"><div><div class="eyebrow">${esc(L.eyebrow)}</div><h1>${esc(L.h1)}</h1><p>${esc(L.p)}</p></div></section>
-    <div class="rules">${L.rules.map((r, i) => `<div class="rule"><span class="ic">${ic(["clean", "home", "users"][i])}</span><div><b>${esc(r[0])}</b><span>${esc(r[1])}</span></div></div>`).join("")}</div>
-    <section class="group"><h2>${esc(L.groups.res)}</h2><div class="svc-grid">${["regular", "deluxe", "move", "airbnb"].map(card).join("")}</div></section>
-    <section class="group"><h2>${esc(L.groups.con)} · ${esc(L.groups.com)}</h2><div class="svc-grid">${card("post")}${card("commercial")}</div></section>
-    <section class="group"><h2>${esc(L.groups.tr)}</h2><div class="svc-grid"><div class="svc-card"><h3>${esc(L.trainerName)}</h3><p>${esc(L.trainerDesc)}</p>${linkRow("trainer", L.trainer, "PT · EN", "tr")}</div></div></section>
-    <p class="note">${esc(L.note)}</p>`;
+function hubShow() {
+  try { localStorage.setItem("tsp:hub", JSON.stringify({ svc: hubSvc, aud: hubAud })); } catch (e) {}
+  renderPicker();
+  loadPage(ENTRIES[hubKey()]);
 }
 document.addEventListener("click", e => {
   const b = e.target.closest("button"); if (!b) return;
-  if (b.dataset.lang) { lang = b.dataset.lang; try { localStorage.setItem("tsp:index:lang", lang); } catch (err) {} return render(); }
-  if (b.dataset.copy) {
-    const url = b.dataset.copy, label = T[lang].copied;
-    const done = () => { b.textContent = label; setTimeout(() => { b.textContent = T[lang].copy; }, 1600); };
+  if (b.dataset.hsvc) { hubSvc = b.dataset.hsvc; return hubShow(); }
+  if (b.dataset.haud) { hubAud = b.dataset.haud; return hubShow(); }
+  if (b.dataset.hlink) {
+    const url = b.dataset.hlink, old = b.textContent;
+    const done = () => { b.textContent = "Copiado ✓"; setTimeout(() => { b.textContent = old; }, 1600); };
     try { navigator.clipboard.writeText(url).then(done, () => { b.textContent = url; }); } catch (err) { b.textContent = url; }
   }
 });
-render();
+document.getElementById("mark").innerHTML = `<img src="${LOGO}" alt="" style="width:30px">`;
+document.getElementById("logo").src = LOGO;
+hubShow();
 </script>
