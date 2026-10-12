@@ -1,0 +1,1028 @@
+<title>Deluxe Cleaning SOP</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@600;700&family=Nunito+Sans:opsz,wght@6..12,400;6..12,600;6..12,700&display=swap">
+<style>
+/* Layout: sticky top bar with track tabs + language pills; inside a track, a step rail on the left (chips on phones) and one step card with Back / Next. */
+:root {
+  /* Top&Shine brand blue #319FC2 (from the logo), deepened for text and buttons */
+  --brand: #319fc2;
+  --bg: #f2f8fb;
+  --surface: #ffffff;
+  --surface-2: #e4f1f7;
+  --ink: #0f3446;
+  --muted: #4f6b7a;
+  --line: #cfe2eb;
+  --accent: #1f7fa3;
+  --accent-ink: #ffffff;
+  --accent-soft: #d9eef7;
+  --shine: #319fc2;
+  --shine-soft: #e6f5fb;
+  --warn: #b4361f;
+  --warn-soft: #fbe5e0;
+  --ok: #2a7a3b;
+  --ok-soft: #dff1e2;
+  --font-display: "Roboto Condensed", "Arial Narrow", "Segoe UI", system-ui, sans-serif;
+  --font-body: "Nunito Sans", "Segoe UI", system-ui, sans-serif;
+  --radius: 14px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0b1c25; --surface: #112a37; --surface-2: #173543; --ink: #e6f3f8; --muted: #9bbccb;
+    --line: #24485a; --accent: #5cc3e6; --accent-ink: #062330; --accent-soft: #143c4d;
+    --shine: #5cc3e6; --shine-soft: #12313f; --warn: #ff8a73; --warn-soft: #3d1f1a;
+    --ok: #7fd18f; --ok-soft: #1a3522; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0b1c25; --surface: #112a37; --surface-2: #173543; --ink: #e6f3f8; --muted: #9bbccb;
+  --line: #24485a; --accent: #5cc3e6; --accent-ink: #062330; --accent-soft: #143c4d;
+  --shine: #5cc3e6; --shine-soft: #12313f; --warn: #ff8a73; --warn-soft: #3d1f1a;
+  --ok: #7fd18f; --ok-soft: #1a3522; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--ink); font-family: var(--font-body); font-size: 16px; line-height: 1.55; }
+h1, h2, h3 { font-family: var(--font-display); text-wrap: balance; margin: 0; line-height: 1.2; }
+button { font: inherit; color: inherit; cursor: pointer; }
+button:focus-visible, a:focus-visible, input:focus-visible { outline: 3px solid var(--brand); outline-offset: 2px; }
+
+/* top bar */
+.bar { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 10; background: var(--surface); border-bottom: 1px solid var(--line); }
+.bar-in { max-width: 1180px; margin: 0 auto; padding: 10px 16px; display: flex; flex-wrap: wrap; align-items: center; gap: 10px 18px; }
+.brand { display: flex; align-items: center; gap: 10px; background: none; border: 0; padding: 0; text-align: left; }
+.brand-mark { width: 42px; height: 42px; border-radius: 10px; background: #ffffff; display: grid; place-items: center; flex: none; border: 1px solid var(--line); }
+.brand-mark img { width: 32px; height: auto; }
+.brand b { font-family: var(--font-display); font-size: 19px; color: var(--brand); display: block; line-height: 1.1; }
+.brand small { color: var(--muted); font-size: 12px; }
+.tabs { display: flex; gap: 4px; flex-wrap: wrap; margin-left: auto; }
+.tab { border: 1px solid transparent; background: none; padding: 7px 12px; border-radius: 999px; font-weight: 700; font-size: 14px; color: var(--muted); }
+.tab[aria-current="true"] { background: var(--ink); color: var(--bg); }
+.tab:hover:not([aria-current="true"]) { background: var(--surface-2); color: var(--ink); }
+.langs { display: flex; gap: 4px; }
+.lang { border: 1px solid var(--line); background: var(--surface); padding: 5px 10px; border-radius: 8px; font-size: 13px; font-weight: 700; letter-spacing: .04em; }
+.svcs { display: flex; padding: 3px; gap: 2px; background: var(--surface-2); border-radius: 10px; }
+.svcs:empty { display: none; }
+.svc { border: 0; background: none; padding: 5px 12px; border-radius: 8px; font-size: 13px; font-weight: 700; color: var(--muted); }
+.svc[aria-pressed="true"] { background: var(--surface); color: var(--ink); box-shadow: 0 1px 2px rgba(0,0,0,.12); }
+.lang[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+
+.wrap { max-width: 1180px; margin: 0 auto; padding-inline: 16px; padding-block: 24px 64px; }
+
+/* home */
+.hero { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: 32px; align-items: center; padding-block: 12px 28px; }
+.eyebrow { text-transform: uppercase; letter-spacing: .12em; font-size: 12px; font-weight: 700; color: var(--accent); }
+.hero-brand { display: flex; align-items: center; gap: 16px; margin-bottom: 14px; }
+.hero-brand img { width: 96px; height: auto; background: #ffffff; border-radius: 16px; padding: 8px; border: 1px solid var(--line); }
+.hero h1 { font-weight: 700; letter-spacing: -.01em; font-size: clamp(30px, 5vw, 48px); margin-top: 8px; }
+.hero p { color: var(--muted); max-width: 58ch; font-size: 17px; }
+.tb { display: grid; gap: 6px; }
+.tb-row { display: grid; grid-template-columns: 74px 1fr; gap: 10px; align-items: center; font-size: 13px; }
+.tb-row span:first-child { color: var(--muted); font-weight: 700; text-align: right; }
+.tb-row i { display: block; height: 30px; border-radius: 8px; background: var(--brand); font-style: normal; color: #ffffff; font-weight: 700; padding: 5px 10px; font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.tb-row:nth-child(odd) i { background: var(--accent); }
+.tb-arrow { font-size: 12px; color: var(--muted); text-align: center; padding-left: 84px; }
+.cards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 22px; text-align: left; display: grid; gap: 10px; align-content: start; transition: transform .15s, border-color .15s; }
+.card:hover { transform: translateY(-2px); border-color: var(--accent); }
+.card .ic { width: 46px; height: 46px; border-radius: 12px; background: var(--accent-soft); display: grid; place-items: center; color: var(--accent); }
+.card h2 { font-size: 21px; }
+.card p { margin: 0; color: var(--muted); font-size: 15px; }
+.card .pills { display: flex; gap: 6px; flex-wrap: wrap; }
+.pill { font-size: 12px; font-weight: 700; padding: 3px 8px; border-radius: 6px; background: var(--surface-2); letter-spacing: .04em; }
+.card .go { font-weight: 700; color: var(--accent); }
+.svc-sec { display: grid; gap: 12px; margin-top: 24px; }
+.svc-head h2 { font-size: 22px; margin-top: 2px; }
+.svc-head p { margin: 4px 0 0; }
+.svc-sec .cards { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.scope-h { font-size: 15px; margin-bottom: 8px; }
+.scope .two ul { columns: 1; }
+.scope { margin-top: 28px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 22px; }
+.scope h2 { font-size: 18px; margin-bottom: 12px; }
+.scope ul { columns: 2; column-gap: 32px; margin: 0; padding-left: 20px; }
+.scope li { break-inside: avoid; margin-bottom: 4px; }
+
+/* track */
+.track { display: grid; grid-template-columns: 270px minmax(0, 1fr); gap: 24px; align-items: start; }
+.rail { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 80px); background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 10px; max-height: calc(100vh - 110px); overflow: auto; }
+.rail h3 { font-size: 13px; text-transform: uppercase; letter-spacing: .1em; color: var(--muted); padding: 8px 8px 10px; }
+.rail ol { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; }
+.rail button { width: 100%; display: flex; gap: 10px; align-items: center; text-align: left; background: none; border: 0; padding: 8px; border-radius: 10px; font-size: 14px; }
+.rail button:hover { background: var(--surface-2); }
+.rail button[aria-current="step"] { background: var(--accent-soft); font-weight: 700; }
+.num { flex: none; width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; font-size: 12px; font-weight: 700; background: var(--surface-2); font-variant-numeric: tabular-nums; }
+[aria-current="step"] .num { background: var(--accent); color: var(--accent-ink); }
+.num.done { background: var(--ok); color: var(--surface); }
+
+.progress { height: 6px; border-radius: 99px; background: var(--surface-2); overflow: hidden; margin-bottom: 16px; }
+.progress i { display: block; height: 100%; background: var(--accent); transition: width .25s; }
+.step { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: clamp(18px, 3vw, 32px); }
+.step-head { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 16px; align-items: start; }
+.step-ic { width: 56px; height: 56px; border-radius: 14px; background: var(--brand); color: #ffffff; display: grid; place-items: center; }
+.step-ic svg { width: 30px; height: 30px; }
+.step-kicker { font-size: 13px; color: var(--muted); font-weight: 700; letter-spacing: .06em; text-transform: uppercase; font-variant-numeric: tabular-nums; }
+.step h2 { font-size: clamp(22px, 3vw, 30px); margin-top: 2px; }
+.lead { color: var(--muted); font-size: 17px; margin: 10px 0 0; max-width: 65ch; }
+.band { display: grid; gap: 3px; width: 92px; }
+.band span { font-size: 11px; padding: 2px 6px; border-radius: 5px; background: var(--surface-2); color: var(--muted); text-align: center; font-weight: 700; }
+.band span.on { background: var(--brand); color: #ffffff; }
+.band-cap { font-size: 10px; color: var(--muted); text-align: center; text-transform: uppercase; letter-spacing: .08em; }
+.blocks { display: grid; gap: 16px; margin-top: 22px; }
+.blk { border-radius: 12px; padding: 16px 18px; background: var(--surface-2); min-width: 0; }
+.blk h3 { font-size: 15px; display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+.blk h3 svg { width: 18px; height: 18px; flex: none; }
+.blk.do { background: var(--surface); border: 1px solid var(--line); }
+.blk.avoid { background: var(--warn-soft); }
+.blk.avoid h3 { color: var(--warn); }
+.blk.tip { background: var(--shine-soft); }
+.blk.done { background: var(--ok-soft); }
+.blk.done h3 { color: var(--ok); }
+.blk ol, .blk ul { margin: 0; padding-left: 22px; display: grid; gap: 6px; }
+.blk.do ol { counter-reset: s; list-style: none; padding-left: 0; gap: 10px; }
+.blk.do ol li { counter-increment: s; display: grid; grid-template-columns: 30px minmax(0, 1fr); gap: 10px; }
+.blk.do ol li::before { content: counter(s); width: 26px; height: 26px; border-radius: 8px; background: var(--accent-soft); color: var(--accent); font-weight: 700; font-size: 13px; display: grid; place-items: center; font-variant-numeric: tabular-nums; }
+.blk p { margin: 0; }
+.blk p + p { margin-top: 8px; }
+.two { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; }
+.checks { list-style: none !important; padding-left: 0 !important; }
+.checks label { display: flex; gap: 10px; align-items: flex-start; cursor: pointer; }
+.checks input { width: 20px; height: 20px; margin-top: 2px; accent-color: var(--ok); flex: none; }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chips span { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 4px 10px; font-size: 14px; }
+.swatches { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; }
+.sw { border-radius: 10px; padding: 10px 12px; background: var(--surface); border: 1px solid var(--line); display: flex; gap: 10px; align-items: center; font-size: 14px; }
+.sw i { width: 22px; height: 22px; border-radius: 6px; flex: none; }
+.areas { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+.areas.two-col { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.area { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 12px; display: grid; gap: 10px; align-content: start; }
+.area h4, .sp-h { margin: 0; font-family: var(--font-display); font-size: 14px; }
+.sp-h { margin: 14px 0 8px; }
+.cl { display: grid; grid-template-columns: 30px minmax(0, 1fr); gap: 10px; align-items: start; font-size: 14px; line-height: 1.4; }
+.areas.two-col .cl { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; }
+.cl i { width: 30px; height: 30px; border-radius: 8px; border: 1px solid rgba(0,0,0,.12); }
+.tag { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); }
+.xgrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 8px; }
+.x { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; font-size: 14px; line-height: 1.45; min-width: 0; }
+.x.inc { border-color: var(--brand); }
+.xtag { display: inline-block; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; background: var(--accent-soft); color: var(--accent); padding: 1px 6px; border-radius: 5px; }
+.tbl { overflow-x: auto; }
+.tbl table { border-collapse: collapse; width: 100%; font-size: 14px; min-width: 520px; }
+.tbl th, .tbl td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+.tbl th { font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); }
+.score { display: flex; flex-wrap: wrap; gap: 12px 24px; align-items: center; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--line); }
+.score b { font-family: var(--font-display); font-size: 28px; font-variant-numeric: tabular-nums; }
+.verdict { font-weight: 700; padding: 4px 10px; border-radius: 8px; }
+.verdict.pass { background: var(--ok); color: var(--surface); }
+.verdict.fail { background: var(--warn); color: var(--surface); }
+.pager { display: flex; gap: 12px; justify-content: space-between; align-items: center; margin-top: 16px; }
+.btn { border: 1px solid var(--line); background: var(--surface); padding: 12px 18px; border-radius: 12px; font-weight: 700; display: inline-flex; gap: 8px; align-items: center; }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+.btn:disabled { opacity: .4; cursor: default; }
+.pager .count { color: var(--muted); font-size: 14px; font-variant-numeric: tabular-nums; }
+.small { font-size: 13px; color: var(--muted); }
+.linkish { background: none; border: 0; padding: 0; color: var(--accent); font-weight: 700; text-decoration: underline; font-size: 13px; }
+.timeline { list-style: none; padding: 0; margin: 0; display: grid; gap: 0; }
+.timeline li { display: grid; grid-template-columns: 28px minmax(0, 1fr); gap: 12px; padding-bottom: 14px; position: relative; }
+.timeline li::before { content: ""; width: 14px; height: 14px; border-radius: 50%; background: var(--accent); margin: 5px 0 0 7px; }
+.timeline li::after { content: ""; position: absolute; left: 13px; top: 22px; bottom: 0; width: 2px; background: var(--line); }
+.timeline li:last-child::after { display: none; }
+
+@media (max-width: 860px) {
+  .hero { grid-template-columns: 1fr; }
+  .cards, .svc-sec .cards { grid-template-columns: 1fr; }
+  .scope ul { columns: 1; }
+  .track { grid-template-columns: 1fr; }
+  .rail { position: static; max-height: none; padding: 8px; overflow: hidden; min-width: 0; }
+  .track > * { min-width: 0; }
+  .rail h3 { display: none; }
+  .rail ol { display: flex; overflow-x: auto; gap: 6px; padding-bottom: 4px; }
+  .rail li { flex: none; }
+  .rail button { white-space: nowrap; }
+  .rail button .lbl { display: none; }
+  .rail button[aria-current="step"] .lbl { display: inline; }
+  .two, .areas, .areas.two-col { grid-template-columns: 1fr; }
+  .step-head { grid-template-columns: auto minmax(0, 1fr); }
+  .band-wrap { grid-column: 1 / -1; min-width: 0; }
+  .band { width: 100%; grid-template-columns: repeat(5, minmax(0, 1fr)); }
+  .band span { padding: 2px 2px; overflow: hidden; text-overflow: ellipsis; }
+  .band-cap { grid-column: 1 / -1; text-align: left; }
+  .tabs { margin-left: 0; }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+
+/* single-page guides */
+.bar-in { justify-content: space-between; }
+.brand { cursor: default; }
+.toolbar { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; margin-bottom: 18px; }
+.seg { display: flex; padding: 3px; gap: 2px; background: var(--surface-2); border-radius: 10px; }
+.seg button { border: 0; background: none; padding: 7px 14px; border-radius: 8px; font-size: 14px; font-weight: 700; color: var(--muted); }
+.seg button[aria-pressed="true"] { background: var(--surface); color: var(--ink); box-shadow: 0 1px 2px rgba(0,0,0,.12); }
+.small-btn { padding: 8px 14px; font-size: 14px; }
+.small-btn svg { width: 16px; height: 16px; }
+.all { display: grid; gap: 18px; max-width: 920px; }
+.all-head { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: clamp(18px, 3vw, 32px); }
+.all-head h1 { font-size: clamp(26px, 4vw, 38px); }
+.toc { margin: 14px 0 0; padding-left: 22px; columns: 2; column-gap: 28px; }
+.toc li { break-inside: avoid; margin-bottom: 4px; }
+.toc a { color: var(--accent); font-weight: 600; }
+body.copying [data-nocopy] { display: none !important; }
+@media (max-width: 860px) { .toc { columns: 1; } }
+
+</style>
+<header class="bar">
+  <div class="bar-in">
+    <div class="brand">
+      <span class="brand-mark"><img src="data:image/png;base64,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" alt=""></span>
+      <span><b id="pname"></b><small>Top&amp;Shine · <span id="plabel"></span></small></span>
+    </div>
+    <div class="langs" id="langs" role="group" aria-label="Language"></div>
+  </div>
+</header>
+<main class="wrap" id="app"></main>
+<script>
+/* ---------- icons (24x24 stroke) ---------- */
+const ICONS = {
+  door: '<rect x="5" y="2.5" width="14" height="19" rx="1.5"/><circle cx="15" cy="12" r="1"/><path d="M2 21.5h20"/>',
+  star: '<path d="M12 3l2.6 5.6L20.5 9l-4.4 4 1.2 6L12 16.2 6.7 19l1.2-6L3.5 9l5.9-.4z"/>',
+  kit: '<path d="M4 9h16l-1.5 11h-13z"/><path d="M8 9V6a4 4 0 0 1 8 0v3"/><path d="M10 13h4"/>',
+  spray: '<path d="M8 8h6v13H6V11z"/><path d="M8 8V5h5l3-2"/><path d="M17 7h2M18 10h3M17 13h2"/>',
+  fan: '<circle cx="12" cy="12" r="2"/><path d="M12 10c0-5 2-7 5-7 1 3-1 6-5 7zM14 12c5 0 7 2 7 5-3 1-6-1-7-5zM12 14c0 5-2 7-5 7-1-3 1-6 5-7zM10 12c-5 0-7-2-7-5 3-1 6 1 7 5z"/>',
+  blinds: '<rect x="4" y="3" width="16" height="18" rx="1"/><path d="M4 7h16M4 11h16M4 15h16M12 3v18"/>',
+  frame: '<rect x="3" y="4" width="18" height="14" rx="1.5"/><path d="M3 15l5-5 4 4 3-3 6 6"/><circle cx="16" cy="8.5" r="1.3"/>',
+  base: '<path d="M3 3v15h18"/><path d="M3 14h18"/><path d="M8 14v4M14 14v4"/>',
+  kitchen: '<rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="2"/><circle cx="15.5" cy="8.5" r="2"/><path d="M3 13h18M8 17h8"/>',
+  bath: '<path d="M3 12h18v3a5 5 0 0 1-5 5H8a5 5 0 0 1-5-5z"/><path d="M6 12V5a2 2 0 0 1 4 0"/><path d="M7 20l-1 2M17 20l1 2"/>',
+  bed: '<path d="M3 18V7M3 13h18v5M21 13a3 3 0 0 0-3-3h-8v3"/><circle cx="6.5" cy="10.5" r="1.5"/>',
+  trash: '<path d="M4 6h16M9 6V4h6v2M6 6l1 15h10l1-15"/><path d="M10 10v7M14 10v7"/>',
+  floor: '<path d="M14 3l-4 10"/><path d="M6 13h8l3 8H3z"/><path d="M8 17v4M12 17v4"/>',
+  check: '<circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.5 2.5L16 9.5"/>',
+  info: '<circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.5"/>',
+  calendar: '<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/>',
+  list: '<path d="M9 6h12M9 12h12M9 18h12"/><path d="M4 6l1 1 2-2M4 12l1 1 2-2M4 18l1 1 2-2"/>',
+  x: '<circle cx="12" cy="12" r="9"/><path d="M9 9l6 6M15 9l-6 6"/>',
+  chat: '<path d="M4 5h16v11H9l-5 4z"/><path d="M8 10h8M8 13h5"/>',
+  users: '<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><circle cx="17" cy="9" r="2.5"/><path d="M16 14a5 5 0 0 1 6 5"/>',
+  route: '<circle cx="6" cy="18" r="2.5"/><circle cx="18" cy="6" r="2.5"/><path d="M8.5 18H15a3 3 0 0 0 0-6H9a3 3 0 0 1 0-6h6.5"/>',
+  shield: '<path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/><path d="M9 12l2 2 4-4"/>',
+  target: '<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/>',
+  award: '<circle cx="12" cy="9" r="6"/><path d="M8.5 14L7 22l5-3 5 3-1.5-8"/>',
+  clip: '<rect x="5" y="4" width="14" height="18" rx="2"/><path d="M9 4V2.5h6V4M9 10h6M9 14h6M9 18h3"/>',
+  warn: '<path d="M12 3l10 18H2z"/><path d="M12 10v5M12 18v.5"/>',
+  bulb: '<path d="M9 18h6M10 21h4"/><path d="M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.3 1 2.1h5c0-.8.4-1.6 1-2.1A6 6 0 0 0 12 3z"/>',
+  tool: '<path d="M14 6a4 4 0 0 0 5 5l-9 9a2 2 0 0 1-3-3z"/>',
+  home: '<path d="M3 11l9-8 9 8"/><path d="M5 10v11h14V10"/><path d="M10 21v-6h4v6"/>',
+  clean: '<path d="M12 2v6M12 16v6M2 12h6M16 12h6M5 5l3 3M16 16l3 3M19 5l-3 3M8 16l-3 3"/>'
+};
+const icon = (n, cls) => `<svg ${cls ? 'class="' + cls + '"' : ''} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICONS[n] || ICONS.info}</svg>`;
+
+/* ---------- interface words ---------- */
+const UI = {
+  en: { home: "Home", cleaners: "Cleaners", clients: "Clients", trainers: "Trainers & VA", back: "Back", next: "Next", step: "Step", of: "of", steps: "Steps", sections: "Sections",
+        do: "How to do it", avoid: "Never do this", tools: "What you need", done: "Done when…", tip: "Pro tip", why: "Why", band: "Work zone",
+        bands: ["Ceiling", "High", "Middle", "Low", "Floor"], reset: "Clear my checkmarks", finish: "Back to start", saved: "Your checkmarks stay on this device." },
+  pt: { home: "Início", cleaners: "Cleaners", clients: "Clientes", trainers: "Treinadores & VA", back: "Voltar", next: "Próximo", step: "Passo", of: "de", steps: "Passos", sections: "Seções",
+        do: "Como fazer", avoid: "Nunca faça isso", tools: "O que você precisa", done: "Pronto quando…", tip: "Dica de ouro", why: "Por quê", band: "Zona de trabalho",
+        bands: ["Teto", "Alto", "Meio", "Baixo", "Chão"], reset: "Limpar minhas marcações", finish: "Voltar ao início", saved: "Suas marcações ficam salvas neste aparelho." },
+  es: { home: "Inicio", cleaners: "Cleaners", clients: "Clientes", trainers: "Entrenadores & VA", back: "Atrás", next: "Siguiente", step: "Paso", of: "de", steps: "Pasos", sections: "Secciones",
+        do: "Cómo hacerlo", avoid: "Nunca hagas esto", tools: "Lo que necesitas", done: "Listo cuando…", tip: "Consejo de oro", why: "Por qué", band: "Zona de trabajo",
+        bands: ["Techo", "Alto", "Medio", "Bajo", "Piso"], reset: "Borrar mis marcas", finish: "Volver al inicio", saved: "Tus marcas se guardan en este aparato." }
+};
+
+const CLOTH = {
+  en: { title: "Cloth color code",
+    intro: "The result we promise includes never carrying dirt from one room to another: a bathroom cloth never goes to the kitchen. The logic is one pair of colors per area — one for wet, one for dry. Holding a cloth and can't remember where it came from? The color tells you.",
+    wet: "Wet", dry: "Dry",
+    areas: [
+      ["Kitchen", ["#2e9e4f", "Green", "Wet & greasy areas: sink, stovetop, inside the microwave"], ["#e9c42b", "Yellow", "Drying & polishing: counters, stainless steel, dry surfaces"]],
+      ["Bathroom", ["#e66aa5", "Pink", "Heavy cleaning & disinfecting: shower, tub, sink and toilet"], ["#1fb3c8", "Blue / turquoise", "Drying & polishing: mirror, fixtures, counter"]],
+      ["Other areas", ["#f08a24", "Orange", "Furniture, windows, sills, damp surfaces in bedrooms & living rooms"], ["#8a5cc7", "Purple", "Dusting & polishing: furniture, electronics, decor"]]
+    ],
+    spTitle: "Sponges",
+    sponges: [[["#e9c42b", "#2e9e4f"], "Yellow & green, double-sided: kitchen", "Yellow side for delicate surfaces. Green side only for stuck-on dirt on tough surfaces."],
+              [["#1fb3c8"], "Blue, non-abrasive: bathroom", "Tub, shower, shower glass, bathroom sink."]] },
+  pt: { title: "Código de cores dos panos",
+    intro: "O resultado contratado inclui não levar sujeira de um ambiente para outro: pano de banheiro nunca vai para a cozinha. A lógica é um par de cores por área — uma para o úmido, uma para o seco. Se você está com um pano na mão e não lembra de onde ele veio, a cor responde.",
+    wet: "Úmido", dry: "Seco",
+    areas: [
+      ["Cozinha", ["#2e9e4f", "Verde", "Área úmida e engordurada: pia, fogão, interior do micro-ondas"], ["#e9c42b", "Amarelo", "Secagem e polimento: bancada, aço inox e superfícies secas"]],
+      ["Banheiro", ["#e66aa5", "Rosa", "Limpeza pesada e desinfecção: box, banheira, pia e vaso sanitário"], ["#1fb3c8", "Azul / turquesa", "Secagem e polimento: espelho, metais e bancada"]],
+      ["Demais áreas", ["#f08a24", "Laranja", "Móvel, janela, parapeito e superfície úmida em quartos e salas"], ["#8a5cc7", "Roxo", "Pó e polimento: móvel, eletrônico e decoração"]]
+    ],
+    spTitle: "Esponjas",
+    sponges: [[["#e9c42b", "#2e9e4f"], "Amarela e verde (dupla face): cozinha", "Lado amarelo para superfície sensível; lado verde só para sujeira incrustada em superfície resistente."],
+              [["#1fb3c8"], "Azul, não abrasiva: banheiro", "Banheira, box, vidro do box, pia de banheiro."]] },
+  es: { title: "Código de colores de trapos",
+    intro: "El resultado contratado incluye no llevar suciedad de un cuarto a otro: un trapo del baño nunca va a la cocina. La lógica es un par de colores por área — uno para lo húmedo, uno para lo seco. Si tienes un trapo en la mano y no recuerdas de dónde vino, el color te responde.",
+    wet: "Húmedo", dry: "Seco",
+    areas: [
+      ["Cocina", ["#2e9e4f", "Verde", "Área húmeda y grasosa: fregadero, estufa, interior del microondas"], ["#e9c42b", "Amarillo", "Secado y pulido: mostrador, acero inoxidable y superficies secas"]],
+      ["Baño", ["#e66aa5", "Rosa", "Limpieza pesada y desinfección: regadera, tina, lavabo e inodoro"], ["#1fb3c8", "Azul / turquesa", "Secado y pulido: espejo, llaves y mostrador"]],
+      ["Demás áreas", ["#f08a24", "Naranja", "Muebles, ventanas, repisas y superficies húmedas en recámaras y salas"], ["#8a5cc7", "Morado", "Polvo y pulido: muebles, electrónicos y decoración"]]
+    ],
+    spTitle: "Esponjas",
+    sponges: [[["#e9c42b", "#2e9e4f"], "Amarilla y verde (doble cara): cocina", "Lado amarillo para superficies delicadas; lado verde solo para suciedad pegada en superficies resistentes."],
+              [["#1fb3c8"], "Azul, no abrasiva: baño", "Tina, regadera, vidrio de la regadera, lavabo del baño."]] }
+};
+function clothHTML(lang) {
+  const C = CLOTH[lang];
+  const sw = (c, n, u, tag) => `<div class="cl"><i style="background:${c}"></i><div><b>${esc(n)}</b> <span class="tag">${esc(tag)}</span><br><span class="small">${esc(u)}</span></div></div>`;
+  return `<div class="blk"><h3>${icon("tool")}${esc(C.title)}</h3><p class="small" style="margin-bottom:12px">${esc(C.intro)}</p>
+    <div class="areas">${C.areas.map(([a, w, d]) => `<div class="area"><h4>${esc(a)}</h4>${sw(w[0], w[1], w[2], C.wet)}${sw(d[0], d[1], d[2], C.dry)}</div>`).join("")}</div>
+    <h4 class="sp-h">${esc(C.spTitle)}</h4>
+    <div class="areas two-col">${C.sponges.map(([cs, n, u]) => `<div class="cl"><i style="background:${cs.length > 1 ? `linear-gradient(${cs[0]} 50%, ${cs[1]} 50%)` : cs[0]}"></i><div><b>${esc(n)}</b><br><span class="small">${esc(u)}</span></div></div>`).join("")}</div></div>`;
+}
+
+/* =========================================================
+   OPTIONAL UPGRADES — shared by every service
+   inc = services where the item is already part of the scope
+   ========================================================= */
+const EXTRAS = [
+  { price: "$50", inc: ["move", "post"],
+    en: { n: "Refrigerator interior care", d: "Shelves, drawers and walls inside the fridge cleaned.", c: "Take out one shelf of food at a time, wipe shelves, drawers and walls with the green cloth, dry with the yellow cloth and put everything back in the same place." },
+    pt: { n: "Geladeira por dentro", c: "Tire a comida de uma prateleira por vez, limpe prateleiras, gavetas e paredes com o pano verde, seque com o amarelo e coloque tudo de volta no mesmo lugar." },
+    es: { n: "Refrigerador por dentro", c: "Saca la comida de una repisa a la vez, limpia repisas, cajones y paredes con el trapo verde, seca con el amarillo y regresa todo al mismo lugar." } },
+  { price: "$30", inc: ["move", "post"],
+    en: { n: "Oven interior care", d: "Inside of the oven and racks degreased and scrubbed.", c: "Oven OFF and cool. Spray degreaser inside, let it sit, scrub with the green side of the sponge, wipe all residue out. Clean the racks in the sink." },
+    pt: { n: "Forno por dentro", c: "Forno DESLIGADO e frio. Borrife desengordurante por dentro, deixe agir, esfregue com o lado verde da esponja e tire todo o resíduo. Limpe as grades na pia." },
+    es: { n: "Horno por dentro", c: "Horno APAGADO y frío. Rocía desengrasante por dentro, deja actuar, talla con el lado verde de la esponja y quita todo el residuo. Limpia las parrillas en el fregadero." } },
+  { price: "$10 per window", inc: ["move", "post"],
+    en: { n: "Interior window care", d: "Inside glass, frame and sill of each window.", c: "Dust frame and sill first. Glass cleaner on the glass, wipe with the orange cloth, then polish with the purple cloth until there are no streaks." },
+    pt: { n: "Janelas por dentro", c: "Tire o pó do batente e do parapeito primeiro. Limpa-vidros no vidro, passe o pano laranja e dê polimento com o roxo até não ficar marca." },
+    es: { n: "Ventanas por dentro", c: "Quita el polvo del marco y la repisa primero. Limpiavidrios en el vidrio, pasa el trapo naranja y pule con el morado hasta que no queden marcas." } },
+  { price: "starting at $30", inc: [],
+    en: { n: "Patio / balcony care", d: "Swept, cobwebs removed, railings and outdoor furniture wiped.", c: "Remove cobwebs, wipe railings and outdoor furniture, then sweep the floor from the far side toward the door." },
+    pt: { n: "Pátio / varanda", c: "Tire as teias, limpe o guarda-corpo e os móveis de fora, depois varra do fundo em direção à porta." },
+    es: { n: "Patio / balcón", c: "Quita las telarañas, limpia el barandal y los muebles de afuera, luego barre desde el fondo hacia la puerta." } },
+  { price: "$15", inc: ["airbnb"],
+    en: { n: "Dishwashing", d: "Dishes in the sink washed, dried and put away or left on the rack.", c: "Wash, rinse and dry the dishes in the sink. Put them away if you know where they go, or leave them neat on the rack." },
+    pt: { n: "Lavar louça", c: "Lave, enxágue e seque a louça da pia. Guarde se souber onde vai, ou deixe arrumada no escorredor." },
+    es: { n: "Lavar platos", c: "Lava, enjuaga y seca los platos del fregadero. Guárdalos si sabes dónde van, o déjalos ordenados en el escurridor." } },
+  { price: "$30–$60", inc: [],
+    en: { n: "Garage sweeping", d: "Garage floor swept and cobwebs removed.", c: "Remove cobwebs, then sweep the garage floor from the back toward the door. Bag the debris." },
+    pt: { n: "Varrer a garagem", c: "Tire as teias, depois varra o chão da garagem do fundo em direção à porta. Ensaque a sujeira." },
+    es: { n: "Barrer el garaje", c: "Quita las telarañas, luego barre el piso del garaje desde el fondo hacia la puerta. Embolsa la basura." } },
+  { price: "$10 per room", inc: ["deluxe", "move", "post"],
+    en: { n: "Baseboards", d: "Baseboards dusted and hand wiped.", c: "Dust or vacuum first, then hand wipe with the damp orange cloth and dry with the purple cloth." },
+    pt: { n: "Rodapés", c: "Tire o pó ou aspire primeiro, depois passe o pano laranja úmido à mão e seque com o roxo." },
+    es: { n: "Zócalos", c: "Quita el polvo o aspira primero, luego limpia a mano con el trapo naranja húmedo y seca con el morado." } },
+  { price: "$10 each", inc: ["deluxe", "move"],
+    en: { n: "Blinds", d: "Slats dusted or vacuumed on both sides.", c: "Close the slats facing down, dust or vacuum top to bottom, turn them and repeat." },
+    pt: { n: "Persianas", c: "Feche as lâminas para baixo, tire o pó ou aspire de cima para baixo, vire e repita." },
+    es: { n: "Persianas", c: "Cierra las láminas hacia abajo, quita el polvo o aspira de arriba hacia abajo, voltéalas y repite." } },
+  { price: "Double the Standard Service rate", inc: [], only: "regular",
+    en: { n: "Deep Care Upgrade", d: "For Regular Cleaning: adds baseboards, blinds and detailed attention to your visit.", c: "Regular visit plus baseboards, blinds and detailed attention. Follow the Deluxe steps for those items." },
+    pt: { n: "Upgrade Deep Care", c: "Visita regular + rodapés, persianas e atenção aos detalhes. Siga os passos da Deluxe para esses itens." },
+    es: { n: "Mejora Deep Care", c: "Visita regular + zócalos, persianas y atención al detalle. Sigue los pasos de Deluxe para esos puntos." } }
+];
+const EXTRAS_UI = {
+  en: { h: "Extras (upgrades)", lead: "Only do an extra when it is on the job order. Items marked INCLUDED are already part of this service.", inc: "Included" },
+  pt: { h: "Extras (upgrades)", lead: "Só faça um extra quando ele estiver na ordem de serviço. Itens marcados INCLUÍDO já fazem parte deste serviço.", inc: "Incluído" },
+  es: { h: "Extras (mejoras)", lead: "Solo haz un extra cuando esté en la orden de trabajo. Los puntos marcados INCLUIDO ya son parte de este servicio.", inc: "Incluido" }
+};
+function extrasCleanerHTML(lang) {
+  const U = EXTRAS_UI[lang];
+  return `<div class="blk"><h3>${icon("star")}${esc(U.h)}</h3><p class="small" style="margin-bottom:10px">${esc(U.lead)}</p>
+    <div class="xgrid">${EXTRAS.filter(x => !x.only || x.only === state.service).map(x => { const inc = x.inc.includes(state.service);
+      return `<div class="x${inc ? " inc" : ""}"><b>${esc(x[lang].n)}</b>${inc ? ` <span class="xtag">${esc(U.inc)}</span>` : ""}<br><span class="small">${esc(x[lang].c)}</span></div>`; }).join("")}</div></div>`;
+}
+function extrasClientHTML() {
+  return `<div class="blk do tbl"><table><thead><tr><th>Upgrade</th><th>What it covers</th><th>Price</th></tr></thead><tbody>${EXTRAS.filter(x => !x.only || x.only === state.service).map(x => {
+    const inc = x.inc.includes(state.service);
+    return `<tr><td><b>${esc(x.en.n)}</b></td><td>${esc(x.en.d)}</td><td>${inc ? `<span class="xtag">Included in this service</span>` : esc(x.price)}</td></tr>`; }).join("")}</tbody></table></div>`;
+}
+const UPGRADES_STEP = { icon: "star", t: "Optional upgrades", lead: "Optional service upgrades are available, if needed. Add them when you book, or ask us before your visit.", upgrades: true,
+  tip: "Upgrades are done only when they are on your booking, so our team has the time to do them well." };
+
+
+const PAGE = {"key": "deluxe-cleaner", "audience": "cleaner", "service": "deluxe", "langs": ["en", "pt", "es"], "name": {"en": "Deluxe Cleaning", "pt": "Limpeza Deluxe", "es": "Limpieza Deluxe"}, "label": {"en": "Cleaner SOP", "pt": "SOP da Cleaner", "es": "SOP de la Cleaner"}};
+/* =========================================================
+   CLEANER SOP  (EN / PT / ES)
+   band = which heights the step covers: 0 ceiling … 4 floor
+   ========================================================= */
+const META = [
+  { id: "arrive", icon: "door", band: [] },
+  { id: "rules", icon: "star", band: [0,1,2,3,4], colors: true },
+  { id: "kit", icon: "kit", band: [] },
+  { id: "prep", icon: "spray", band: [2,3] },
+  { id: "high", icon: "fan", band: [0,1] },
+  { id: "blinds", icon: "blinds", band: [1,2] },
+  { id: "surfaces", icon: "frame", band: [2] },
+  { id: "woodwork", icon: "base", band: [1,2,3] },
+  { id: "kitchen", icon: "kitchen", band: [1,2,3] },
+  { id: "bath", icon: "bath", band: [1,2,3,4] },
+  { id: "beds", icon: "bed", band: [2,3] },
+  { id: "trash", icon: "trash", band: [3] },
+  { id: "floors", icon: "floor", band: [4] },
+  { id: "final", icon: "check", band: [] }
+];
+
+const DATA = {
+en: {
+  title: "Deluxe Cleaning · Cleaner SOP",
+  intro: "Deluxe Cleaning (Top to Bottom) is our deep clean. Everything in a General Cleaning, done BY HAND, with focus on removing build-up — plus the extra items in this guide. Follow the steps in order.",
+  steps: [
+    { t: "Arrive & walk-through", lead: "A good clean starts before you touch a cloth. Know the home, the client's wishes and the plan.",
+      do: ["Arrive on time, in uniform, with your badge or name tag. Park so you never block the driveway or a neighbor.",
+           "Ring or knock, smile, and greet the client by name: “Hi, I'm ___ from Top&Shine.”",
+           "Ask 4 questions: Any area you want us to focus on? Anything fragile or off-limits? Any pets? Where are the clean sheets for the beds?",
+           "Walk through every room with the client (or alone if they are out). Look for heavy build-up and anything already broken or stained.",
+           "Take a photo of any damage that was already there and send it to the office before you start.",
+           "Bring all supplies in one trip. Put your caddy on a towel, never directly on furniture or floors."],
+      avoid: ["Never start cleaning before the walk-through.", "Never open drawers, mail, papers or touch money and jewelry. Clean around them.", "Never move heavy furniture."],
+      done: ["Client greeted by name", "Focus areas and off-limit areas noted", "I know where the clean sheets are", "Damage already present photographed and sent"] },
+
+    { t: "The golden rules", lead: "Remember these rules in every room. They are the secret of a real deep clean.",
+      do: ["TOP TO BOTTOM: dust falls down. Always clean high first and floors last.",
+           "DRY BEFORE WET: dust or vacuum first, then wipe with liquid. Wet on dust makes mud.",
+           "LEFT TO RIGHT: go around each room in one direction (like a clock) so you never miss a spot.",
+           "BY HAND: Deluxe means hand wiping and scrubbing the build-up, not a quick spray-and-go.",
+           "RIGHT CLOTH, RIGHT PLACE: one pair of colors per area, one wet and one dry (see below). A bathroom cloth never goes to the kitchen.",
+           "BACK OUT OF THE ROOM: finish each room at the door so you don't walk on what you just cleaned."],
+      tip: "Not sure about a product on a surface? Test it first in a small hidden spot. Still not sure? Call the office.",
+      avoid: ["Never mix chemicals. Bleach + ammonia or bleach + vinegar makes toxic gas.", "Never stand on the top step of the ladder, on chairs or on furniture."],
+      done: ["I can explain top to bottom", "I can explain dry before wet", "I know the cloth colors"] },
+
+    { t: "Your supply kit", lead: "Check your kit before leaving for the job. A missing item costs time and quality.",
+      tools: ["Microfiber cloths in 6 colors: green, yellow, pink, blue/turquoise, orange, purple", "All-purpose cleaner", "Bathroom disinfectant", "Glass cleaner", "Degreaser (kitchen)", "Furniture polish", "Stainless steel cleaner",
+              "Scrub brush + small detail brush (toothbrush)", "Sponges: yellow & green double-sided (kitchen) + blue non-abrasive (bathroom)", "Duster with extension pole", "Cobweb brush", "Vacuum with brush and crevice tools",
+              "Mop + bucket or flat mop with clean pads", "2-step ladder", "Trash bags and liners", "Gloves", "Old pillowcase (for ceiling fans)", "Caddy + towel to set it on"],
+      tip: "Clean cloths every job. A dirty cloth just moves dirt from one place to another.",
+      done: ["All products full enough for the job", "Clean cloths in all 6 colors + both sponge types", "Ladder, vacuum and mop in the car"] },
+
+    { t: "Prep: let products work for you", lead: "Before dusting, spray the dirtiest places so the product softens the build-up while you work.",
+      do: ["Bathrooms: spray tub, shower walls, sinks and inside the toilet bowl. Let it sit 5–10 minutes (dwell time).",
+           "Kitchen: put stove grates or drip pans in the sink with hot water and degreaser to soak.",
+           "Bedrooms: strip the beds that will get clean sheets (up to 3). Put the dirty sheets where the client asked.",
+           "Open the blinds a little for better light. Turn on lights in the rooms you will clean.",
+           "Turn on the bathroom fan or open a window for air."],
+      avoid: ["Never mix two products in the same area.", "Don't leave the product so long that it dries. If it dries, spray again before scrubbing."],
+      done: ["Bathrooms sprayed and soaking", "Grates or drip pans soaking", "Beds stripped (up to 3)"] },
+
+    { t: "High work: cobwebs, ceiling fans & lights", lead: "Start in the room farthest from the exit (upstairs first). Clean everything high before anything lower.",
+      do: ["Cobwebs: with the cobweb brush, go around the ceiling corners, tops of windows, behind doors and corners of stairways.",
+           "Ceiling fans: turn the fan OFF and wait until it stops. Set the 2-step ladder steady.",
+           "Slide an old pillowcase over each blade and pull it back. The dust stays inside the pillowcase.",
+           "Hand wipe each blade top and bottom with a damp orange cloth, then the motor housing and pull chain.",
+           "Light fixtures: switch OFF, let them cool. Wipe them in place with a barely damp cloth. Do not remove covers or bulbs.",
+           "Only clean what you reach from the 2-step ladder. Too high? Skip it and tell the office."],
+      avoid: ["Never spray directly on fixtures or electrical parts. Spray the cloth.", "Never stand on the top step, a chair or furniture."],
+      done: ["No cobwebs in corners", "Fan blades clean on both sides", "Light fixtures dust-free"] },
+
+    { t: "Blinds, shutters, sills & lock ledges", lead: "Blinds and shutters are vacuumed, not washed. Sills and lock ledges are hand wiped.",
+      do: ["Blinds: close the slats facing down. Vacuum with the brush tool from top to bottom.",
+           "Turn the slats the other way and vacuum again.",
+           "Shutters: vacuum each louver with the brush tool, then a dry microfiber.",
+           "Window sills and tracks: vacuum loose dirt with the crevice tool first.",
+           "Then hand wipe sills and lock ledges with a damp orange cloth. Use the detail brush in corners. Dry them."],
+      avoid: ["Never wash blinds with water. Vacuum only.", "Don't bend or pull the slats."],
+      done: ["Blinds vacuumed both sides", "Sills and lock ledges wiped and dry", "Tracks free of loose dirt"] },
+
+    { t: "Pictures, knick-knacks, shelves & furniture", lead: "Middle height. Work around the room, left to right, one surface at a time.",
+      do: ["Pictures and frames: dust with the dry purple cloth. Glass: spray glass cleaner on the cloth, not on the frame.",
+           "Knick-knacks: pick up one item at a time, wipe it, wipe the spot under it, and put it back exactly where it was.",
+           "Many items? Take a quick photo first so you can put them back the same way.",
+           "Shelves: hand wipe shelves that are uncluttered. Crowded shelves: dust around the items.",
+           "Furniture: polish the top, fronts, sides and legs. Spray polish on the purple cloth and wipe with the wood grain."],
+      avoid: ["Never use polish or glass cleaner on TV or computer screens. Dry microfiber only.", "Something looks fragile or valuable? Don't touch it. Ask."],
+      done: ["Frames and pictures dust-free", "Items back in their places", "Furniture polished on all sides and legs"] },
+
+    { t: "Moldings, doors, woodwork & baseboards", lead: "This is where deep cleaning shows. Hand wipe every reachable piece of woodwork.",
+      do: ["Door frames and doors: wipe the top edge, the face and the fingerprints around the knob.",
+           "Moldings and chair rails: hand wipe with a damp orange cloth and all-purpose cleaner.",
+           "Light switches and door knobs: spray the cloth and wipe.",
+           "Baseboards: vacuum or dust first, then kneel (use a knee pad) and hand wipe with a damp orange cloth. Dry right after with the purple cloth.",
+           "Clean the baseboards you can reach without moving furniture."],
+      avoid: ["Don't move furniture to reach baseboards.", "Don't soak wood. Damp cloth, then dry."],
+      done: ["Doors and frames free of marks", "Switches and knobs wiped", "Reachable baseboards clean and dry"] },
+
+    { t: "Kitchen: top to bottom", lead: "Follow this order. You will finish with the floor.",
+      do: ["Top of the refrigerator: take items down, hand wash the top, put items back.",
+           "All cabinet fronts: wipe with degreaser or all-purpose cleaner, focus around the handles. Dry them.",
+           "Microwave inside: heat a bowl of water for 2 minutes to make steam. Wipe the inside, the turntable and the door with the green cloth.",
+           "Outside of appliances: refrigerator, dishwasher, oven door, range hood. Stainless steel: dry and polish with the yellow cloth, with the grain.",
+           "Stovetop: scrub the soaked grates or drip pans with the green side of the kitchen sponge, rinse, dry and put back. Clean the stovetop with the green cloth.",
+           "Counters and backsplash: move items, wipe, dry with the yellow cloth, put items back. Sink and faucet: green cloth, then shine with yellow."],
+      avoid: ["Inside the oven, inside the fridge and inside cabinets are NOT included, unless the office added them.", "Stainless steel and glass cooktops: only the yellow side of the sponge. The green side is only for stuck-on dirt on tough surfaces. Never steel wool."],
+      done: ["Top of fridge clean", "Every cabinet front wiped", "Microwave clean inside", "Grates or drip pans scrubbed", "Sink shining"] },
+
+    { t: "Bathrooms: clean and sanitize", lead: "Bathrooms were soaking since the prep step. Now scrub, top to bottom, toilet last.",
+      do: ["Mirror: glass cleaner, then the dry blue/turquoise cloth. Wipe in a Z pattern from top to bottom.",
+           "Counters, sink and faucet: clean and sanitize with the pink cloth, then dry and shine with the blue/turquoise cloth.",
+           "Tub and shower: scrub walls from top to bottom with the blue non-abrasive sponge. Use the brush on grout lines and corners. Rinse and dry the fixtures.",
+           "Toilet (always last, pink cloth): outside first, top to bottom — tank, lid, seat both sides, hinges, base.",
+           "Then inside the bowl with the toilet brush, under the rim. Flush.",
+           "Sanitize all bathroom counters and fixtures. Leave the disinfectant wet for the time written on the label."],
+      avoid: ["Pink and blue cloths and the blue sponge never leave the bathroom. Never take them to the kitchen or any other room.", "Never wipe disinfectant off right away. It needs its contact time to kill germs."],
+      done: ["Mirror with no streaks", "Fixtures dry and shining", "Tub and shower free of soap scum", "Toilet clean inside and out"] },
+
+    { t: "Beds & bedrooms", lead: "Up to 3 beds get clean sheets. A well-made bed is the first thing the client notices.",
+      do: ["Use the clean sheets the client left for you.",
+           "Fitted sheet first, tight at all 4 corners.",
+           "Flat sheet with hospital corners at the foot of the bed.",
+           "Pillowcases on, comforter or duvet smooth, decorative pillows arranged.",
+           "No clean sheets? Make the bed neatly with the same sheets and tell the office."],
+      avoid: ["Don't do laundry unless the office asked.", "Don't sit or lie on the client's bed."],
+      done: ["Up to 3 beds with clean sheets", "Corners tight, no wrinkles", "Dirty sheets where the client asked"] },
+
+    { t: "Wastebaskets", lead: "Every room, every wastebasket.",
+      do: ["Empty each wastebasket into your trash bag.",
+           "If the can is dirty, wipe the inside and outside.",
+           "Put in a new liner (use the client's bags if they have them, or ours).",
+           "Take the trash to the outside bin if the client allows it."],
+      done: ["All wastebaskets emptied", "All relined"] },
+
+    { t: "Stairs & floors (always last)", lead: "Everything above is done. Now the dust is on the floor. Time to remove it.",
+      do: ["Stairs: vacuum from the top step down. Use the crevice tool in the corners of each step.",
+           "Carpets and rugs: vacuum the whole area, edges with the crevice tool.",
+           "Hard floors: vacuum or sweep first, then mop.",
+           "Mop from the farthest corner toward the door so you never walk on the wet floor.",
+           "Change the mop water as soon as it looks dirty."],
+      avoid: ["Hardwood and laminate: damp mop only. Never leave water standing.", "Never walk back over a wet, clean floor."],
+      done: ["Stairs vacuumed, corners included", "All floors vacuumed and/or mopped", "No footprints on clean floors"] },
+
+    { t: "Final check & goodbye", lead: "Look at each room from the door, top to bottom, like the client will.",
+      do: ["Walk every room. Look up, then middle, then down. Fix anything you missed.",
+           "Put lights, blinds and doors back the way you found them.",
+           "Collect ALL your supplies. Never leave a cloth or bottle behind.",
+           "Take after photos if the office asks for them.",
+           "If the client is home, show the highlights and ask: “Is there anything you'd like me to touch up?”",
+           "Lock the doors and set the alarm as the client instructed. Message the office: job done."],
+      tip: "Leave the home smelling fresh and looking finished: towels folded, pillows fluffed, chairs pushed in.",
+      done: ["Every room checked top to bottom", "Nothing of mine left behind", "House locked as instructed", "Office told the job is done"] }
+  ]
+},
+pt: {
+  title: "Limpeza Deluxe · SOP da Cleaner",
+  intro: "A Limpeza Deluxe (Top to Bottom) é a nossa limpeza profunda. Tudo da limpeza geral, feito À MÃO, com foco em remover sujeira acumulada — e mais os itens extras deste guia. Siga os passos na ordem.",
+  steps: [
+    { t: "Chegada e vistoria", lead: "Uma boa limpeza começa antes de pegar o pano. Conheça a casa, o que o cliente quer e o plano.",
+      do: ["Chegue no horário, de uniforme, com crachá. Estacione sem bloquear a garagem ou o vizinho.",
+           "Toque a campainha, sorria e cumprimente o cliente pelo nome: “Olá, eu sou a ___ da Top&Shine.”",
+           "Faça 4 perguntas: Quer que a gente dê atenção a alguma área? Tem algo frágil ou que não devemos mexer? Tem pets? Onde estão os lençóis limpos?",
+           "Passe por todos os cômodos com o cliente (ou sozinha, se ele não estiver). Veja onde tem muita sujeira acumulada e o que já está quebrado ou manchado.",
+           "Tire foto de qualquer dano que já existia e mande para o escritório antes de começar.",
+           "Leve todo o material numa viagem só. Coloque a caixa (caddy) sobre uma toalha, nunca direto no móvel ou no chão."],
+      avoid: ["Nunca comece a limpar antes da vistoria.", "Nunca abra gavetas, correspondência, papéis, nem toque em dinheiro e joias. Limpe ao redor.", "Nunca mova móveis pesados."],
+      done: ["Cliente cumprimentado pelo nome", "Áreas de foco e áreas proibidas anotadas", "Sei onde estão os lençóis limpos", "Danos que já existiam fotografados e enviados"] },
+
+    { t: "As regras de ouro", lead: "Lembre destas regras em todo cômodo. Elas são o segredo de uma limpeza profunda de verdade.",
+      do: ["DE CIMA PARA BAIXO: a poeira cai. Sempre limpe o alto primeiro e o chão por último.",
+           "SECO ANTES DO MOLHADO: tire o pó ou aspire primeiro, depois passe pano com produto. Molhado em cima de pó vira lama.",
+           "DA ESQUERDA PARA A DIREITA: dê a volta no cômodo sempre no mesmo sentido (como um relógio) para não esquecer nenhum lugar.",
+           "À MÃO: Deluxe é passar pano e esfregar a sujeira acumulada à mão, não só borrifar e sair.",
+           "PANO CERTO, LUGAR CERTO: um par de cores por área, um para o úmido e um para o seco (veja abaixo). Pano de banheiro nunca vai para a cozinha.",
+           "SAIA DE COSTAS: termine cada cômodo na porta para não pisar no que acabou de limpar."],
+      tip: "Não tem certeza se um produto pode ser usado numa superfície? Teste antes num cantinho escondido. Ainda em dúvida? Ligue para o escritório.",
+      avoid: ["Nunca misture produtos. Água sanitária + amônia ou água sanitária + vinagre soltam gás tóxico.", "Nunca suba no último degrau da escada, em cadeiras ou em móveis."],
+      done: ["Sei explicar de cima para baixo", "Sei explicar seco antes do molhado", "Sei as cores dos panos"] },
+
+    { t: "Seu kit de materiais", lead: "Confira o kit antes de sair para o trabalho. Um item faltando custa tempo e qualidade.",
+      tools: ["Panos de microfibra em 6 cores: verde, amarelo, rosa, azul/turquesa, laranja, roxo", "Limpador multiuso", "Desinfetante de banheiro", "Limpa-vidros", "Desengordurante (cozinha)", "Lustra-móveis", "Limpador de inox",
+              "Escova + escovinha de detalhe (tipo escova de dente)", "Esponjas: amarela e verde dupla face (cozinha) + azul não abrasiva (banheiro)", "Espanador com cabo extensor", "Escova de teia de aranha", "Aspirador com bocal de escova e bocal fino",
+              "Mop + balde ou mop plano com refis limpos", "Escada de 2 degraus", "Sacos de lixo", "Luvas", "Fronha velha (para ventiladores de teto)", "Caddy + toalha para apoiar"],
+      tip: "Panos limpos em todo trabalho. Pano sujo só leva a sujeira de um lugar para outro.",
+      done: ["Produtos com quantidade suficiente", "Panos limpos nas 6 cores + os dois tipos de esponja", "Escada, aspirador e mop no carro"] },
+
+    { t: "Preparação: deixe o produto trabalhar", lead: "Antes de tirar o pó, borrife os lugares mais sujos para o produto amolecer a sujeira enquanto você trabalha.",
+      do: ["Banheiros: borrife a banheira, paredes do box, pias e dentro do vaso. Deixe agir 5–10 minutos.",
+           "Cozinha: coloque as grades do fogão ou os pratinhos (drip pans) de molho na pia com água quente e desengordurante.",
+           "Quartos: tire a roupa das camas que vão receber lençol limpo (até 3). Coloque os lençóis sujos onde o cliente pediu.",
+           "Abra um pouco as persianas para ter mais luz. Acenda as luzes dos cômodos que vai limpar.",
+           "Ligue o exaustor do banheiro ou abra uma janela para ventilar."],
+      avoid: ["Nunca misture dois produtos no mesmo lugar.", "Não deixe o produto secar. Se secar, borrife de novo antes de esfregar."],
+      done: ["Banheiros borrifados e de molho", "Grades ou pratinhos de molho", "Camas desfeitas (até 3)"] },
+
+    { t: "Parte alta: teias, ventiladores e luminárias", lead: "Comece pelo cômodo mais longe da saída (andar de cima primeiro). Limpe tudo que é alto antes de qualquer coisa mais baixa.",
+      do: ["Teias de aranha: com a escova de teia, passe nos cantos do teto, em cima das janelas, atrás das portas e nos cantos da escada.",
+           "Ventilador de teto: DESLIGUE e espere parar. Coloque a escada de 2 degraus bem firme.",
+           "Encaixe uma fronha velha em cada pá e puxe de volta. A poeira fica dentro da fronha.",
+           "Passe o pano laranja úmido à mão em cada pá, em cima e embaixo, depois no motor e na cordinha.",
+           "Luminárias: DESLIGUE e deixe esfriar. Limpe no lugar com pano levemente úmido. Não tire cúpulas nem lâmpadas.",
+           "Limpe só o que alcança da escada de 2 degraus. Muito alto? Pule e avise o escritório."],
+      avoid: ["Nunca borrife direto em luminárias ou partes elétricas. Borrife no pano.", "Nunca suba no último degrau, em cadeira ou móvel."],
+      done: ["Sem teias nos cantos", "Pás do ventilador limpas dos dois lados", "Luminárias sem poeira"] },
+
+    { t: "Persianas, venezianas, parapeitos e trincos", lead: "Persianas e venezianas são aspiradas, não lavadas. Parapeitos e trincos das janelas são limpos à mão.",
+      do: ["Persianas: feche as lâminas viradas para baixo. Aspire com o bocal de escova de cima para baixo.",
+           "Vire as lâminas para o outro lado e aspire de novo.",
+           "Venezianas (shutters): aspire cada lâmina com o bocal de escova, depois passe microfibra seca.",
+           "Parapeitos e trilhos: aspire a sujeira solta com o bocal fino primeiro.",
+           "Depois passe o pano laranja úmido à mão nos parapeitos e trincos. Use a escovinha nos cantos. Seque."],
+      avoid: ["Nunca lave persianas com água. Só aspire.", "Não entorte nem puxe as lâminas."],
+      done: ["Persianas aspiradas dos dois lados", "Parapeitos e trincos limpos e secos", "Trilhos sem sujeira solta"] },
+
+    { t: "Quadros, enfeites, prateleiras e móveis", lead: "Altura do meio. Dê a volta no cômodo, da esquerda para a direita, uma superfície por vez.",
+      do: ["Quadros e porta-retratos: tire o pó com o pano roxo seco. Vidro: borrife limpa-vidros no pano, não no quadro.",
+           "Enfeites: pegue um por vez, limpe, limpe o lugar embaixo e coloque de volta exatamente onde estava.",
+           "Muitos enfeites? Tire uma foto antes para colocar tudo de volta igual.",
+           "Prateleiras: passe pano à mão nas prateleiras livres. Prateleiras lotadas: tire o pó ao redor dos itens.",
+           "Móveis: lustre o tampo, as frentes, as laterais e os pés. Borrife o lustra-móveis no pano roxo e passe no sentido do veio da madeira."],
+      avoid: ["Nunca use lustra-móveis ou limpa-vidros em TV ou tela de computador. Só microfibra seca.", "Parece frágil ou de valor? Não toque. Pergunte."],
+      done: ["Quadros sem poeira", "Enfeites de volta no lugar", "Móveis lustrados em todos os lados e pés"] },
+
+    { t: "Molduras, portas, madeiras e rodapés", lead: "É aqui que a limpeza profunda aparece. Passe pano à mão em toda madeira que alcançar.",
+      do: ["Batentes e portas: limpe a borda de cima, a frente e as marcas de dedo perto da maçaneta.",
+           "Molduras e frisos: pano laranja úmido à mão com limpador multiuso.",
+           "Interruptores e maçanetas: borrife no pano e limpe.",
+           "Rodapés: aspire ou tire o pó primeiro, depois ajoelhe (use joelheira) e passe o pano laranja úmido à mão. Seque logo em seguida com o pano roxo.",
+           "Limpe os rodapés que alcança sem mover móveis."],
+      avoid: ["Não mova móveis para alcançar rodapés.", "Não encharque a madeira. Pano úmido, depois seque."],
+      done: ["Portas e batentes sem marcas", "Interruptores e maçanetas limpos", "Rodapés alcançáveis limpos e secos"] },
+
+    { t: "Cozinha: de cima para baixo", lead: "Siga esta ordem. Você termina pelo chão.",
+      do: ["Em cima da geladeira: tire os objetos, lave à mão, coloque tudo de volta.",
+           "Todas as frentes de armário: passe desengordurante ou multiuso, com atenção perto dos puxadores. Seque.",
+           "Dentro do micro-ondas: aqueça uma tigela com água por 2 minutos para fazer vapor. Limpe dentro, o prato giratório e a porta com o pano verde.",
+           "Fora dos eletrodomésticos: geladeira, lava-louças, porta do forno, coifa. Inox: seque e dê polimento com o pano amarelo, no sentido das linhas do metal.",
+           "Fogão: esfregue as grades ou pratinhos que estavam de molho com o lado verde da esponja de cozinha, enxágue, seque e recoloque. Limpe a mesa do fogão com o pano verde.",
+           "Bancadas e azulejo: tire os objetos, limpe, seque com o pano amarelo, coloque de volta. Pia e torneira: pano verde, depois brilho com o amarelo."],
+      avoid: ["Dentro do forno, dentro da geladeira e dentro dos armários NÃO estão incluídos, a não ser que o escritório tenha adicionado.", "Inox e cooktop de vidro: só o lado amarelo da esponja. O lado verde é só para sujeira incrustada em superfície resistente. Nunca palha de aço."],
+      done: ["Topo da geladeira limpo", "Todas as frentes de armário limpas", "Micro-ondas limpo por dentro", "Grades ou pratinhos esfregados", "Pia brilhando"] },
+
+    { t: "Banheiros: limpar e higienizar", lead: "Os banheiros estão de molho desde a preparação. Agora esfregue, de cima para baixo, vaso por último.",
+      do: ["Espelho: limpa-vidros, depois o pano azul/turquesa seco. Passe em Z de cima para baixo.",
+           "Bancada, pia e torneira: limpe e higienize com o pano rosa, depois seque e dê brilho com o pano azul/turquesa.",
+           "Banheira e box: esfregue as paredes de cima para baixo com a esponja azul não abrasiva. Use a escova nos rejuntes e cantos. Enxágue e seque os metais.",
+           "Vaso (sempre por último, pano rosa): por fora primeiro, de cima para baixo — caixa, tampa, assento dos dois lados, dobradiças, base.",
+           "Depois por dentro com a escova sanitária, embaixo da borda. Dê descarga.",
+           "Higienize todas as bancadas e metais do banheiro. Deixe o desinfetante agir pelo tempo escrito no rótulo."],
+      avoid: ["Panos rosa e azul e a esponja azul nunca saem do banheiro. Nunca leve para a cozinha ou outro cômodo.", "Nunca tire o desinfetante na hora. Ele precisa do tempo de contato para matar os germes."],
+      done: ["Espelho sem manchas", "Metais secos e brilhando", "Banheira e box sem limo de sabão", "Vaso limpo por dentro e por fora"] },
+
+    { t: "Camas e quartos", lead: "Até 3 camas recebem lençóis limpos. Uma cama bem feita é a primeira coisa que o cliente nota.",
+      do: ["Use os lençóis limpos que o cliente deixou.",
+           "Lençol de elástico primeiro, bem esticado nos 4 cantos.",
+           "Lençol de cima com canto de hotel (dobra de hospital) nos pés da cama.",
+           "Fronhas, edredom bem esticado, almofadas arrumadas.",
+           "Não tem lençol limpo? Arrume a cama com os mesmos lençóis, bem esticados, e avise o escritório."],
+      avoid: ["Não lave roupa, a não ser que o escritório peça.", "Não sente nem deite na cama do cliente."],
+      done: ["Até 3 camas com lençóis limpos", "Cantos esticados, sem rugas", "Lençóis sujos onde o cliente pediu"] },
+
+    { t: "Lixeiras", lead: "Todo cômodo, toda lixeira.",
+      do: ["Esvazie cada lixeira no seu saco de lixo.",
+           "Se a lixeira estiver suja, limpe por dentro e por fora.",
+           "Coloque saco novo (use os do cliente se houver, ou os nossos).",
+           "Leve o lixo para a lixeira de fora se o cliente permitir."],
+      done: ["Todas as lixeiras esvaziadas", "Todas com saco novo"] },
+
+    { t: "Escadas e pisos (sempre por último)", lead: "Tudo de cima já foi feito. Agora a poeira está no chão. Hora de tirar.",
+      do: ["Escada: aspire do degrau de cima para baixo. Use o bocal fino nos cantos de cada degrau.",
+           "Carpetes e tapetes: aspire tudo, bordas com o bocal fino.",
+           "Pisos duros: aspire ou varra primeiro, depois passe o mop.",
+           "Passe o mop do canto mais longe em direção à porta, para nunca pisar no chão molhado.",
+           "Troque a água do mop assim que ficar suja."],
+      avoid: ["Madeira e laminado: mop só úmido. Nunca deixe água parada.", "Nunca volte pisando no chão limpo e molhado."],
+      done: ["Escada aspirada, cantos incluídos", "Todos os pisos aspirados e/ou passados mop", "Sem pegadas no chão limpo"] },
+
+    { t: "Conferência final e despedida", lead: "Olhe cada cômodo da porta, de cima para baixo, como o cliente vai olhar.",
+      do: ["Passe em todos os cômodos. Olhe para cima, depois o meio, depois embaixo. Arrume o que faltou.",
+           "Deixe luzes, persianas e portas do jeito que encontrou.",
+           "Recolha TODO o seu material. Nunca esqueça pano ou frasco.",
+           "Tire fotos do depois se o escritório pedir.",
+           "Se o cliente estiver em casa, mostre os destaques e pergunte: “Tem algo que você gostaria que eu retocasse?”",
+           "Tranque as portas e ligue o alarme como o cliente orientou. Mande mensagem ao escritório: trabalho concluído."],
+      tip: "Deixe a casa cheirosa e com cara de finalizada: toalhas dobradas, almofadas afofadas, cadeiras encostadas.",
+      done: ["Todos os cômodos conferidos de cima para baixo", "Nada meu ficou para trás", "Casa trancada como pedido", "Escritório avisado"] }
+  ]
+},
+es: {
+  title: "Limpieza Deluxe · SOP de la Cleaner",
+  intro: "La Limpieza Deluxe (Top to Bottom) es nuestra limpieza profunda. Todo lo de la limpieza general, hecho A MANO, enfocado en quitar la suciedad acumulada — más los puntos extra de esta guía. Sigue los pasos en orden.",
+  steps: [
+    { t: "Llegada y recorrido", lead: "Una buena limpieza empieza antes de tocar un trapo. Conoce la casa, lo que quiere el cliente y el plan.",
+      do: ["Llega a tiempo, con uniforme y gafete. Estaciona sin bloquear la entrada ni al vecino.",
+           "Toca el timbre, sonríe y saluda al cliente por su nombre: “Hola, soy ___ de Top&Shine.”",
+           "Haz 4 preguntas: ¿Quiere que nos enfoquemos en alguna área? ¿Hay algo frágil o que no debemos tocar? ¿Tiene mascotas? ¿Dónde están las sábanas limpias?",
+           "Recorre todos los cuartos con el cliente (o sola si no está). Mira dónde hay mucha suciedad acumulada y qué ya está roto o manchado.",
+           "Toma foto de cualquier daño que ya existía y envíala a la oficina antes de empezar.",
+           "Mete todo el material en un solo viaje. Pon el caddy sobre una toalla, nunca directo en muebles o pisos."],
+      avoid: ["Nunca empieces a limpiar antes del recorrido.", "Nunca abras cajones, correo, papeles, ni toques dinero o joyas. Limpia alrededor.", "Nunca muevas muebles pesados."],
+      done: ["Cliente saludado por su nombre", "Áreas de enfoque y áreas prohibidas anotadas", "Sé dónde están las sábanas limpias", "Daños previos fotografiados y enviados"] },
+
+    { t: "Las reglas de oro", lead: "Recuerda estas reglas en cada cuarto. Son el secreto de una limpieza profunda de verdad.",
+      do: ["DE ARRIBA HACIA ABAJO: el polvo cae. Siempre limpia lo alto primero y el piso al final.",
+           "SECO ANTES QUE MOJADO: quita el polvo o aspira primero, luego limpia con líquido. Mojado sobre polvo hace lodo.",
+           "DE IZQUIERDA A DERECHA: recorre cada cuarto siempre en la misma dirección (como un reloj) para no olvidar ningún lugar.",
+           "A MANO: Deluxe significa limpiar y tallar la suciedad acumulada a mano, no solo rociar y seguir.",
+           "TRAPO CORRECTO, LUGAR CORRECTO: un par de colores por área, uno para lo húmedo y uno para lo seco (ver abajo). Un trapo del baño nunca va a la cocina.",
+           "SAL DE ESPALDAS: termina cada cuarto en la puerta para no pisar lo que acabas de limpiar."],
+      tip: "¿No estás segura de un producto en una superficie? Pruébalo primero en un lugar escondido. ¿Sigues con dudas? Llama a la oficina.",
+      avoid: ["Nunca mezcles químicos. Cloro + amoníaco o cloro + vinagre sueltan gas tóxico.", "Nunca te pares en el último escalón de la escalera, en sillas o en muebles."],
+      done: ["Puedo explicar de arriba hacia abajo", "Puedo explicar seco antes que mojado", "Conozco los colores de los trapos"] },
+
+    { t: "Tu kit de materiales", lead: "Revisa tu kit antes de salir al trabajo. Si falta algo, pierdes tiempo y calidad.",
+      tools: ["Trapos de microfibra en 6 colores: verde, amarillo, rosa, azul/turquesa, naranja, morado", "Limpiador multiusos", "Desinfectante de baño", "Limpiavidrios", "Desengrasante (cocina)", "Abrillantador de muebles", "Limpiador de acero inoxidable",
+              "Cepillo + cepillito de detalle (tipo cepillo de dientes)", "Esponjas: amarilla y verde doble cara (cocina) + azul no abrasiva (baño)", "Plumero con extensión", "Cepillo para telarañas", "Aspiradora con cepillo y boquilla fina",
+              "Trapeador + cubeta o mopa plana con paños limpios", "Escalera de 2 escalones", "Bolsas de basura", "Guantes", "Funda de almohada vieja (para ventiladores)", "Caddy + toalla para apoyarlo"],
+      tip: "Trapos limpios en cada trabajo. Un trapo sucio solo mueve la suciedad de un lugar a otro.",
+      done: ["Productos suficientes para el trabajo", "Trapos limpios en los 6 colores + los dos tipos de esponja", "Escalera, aspiradora y trapeador en el carro"] },
+
+    { t: "Preparación: deja que el producto trabaje", lead: "Antes de quitar el polvo, rocía los lugares más sucios para que el producto afloje la suciedad mientras trabajas.",
+      do: ["Baños: rocía la tina, paredes de la regadera, lavabos y dentro del inodoro. Deja actuar 5–10 minutos.",
+           "Cocina: pon las parrillas de la estufa o los platillos (drip pans) a remojar en el fregadero con agua caliente y desengrasante.",
+           "Recámaras: quita las sábanas de las camas que recibirán sábanas limpias (hasta 3). Pon las sucias donde pidió el cliente.",
+           "Abre un poco las persianas para tener más luz. Prende las luces de los cuartos que vas a limpiar.",
+           "Prende el extractor del baño o abre una ventana para ventilar."],
+      avoid: ["Nunca mezcles dos productos en el mismo lugar.", "No dejes que el producto se seque. Si se seca, rocía otra vez antes de tallar."],
+      done: ["Baños rociados y en remojo", "Parrillas o platillos en remojo", "Camas sin sábanas (hasta 3)"] },
+
+    { t: "Lo alto: telarañas, ventiladores y lámparas", lead: "Empieza por el cuarto más lejos de la salida (arriba primero). Limpia todo lo alto antes de cualquier cosa más baja.",
+      do: ["Telarañas: con el cepillo, pasa por las esquinas del techo, arriba de las ventanas, detrás de las puertas y esquinas de la escalera.",
+           "Ventilador de techo: APÁGALO y espera a que pare. Pon la escalera de 2 escalones firme.",
+           "Mete una funda de almohada vieja en cada aspa y jálala hacia ti. El polvo se queda dentro de la funda.",
+           "Limpia a mano cada aspa por arriba y por abajo con el trapo naranja húmedo, luego el motor y la cadenita.",
+           "Lámparas: APÁGALAS y deja que se enfríen. Límpialas en su lugar con trapo apenas húmedo. No quites pantallas ni focos.",
+           "Solo limpia lo que alcanzas desde la escalera de 2 escalones. ¿Muy alto? Sáltalo y avisa a la oficina."],
+      avoid: ["Nunca rocíes directo en lámparas o partes eléctricas. Rocía el trapo.", "Nunca te pares en el último escalón, en una silla o mueble."],
+      done: ["Sin telarañas en las esquinas", "Aspas limpias por los dos lados", "Lámparas sin polvo"] },
+
+    { t: "Persianas, contraventanas, repisas y seguros", lead: "Persianas y contraventanas se aspiran, no se lavan. Las repisas y seguros de ventanas se limpian a mano.",
+      do: ["Persianas: cierra las láminas hacia abajo. Aspira con el cepillo de arriba hacia abajo.",
+           "Voltea las láminas hacia el otro lado y aspira otra vez.",
+           "Contraventanas (shutters): aspira cada lámina con el cepillo, luego microfibra seca.",
+           "Repisas y rieles de ventana: aspira primero la suciedad suelta con la boquilla fina.",
+           "Luego limpia a mano las repisas y seguros con el trapo naranja húmedo. Usa el cepillito en las esquinas. Seca."],
+      avoid: ["Nunca laves las persianas con agua. Solo aspíralas.", "No dobles ni jales las láminas."],
+      done: ["Persianas aspiradas por los dos lados", "Repisas y seguros limpios y secos", "Rieles sin suciedad suelta"] },
+
+    { t: "Cuadros, adornos, repisas y muebles", lead: "Altura media. Recorre el cuarto de izquierda a derecha, una superficie a la vez.",
+      do: ["Cuadros y marcos: quita el polvo con el trapo morado seco. Vidrio: rocía limpiavidrios en el trapo, no en el cuadro.",
+           "Adornos: levanta uno a la vez, límpialo, limpia el lugar de abajo y ponlo de vuelta exactamente donde estaba.",
+           "¿Muchos adornos? Toma una foto antes para dejarlos igual.",
+           "Repisas: limpia a mano las repisas despejadas. Repisas llenas: quita el polvo alrededor de los objetos.",
+           "Muebles: abrillanta la parte de arriba, frentes, lados y patas. Rocía el abrillantador en el trapo morado y limpia a favor de la veta de la madera."],
+      avoid: ["Nunca uses abrillantador o limpiavidrios en pantallas de TV o computadora. Solo microfibra seca.", "¿Se ve frágil o valioso? No lo toques. Pregunta."],
+      done: ["Cuadros sin polvo", "Adornos en su lugar", "Muebles abrillantados por todos lados y patas"] },
+
+    { t: "Molduras, puertas, madera y zócalos", lead: "Aquí es donde se nota la limpieza profunda. Limpia a mano toda la madera que alcances.",
+      do: ["Marcos y puertas: limpia el borde de arriba, el frente y las huellas cerca de la perilla.",
+           "Molduras: trapo naranja húmedo a mano con limpiador multiusos.",
+           "Apagadores y perillas: rocía el trapo y limpia.",
+           "Zócalos (baseboards): aspira o quita el polvo primero, luego arrodíllate (usa rodillera) y limpia a mano con el trapo naranja húmedo. Seca enseguida con el trapo morado.",
+           "Limpia los zócalos que alcanzas sin mover muebles."],
+      avoid: ["No muevas muebles para alcanzar los zócalos.", "No empapes la madera. Trapo húmedo y luego seca."],
+      done: ["Puertas y marcos sin marcas", "Apagadores y perillas limpios", "Zócalos alcanzables limpios y secos"] },
+
+    { t: "Cocina: de arriba hacia abajo", lead: "Sigue este orden. Terminas con el piso.",
+      do: ["Arriba del refrigerador: baja los objetos, lava a mano, regrésalos.",
+           "Todos los frentes de gabinetes: limpia con desengrasante o multiusos, con atención cerca de las manijas. Seca.",
+           "Dentro del microondas: calienta un tazón con agua 2 minutos para hacer vapor. Limpia por dentro, el plato giratorio y la puerta con el trapo verde.",
+           "Por fuera de los electrodomésticos: refrigerador, lavaplatos, puerta del horno, campana. Acero inoxidable: seca y pule con el trapo amarillo, a favor de las líneas.",
+           "Estufa: talla las parrillas o platillos que estaban en remojo con el lado verde de la esponja de cocina, enjuaga, seca y regrésalos. Limpia la superficie de la estufa con el trapo verde.",
+           "Mostradores y salpicadero: quita los objetos, limpia, seca con el trapo amarillo, regrésalos. Fregadero y llave: trapo verde, luego brillo con el amarillo."],
+      avoid: ["Dentro del horno, dentro del refrigerador y dentro de los gabinetes NO están incluidos, a menos que la oficina los haya agregado.", "Acero inoxidable y estufas de vidrio: solo el lado amarillo de la esponja. El lado verde es solo para suciedad pegada en superficies resistentes. Nunca fibra de acero."],
+      done: ["Arriba del refri limpio", "Todos los frentes de gabinetes limpios", "Microondas limpio por dentro", "Parrillas o platillos tallados", "Fregadero brillando"] },
+
+    { t: "Baños: limpiar y desinfectar", lead: "Los baños están en remojo desde la preparación. Ahora talla, de arriba hacia abajo, el inodoro al final.",
+      do: ["Espejo: limpiavidrios, luego el trapo azul/turquesa seco. Limpia en Z de arriba hacia abajo.",
+           "Mostrador, lavabo y llave: limpia y desinfecta con el trapo rosa, luego seca y da brillo con el trapo azul/turquesa.",
+           "Tina y regadera: talla las paredes de arriba hacia abajo con la esponja azul no abrasiva. Usa el cepillo en las juntas y esquinas. Enjuaga y seca las llaves.",
+           "Inodoro (siempre al final, trapo rosa): por fuera primero, de arriba hacia abajo — tanque, tapa, asiento por los dos lados, bisagras, base.",
+           "Luego por dentro con el cepillo, debajo del borde. Jala la cadena.",
+           "Desinfecta todos los mostradores y llaves del baño. Deja el desinfectante mojado el tiempo que dice la etiqueta."],
+      avoid: ["Los trapos rosa y azul y la esponja azul nunca salen del baño. Nunca los lleves a la cocina ni a otro cuarto.", "Nunca quites el desinfectante enseguida. Necesita su tiempo de contacto para matar gérmenes."],
+      done: ["Espejo sin rayas", "Llaves secas y brillando", "Tina y regadera sin sarro de jabón", "Inodoro limpio por dentro y por fuera"] },
+
+    { t: "Camas y recámaras", lead: "Hasta 3 camas reciben sábanas limpias. Una cama bien hecha es lo primero que nota el cliente.",
+      do: ["Usa las sábanas limpias que dejó el cliente.",
+           "Sábana de resorte primero, bien estirada en las 4 esquinas.",
+           "Sábana de arriba con esquina de hotel (doblez de hospital) a los pies de la cama.",
+           "Fundas, edredón bien estirado, cojines acomodados.",
+           "¿No hay sábanas limpias? Tiende la cama con las mismas sábanas, bien estiradas, y avisa a la oficina."],
+      avoid: ["No laves ropa a menos que la oficina lo pida.", "No te sientes ni te acuestes en la cama del cliente."],
+      done: ["Hasta 3 camas con sábanas limpias", "Esquinas estiradas, sin arrugas", "Sábanas sucias donde pidió el cliente"] },
+
+    { t: "Botes de basura", lead: "Cada cuarto, cada bote.",
+      do: ["Vacía cada bote en tu bolsa de basura.",
+           "Si el bote está sucio, límpialo por dentro y por fuera.",
+           "Pon bolsa nueva (usa las del cliente si tiene, o las nuestras).",
+           "Saca la basura al bote de afuera si el cliente lo permite."],
+      done: ["Todos los botes vaciados", "Todos con bolsa nueva"] },
+
+    { t: "Escaleras y pisos (siempre al final)", lead: "Todo lo de arriba ya está hecho. Ahora el polvo está en el piso. Hora de quitarlo.",
+      do: ["Escaleras: aspira desde el escalón de arriba hacia abajo. Usa la boquilla fina en las esquinas de cada escalón.",
+           "Alfombras y tapetes: aspira todo, bordes con la boquilla fina.",
+           "Pisos duros: aspira o barre primero, luego trapea.",
+           "Trapea desde la esquina más lejana hacia la puerta, para nunca pisar el piso mojado.",
+           "Cambia el agua del trapeador en cuanto se vea sucia."],
+      avoid: ["Madera y laminado: trapeador solo húmedo. Nunca dejes agua encharcada.", "Nunca vuelvas a pisar el piso limpio y mojado."],
+      done: ["Escaleras aspiradas, esquinas incluidas", "Todos los pisos aspirados y/o trapeados", "Sin huellas en pisos limpios"] },
+
+    { t: "Revisión final y despedida", lead: "Mira cada cuarto desde la puerta, de arriba hacia abajo, como lo verá el cliente.",
+      do: ["Recorre todos los cuartos. Mira arriba, luego el medio, luego abajo. Arregla lo que faltó.",
+           "Deja luces, persianas y puertas como las encontraste.",
+           "Recoge TODO tu material. Nunca olvides un trapo o una botella.",
+           "Toma fotos del después si la oficina lo pide.",
+           "Si el cliente está, muéstrale lo más destacado y pregunta: “¿Hay algo que quiera que retoque?”",
+           "Cierra con llave y pon la alarma como indicó el cliente. Manda mensaje a la oficina: trabajo terminado."],
+      tip: "Deja la casa oliendo fresco y con aspecto terminado: toallas dobladas, cojines esponjados, sillas acomodadas.",
+      done: ["Todos los cuartos revisados de arriba hacia abajo", "No dejé nada mío", "Casa cerrada como se indicó", "Oficina avisada"] }
+  ]
+}
+};
+
+/* Cloth color code — from the Top&Shine manual: one pair of colors per area (wet + dry) */
+
+/* ---------- one page = one cleaning type + one audience ----------
+   PAGE (set by build.py): { key, audience: "cleaner"|"client"|"trainer", service, langs, name: {lang: "..."}, label: {lang: "..."} }
+   DATA: { lang: { title, intro, steps } }, META (cleaner pages only), SCORE (trainer page only) */
+const VIEW_UI = {
+  en: { steps: "Step by step", all: "Full guide", copy: "Copy text", copied: "Copied. Paste it anywhere.", copyFail: "Copy is blocked here. The text is selected: press Ctrl+C (or ⌘C).", prep: "Before we arrive", notInc: "Not part of this service", good: "Good to know" },
+  pt: { steps: "Passo a passo", all: "Guia completo", copy: "Copiar texto", copied: "Copiado. Cole onde quiser.", copyFail: "A cópia está bloqueada aqui. O texto está selecionado: aperte Ctrl+C (ou ⌘C)." },
+  es: { steps: "Paso a paso", all: "Guía completa", copy: "Copiar texto", copied: "Copiado. Pégalo donde quieras.", copyFail: "Copiar está bloqueado aquí. El texto está seleccionado: presiona Ctrl+C (o ⌘C)." }
+};
+const store = {
+  get(k, d) { try { const v = localStorage.getItem("tsp:" + PAGE.key + ":" + k); return v === null ? d : JSON.parse(v); } catch (e) { return d; } },
+  set(k, v) { try { localStorage.setItem("tsp:" + PAGE.key + ":" + k, JSON.stringify(v)); } catch (e) {} }
+};
+const esc = s => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+const savedLang = store.get("lang", PAGE.langs[0]);
+const state = { service: PAGE.service, lang: PAGE.langs.includes(savedLang) ? savedLang : PAGE.langs[0], step: 0, mode: store.get("mode", "steps") === "all" ? "all" : "steps" };
+let checks = store.get("checks", {});
+const app = document.getElementById("app");
+const VU = () => Object.assign({}, VIEW_UI.en, VIEW_UI[state.lang]);
+
+/* client pages always offer the upgrades table before "Our promise" */
+if (PAGE.audience === "client" && typeof UPGRADES_STEP !== "undefined")
+  Object.values(DATA).forEach(d => { if (!d.steps.some(s => s.upgrades)) d.steps.splice(d.steps.length - 1, 0, UPGRADES_STEP); });
+
+function renderHeader() {
+  document.getElementById("pname").textContent = PAGE.name[state.lang] || PAGE.name.en;
+  document.getElementById("plabel").textContent = PAGE.label[state.lang] || PAGE.label.en;
+  document.title = (PAGE.name.en) + " " + PAGE.label.en;
+  document.getElementById("langs").innerHTML = PAGE.langs.length > 1 ? PAGE.langs.map(l =>
+    `<button class="lang" type="button" data-lang="${l}" aria-pressed="${state.lang === l}">${l.toUpperCase()}</button>`).join("") : "";
+}
+
+function bandHTML(b, L) {
+  if (!b || !b.length) return "";
+  return `<div class="band-wrap" data-nocopy><div class="band" aria-label="${esc(L.band)}">${L.bands.map((n, i) => `<span class="${b.includes(i) ? "on" : ""}">${esc(n)}</span>`).join("")}</div><div class="band-cap">${esc(L.band)}</div></div>`;
+}
+const list = (items, ordered) => `<${ordered ? "ol" : "ul"}>${items.map(i => `<li>${esc(i)}</li>`).join("")}</${ordered ? "ol" : "ul"}>`;
+function checkList(key, items) {
+  return `<ul class="checks">${items.map((it, i) => {
+    const id = `${key}-${i}`;
+    return `<li><label><input type="checkbox" id="c-${id}" data-check="${id}" ${checks[id] ? "checked" : ""}><span>${esc(it)}</span></label></li>`;
+  }).join("")}</ul>`;
+}
+
+function stepBody(idx, s, L) {
+  const lang = state.lang, V = VU();
+  let h = "";
+  if (PAGE.audience === "cleaner") {
+    const meta = META[idx];
+    if (s.do) h += `<div class="blk do"><h3>${icon("list")}${L.do}</h3>${list(s.do, true)}</div>`;
+    if (meta.colors) h += clothHTML(lang) + extrasCleanerHTML(lang);
+    if (s.tools) h += `<div class="blk"><h3>${icon("kit")}${L.tools}</h3><div class="chips">${s.tools.map(t => `<span>${esc(t)}</span>`).join("")}</div></div>`;
+    const side = [];
+    if (s.avoid) side.push(`<div class="blk avoid"><h3>${icon("warn")}${L.avoid}</h3>${list(s.avoid)}</div>`);
+    if (s.tip) side.push(`<div class="blk tip"><h3>${icon("bulb")}${L.tip}</h3><p>${esc(s.tip)}</p></div>`);
+    if (side.length) h += side.length > 1 ? `<div class="two">${side.join("")}</div>` : side[0];
+    if (s.done) h += `<div class="blk done"><h3>${icon("check")}${L.done}</h3>${checkList(meta.id, s.done)}</div>`;
+  } else if (PAGE.audience === "client") {
+    if (s.html) h += s.html;
+    if (s.groups) h += `<div class="two">${s.groups.map(([g, items]) => `<div class="blk do"><h3>${icon("check")}${esc(g)}</h3>${list(items)}</div>`).join("")}</div>`;
+    if (s.timeline) h += `<div class="blk do"><ol class="timeline">${s.timeline.map(([a, b]) => `<li><div><b>${esc(a)}</b><br><span class="small">${esc(b)}</span></div></li>`).join("")}</ol></div>`;
+    if (s.checklist) h += `<div class="blk done"><h3>${icon("check")}${V.prep}</h3>${checkList("prep", s.checklist)}</div>`;
+    if (s.upgrades) h += extrasClientHTML();
+    if (s.notIncluded) h += `<div class="blk avoid"><h3>${icon("x")}${V.notInc}</h3><ul>${s.notIncluded.map(t => `<li>${esc(t)}</li>`).join("")}</ul></div>`;
+    if (s.tip) h += `<div class="blk tip"><h3>${icon("bulb")}${V.good}</h3><p>${esc(s.tip)}</p></div>`;
+  } else {
+    if (s.blocks) s.blocks.forEach(b => {
+      const ic = { do: "list", tip: "bulb", avoid: "warn", done: "check" }[b.k];
+      const body = b.list ? (b.k === "done" ? checkList(`tr-${idx}-${b.h.length}`, b.list) : list(b.list, b.k === "do")) : `<p>${esc(b.p)}</p>`;
+      h += `<div class="blk ${b.k}"><h3>${icon(ic)}${esc(b.h)}</h3>${body}</div>`;
+    });
+    if (s.table) h += `<div class="blk do tbl"><table><thead><tr>${s.table.head.map(c => `<th>${esc(c)}</th>`).join("")}</tr></thead><tbody>${s.table.rows.map(r => `<tr>${r.map((c, i) => `<td>${i === 0 ? "<b>" + esc(c) + "</b>" : esc(c)}</td>`).join("")}</tr>`).join("")}</tbody></table></div>`;
+    if (s.scorecard) h += `<div class="blk do"><h3>${icon("clip")}${lang === "pt" ? "Itens avaliados" : "Items evaluated"}</h3>${checkList("score", SCORE[lang])}<div class="score" id="score" data-nocopy></div></div>`;
+  }
+  return h;
+}
+
+function stepArticle(D, idx, L) {
+  const s = D.steps[idx], n = D.steps.length;
+  const ic = PAGE.audience === "cleaner" ? META[idx].icon : s.icon;
+  const band = PAGE.audience === "cleaner" ? META[idx].band : null;
+  return `<article class="step" id="s${idx + 1}">
+    <div class="step-head">
+      <div class="step-ic" data-nocopy>${icon(ic)}</div>
+      <div>
+        <div class="step-kicker">${L.step} ${idx + 1} ${L.of} ${n}</div>
+        <h2>${esc(s.t)}</h2>
+      </div>
+      ${bandHTML(band, L)}
+    </div>
+    ${idx === 0 && state.mode === "steps" ? `<p class="lead"><b>${esc(D.intro)}</b></p>` : ""}
+    <p class="lead">${esc(s.lead)}</p>
+    <div class="blocks">${stepBody(idx, s, L)}</div>
+  </article>`;
+}
+
+function stepDone(D, i) {
+  if (PAGE.audience !== "cleaner") return false;
+  const d = D.steps[i].done; if (!d) return false;
+  return d.every((_, j) => checks[`${META[i].id}-${j}`]);
+}
+
+function render() {
+  renderHeader();
+  const L = UI[state.lang], V = VU(), D = DATA[state.lang], n = D.steps.length;
+  const idx = state.step = Math.min(state.step, n - 1);
+  const toolbar = `<div class="toolbar" data-nocopy>
+      <div class="seg" role="group" aria-label="View">
+        <button type="button" data-mode="steps" aria-pressed="${state.mode === "steps"}">${esc(V.steps)}</button>
+        <button type="button" data-mode="all" aria-pressed="${state.mode === "all"}">${esc(V.all)}</button>
+      </div>
+      <button class="btn small-btn" type="button" data-copy="1">${icon("clip")}${esc(V.copy)}</button>
+      <span class="small" id="copymsg" role="status"></span>
+    </div>`;
+  const savedNote = PAGE.audience !== "client" ? `<p class="small" style="margin-top:12px" data-nocopy>${L.saved} <button class="linkish" type="button" data-reset="1">${L.reset}</button></p>` : "";
+  if (state.mode === "all") {
+    app.innerHTML = `${toolbar}
+      <div class="all" id="copyzone">
+        <header class="all-head"><h1>${esc(D.title)}</h1><p class="lead">${esc(D.intro)}</p>
+          <ol class="toc" data-nocopy>${D.steps.map((s, i) => `<li><a href="#s${i + 1}">${esc(s.t)}</a></li>`).join("")}</ol></header>
+        ${D.steps.map((_, i) => stepArticle(D, i, L)).join("")}
+      </div>${savedNote}`;
+  } else {
+    app.innerHTML = `${toolbar}
+    <div class="track">
+      <aside class="rail" data-nocopy>
+        <h3>${esc(PAGE.audience === "cleaner" ? L.steps : L.sections)}</h3>
+        <ol>${D.steps.map((st, i) => `<li><button type="button" data-step="${i}" ${i === idx ? 'aria-current="step"' : ""}><span class="num ${stepDone(D, i) ? "done" : ""}">${stepDone(D, i) ? "✓" : i + 1}</span><span class="lbl">${esc(st.t)}</span></button></li>`).join("")}</ol>
+      </aside>
+      <section>
+        <div class="progress" aria-hidden="true"><i style="width:${((idx + 1) / n) * 100}%"></i></div>
+        <div id="copyzone">${stepArticle(D, idx, L)}</div>
+        <div class="pager" data-nocopy>
+          <button class="btn" type="button" data-nav="-1" ${idx === 0 ? "disabled" : ""}>← ${L.back}</button>
+          <span class="count">${idx + 1} / ${n}</span>
+          ${idx === n - 1
+            ? `<button class="btn primary" type="button" data-nav="first">${L.finish} ↺</button>`
+            : `<button class="btn primary" type="button" data-nav="1">${L.next} →</button>`}
+        </div>
+        ${savedNote}
+      </section>
+    </div>`;
+    const cur = app.querySelector('.rail [aria-current="step"]'), rail = cur && cur.closest("ol");
+    if (rail && rail.scrollWidth > rail.clientWidth) rail.scrollLeft = cur.parentElement.offsetLeft - rail.clientWidth / 2 + cur.offsetWidth / 2;
+  }
+  updateScore();
+}
+
+function updateScore() {
+  const el = document.getElementById("score"); if (!el || typeof SCORE === "undefined") return;
+  const lang = state.lang, total = SCORE[lang].length;
+  const got = SCORE[lang].filter((_, i) => checks[`score-${i}`]).length;
+  const pct = Math.round(got / total * 100), pass = pct >= 90;
+  const t = lang === "pt" ? { s: "Nota", p: "Aprovada", f: "Ainda não aprovada", r: "Mínimo 90%" } : { s: "Score", p: "Pass", f: "Not yet", r: "Minimum 90%" };
+  el.innerHTML = `<span>${t.s}</span><b>${pct}%</b><span class="small">${got} / ${total}</span><span class="verdict ${pass ? "pass" : "fail"}">${pass ? t.p : t.f}</span><span class="small">${t.r}</span>`;
+}
+
+function copyText() {
+  const zone = document.getElementById("copyzone"), msg = document.getElementById("copymsg"), V = VU();
+  document.body.classList.add("copying");
+  /* plain-text markers so pasted lists stay readable in WhatsApp, SMS or email */
+  const tmp = [];
+  zone.querySelectorAll("li").forEach(li => {
+    const cb = li.querySelector("input[type=checkbox]"), m = document.createElement("span");
+    m.textContent = cb ? (cb.checked ? "☑ " : "☐ ") : li.parentElement.tagName === "OL" ? ([...li.parentElement.children].indexOf(li) + 1) + ". " : "• ";
+    (li.querySelector("label > span, div") || li).prepend(m); tmp.push(m);
+  });
+  zone.querySelectorAll(".blk h3, .all-head ~ .step h2").forEach(h => { const br = document.createElement("br"); h.before(br); tmp.push(br); });
+  const head = state.mode === "steps" ? `${PAGE.name[state.lang] || PAGE.name.en} · ${PAGE.label[state.lang] || PAGE.label.en}\n\n` : "";
+  const text = head + zone.innerText.replace(/\n{3,}/g, "\n\n").trim();
+  tmp.forEach(n => n.remove());
+  document.body.classList.remove("copying");
+  const fallback = () => { const r = document.createRange(); r.selectNodeContents(zone); const sel = getSelection(); sel.removeAllRanges(); sel.addRange(r); msg.textContent = V.copyFail; };
+  try { navigator.clipboard.writeText(text).then(() => { msg.textContent = V.copied; }, fallback); } catch (e) { fallback(); }
+}
+
+document.addEventListener("click", e => {
+  const a = e.target.closest('.toc a');
+  if (a) { e.preventDefault(); document.querySelector(a.getAttribute("href"))?.scrollIntoView({ behavior: "smooth" }); return; }
+  const t = e.target.closest("button"); if (!t) return;
+  if (t.dataset.lang) { state.lang = t.dataset.lang; store.set("lang", state.lang); return render(); }
+  if (t.dataset.mode) { state.mode = t.dataset.mode; store.set("mode", state.mode); render(); return window.scrollTo({ top: 0 }); }
+  if (t.dataset.copy) return copyText();
+  if (t.dataset.step) { state.step = +t.dataset.step; render(); return window.scrollTo({ top: 0 }); }
+  if (t.dataset.nav) {
+    const n = DATA[state.lang].steps.length;
+    state.step = t.dataset.nav === "first" ? 0 : Math.max(0, Math.min(n - 1, state.step + +t.dataset.nav));
+    render(); return window.scrollTo({ top: 0 });
+  }
+  if (t.dataset.reset) { checks = {}; store.set("checks", checks); render(); }
+});
+document.addEventListener("change", e => {
+  const c = e.target.closest("[data-check]"); if (!c) return;
+  checks[c.dataset.check] = c.checked; store.set("checks", checks);
+  if (PAGE.audience === "cleaner" && state.mode === "steps") { const keep = window.scrollY; render(); window.scrollTo({ top: keep }); }
+  else updateScore();
+});
+document.addEventListener("keydown", e => {
+  if (state.mode !== "steps" || e.target.matches("input, textarea")) return;
+  if (e.key === "ArrowRight") document.querySelector('[data-nav="1"]')?.click();
+  if (e.key === "ArrowLeft") document.querySelector('[data-nav="-1"]')?.click();
+});
+render();
+
+</script>

@@ -1,0 +1,655 @@
+<title>Post-Construction Cleaning Client Guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@600;700&family=Nunito+Sans:opsz,wght@6..12,400;6..12,600;6..12,700&display=swap">
+<style>
+/* Layout: sticky top bar with track tabs + language pills; inside a track, a step rail on the left (chips on phones) and one step card with Back / Next. */
+:root {
+  /* Top&Shine brand blue #319FC2 (from the logo), deepened for text and buttons */
+  --brand: #319fc2;
+  --bg: #f2f8fb;
+  --surface: #ffffff;
+  --surface-2: #e4f1f7;
+  --ink: #0f3446;
+  --muted: #4f6b7a;
+  --line: #cfe2eb;
+  --accent: #1f7fa3;
+  --accent-ink: #ffffff;
+  --accent-soft: #d9eef7;
+  --shine: #319fc2;
+  --shine-soft: #e6f5fb;
+  --warn: #b4361f;
+  --warn-soft: #fbe5e0;
+  --ok: #2a7a3b;
+  --ok-soft: #dff1e2;
+  --font-display: "Roboto Condensed", "Arial Narrow", "Segoe UI", system-ui, sans-serif;
+  --font-body: "Nunito Sans", "Segoe UI", system-ui, sans-serif;
+  --radius: 14px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0b1c25; --surface: #112a37; --surface-2: #173543; --ink: #e6f3f8; --muted: #9bbccb;
+    --line: #24485a; --accent: #5cc3e6; --accent-ink: #062330; --accent-soft: #143c4d;
+    --shine: #5cc3e6; --shine-soft: #12313f; --warn: #ff8a73; --warn-soft: #3d1f1a;
+    --ok: #7fd18f; --ok-soft: #1a3522; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0b1c25; --surface: #112a37; --surface-2: #173543; --ink: #e6f3f8; --muted: #9bbccb;
+  --line: #24485a; --accent: #5cc3e6; --accent-ink: #062330; --accent-soft: #143c4d;
+  --shine: #5cc3e6; --shine-soft: #12313f; --warn: #ff8a73; --warn-soft: #3d1f1a;
+  --ok: #7fd18f; --ok-soft: #1a3522; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--ink); font-family: var(--font-body); font-size: 16px; line-height: 1.55; }
+h1, h2, h3 { font-family: var(--font-display); text-wrap: balance; margin: 0; line-height: 1.2; }
+button { font: inherit; color: inherit; cursor: pointer; }
+button:focus-visible, a:focus-visible, input:focus-visible { outline: 3px solid var(--brand); outline-offset: 2px; }
+
+/* top bar */
+.bar { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 10; background: var(--surface); border-bottom: 1px solid var(--line); }
+.bar-in { max-width: 1180px; margin: 0 auto; padding: 10px 16px; display: flex; flex-wrap: wrap; align-items: center; gap: 10px 18px; }
+.brand { display: flex; align-items: center; gap: 10px; background: none; border: 0; padding: 0; text-align: left; }
+.brand-mark { width: 42px; height: 42px; border-radius: 10px; background: #ffffff; display: grid; place-items: center; flex: none; border: 1px solid var(--line); }
+.brand-mark img { width: 32px; height: auto; }
+.brand b { font-family: var(--font-display); font-size: 19px; color: var(--brand); display: block; line-height: 1.1; }
+.brand small { color: var(--muted); font-size: 12px; }
+.tabs { display: flex; gap: 4px; flex-wrap: wrap; margin-left: auto; }
+.tab { border: 1px solid transparent; background: none; padding: 7px 12px; border-radius: 999px; font-weight: 700; font-size: 14px; color: var(--muted); }
+.tab[aria-current="true"] { background: var(--ink); color: var(--bg); }
+.tab:hover:not([aria-current="true"]) { background: var(--surface-2); color: var(--ink); }
+.langs { display: flex; gap: 4px; }
+.lang { border: 1px solid var(--line); background: var(--surface); padding: 5px 10px; border-radius: 8px; font-size: 13px; font-weight: 700; letter-spacing: .04em; }
+.svcs { display: flex; padding: 3px; gap: 2px; background: var(--surface-2); border-radius: 10px; }
+.svcs:empty { display: none; }
+.svc { border: 0; background: none; padding: 5px 12px; border-radius: 8px; font-size: 13px; font-weight: 700; color: var(--muted); }
+.svc[aria-pressed="true"] { background: var(--surface); color: var(--ink); box-shadow: 0 1px 2px rgba(0,0,0,.12); }
+.lang[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+
+.wrap { max-width: 1180px; margin: 0 auto; padding-inline: 16px; padding-block: 24px 64px; }
+
+/* home */
+.hero { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: 32px; align-items: center; padding-block: 12px 28px; }
+.eyebrow { text-transform: uppercase; letter-spacing: .12em; font-size: 12px; font-weight: 700; color: var(--accent); }
+.hero-brand { display: flex; align-items: center; gap: 16px; margin-bottom: 14px; }
+.hero-brand img { width: 96px; height: auto; background: #ffffff; border-radius: 16px; padding: 8px; border: 1px solid var(--line); }
+.hero h1 { font-weight: 700; letter-spacing: -.01em; font-size: clamp(30px, 5vw, 48px); margin-top: 8px; }
+.hero p { color: var(--muted); max-width: 58ch; font-size: 17px; }
+.tb { display: grid; gap: 6px; }
+.tb-row { display: grid; grid-template-columns: 74px 1fr; gap: 10px; align-items: center; font-size: 13px; }
+.tb-row span:first-child { color: var(--muted); font-weight: 700; text-align: right; }
+.tb-row i { display: block; height: 30px; border-radius: 8px; background: var(--brand); font-style: normal; color: #ffffff; font-weight: 700; padding: 5px 10px; font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.tb-row:nth-child(odd) i { background: var(--accent); }
+.tb-arrow { font-size: 12px; color: var(--muted); text-align: center; padding-left: 84px; }
+.cards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 22px; text-align: left; display: grid; gap: 10px; align-content: start; transition: transform .15s, border-color .15s; }
+.card:hover { transform: translateY(-2px); border-color: var(--accent); }
+.card .ic { width: 46px; height: 46px; border-radius: 12px; background: var(--accent-soft); display: grid; place-items: center; color: var(--accent); }
+.card h2 { font-size: 21px; }
+.card p { margin: 0; color: var(--muted); font-size: 15px; }
+.card .pills { display: flex; gap: 6px; flex-wrap: wrap; }
+.pill { font-size: 12px; font-weight: 700; padding: 3px 8px; border-radius: 6px; background: var(--surface-2); letter-spacing: .04em; }
+.card .go { font-weight: 700; color: var(--accent); }
+.svc-sec { display: grid; gap: 12px; margin-top: 24px; }
+.svc-head h2 { font-size: 22px; margin-top: 2px; }
+.svc-head p { margin: 4px 0 0; }
+.svc-sec .cards { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.scope-h { font-size: 15px; margin-bottom: 8px; }
+.scope .two ul { columns: 1; }
+.scope { margin-top: 28px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 22px; }
+.scope h2 { font-size: 18px; margin-bottom: 12px; }
+.scope ul { columns: 2; column-gap: 32px; margin: 0; padding-left: 20px; }
+.scope li { break-inside: avoid; margin-bottom: 4px; }
+
+/* track */
+.track { display: grid; grid-template-columns: 270px minmax(0, 1fr); gap: 24px; align-items: start; }
+.rail { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 80px); background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 10px; max-height: calc(100vh - 110px); overflow: auto; }
+.rail h3 { font-size: 13px; text-transform: uppercase; letter-spacing: .1em; color: var(--muted); padding: 8px 8px 10px; }
+.rail ol { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; }
+.rail button { width: 100%; display: flex; gap: 10px; align-items: center; text-align: left; background: none; border: 0; padding: 8px; border-radius: 10px; font-size: 14px; }
+.rail button:hover { background: var(--surface-2); }
+.rail button[aria-current="step"] { background: var(--accent-soft); font-weight: 700; }
+.num { flex: none; width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; font-size: 12px; font-weight: 700; background: var(--surface-2); font-variant-numeric: tabular-nums; }
+[aria-current="step"] .num { background: var(--accent); color: var(--accent-ink); }
+.num.done { background: var(--ok); color: var(--surface); }
+
+.progress { height: 6px; border-radius: 99px; background: var(--surface-2); overflow: hidden; margin-bottom: 16px; }
+.progress i { display: block; height: 100%; background: var(--accent); transition: width .25s; }
+.step { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: clamp(18px, 3vw, 32px); }
+.step-head { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 16px; align-items: start; }
+.step-ic { width: 56px; height: 56px; border-radius: 14px; background: var(--brand); color: #ffffff; display: grid; place-items: center; }
+.step-ic svg { width: 30px; height: 30px; }
+.step-kicker { font-size: 13px; color: var(--muted); font-weight: 700; letter-spacing: .06em; text-transform: uppercase; font-variant-numeric: tabular-nums; }
+.step h2 { font-size: clamp(22px, 3vw, 30px); margin-top: 2px; }
+.lead { color: var(--muted); font-size: 17px; margin: 10px 0 0; max-width: 65ch; }
+.band { display: grid; gap: 3px; width: 92px; }
+.band span { font-size: 11px; padding: 2px 6px; border-radius: 5px; background: var(--surface-2); color: var(--muted); text-align: center; font-weight: 700; }
+.band span.on { background: var(--brand); color: #ffffff; }
+.band-cap { font-size: 10px; color: var(--muted); text-align: center; text-transform: uppercase; letter-spacing: .08em; }
+.blocks { display: grid; gap: 16px; margin-top: 22px; }
+.blk { border-radius: 12px; padding: 16px 18px; background: var(--surface-2); min-width: 0; }
+.blk h3 { font-size: 15px; display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+.blk h3 svg { width: 18px; height: 18px; flex: none; }
+.blk.do { background: var(--surface); border: 1px solid var(--line); }
+.blk.avoid { background: var(--warn-soft); }
+.blk.avoid h3 { color: var(--warn); }
+.blk.tip { background: var(--shine-soft); }
+.blk.done { background: var(--ok-soft); }
+.blk.done h3 { color: var(--ok); }
+.blk ol, .blk ul { margin: 0; padding-left: 22px; display: grid; gap: 6px; }
+.blk.do ol { counter-reset: s; list-style: none; padding-left: 0; gap: 10px; }
+.blk.do ol li { counter-increment: s; display: grid; grid-template-columns: 30px minmax(0, 1fr); gap: 10px; }
+.blk.do ol li::before { content: counter(s); width: 26px; height: 26px; border-radius: 8px; background: var(--accent-soft); color: var(--accent); font-weight: 700; font-size: 13px; display: grid; place-items: center; font-variant-numeric: tabular-nums; }
+.blk p { margin: 0; }
+.blk p + p { margin-top: 8px; }
+.two { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; }
+.checks { list-style: none !important; padding-left: 0 !important; }
+.checks label { display: flex; gap: 10px; align-items: flex-start; cursor: pointer; }
+.checks input { width: 20px; height: 20px; margin-top: 2px; accent-color: var(--ok); flex: none; }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chips span { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 4px 10px; font-size: 14px; }
+.swatches { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; }
+.sw { border-radius: 10px; padding: 10px 12px; background: var(--surface); border: 1px solid var(--line); display: flex; gap: 10px; align-items: center; font-size: 14px; }
+.sw i { width: 22px; height: 22px; border-radius: 6px; flex: none; }
+.areas { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+.areas.two-col { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.area { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 12px; display: grid; gap: 10px; align-content: start; }
+.area h4, .sp-h { margin: 0; font-family: var(--font-display); font-size: 14px; }
+.sp-h { margin: 14px 0 8px; }
+.cl { display: grid; grid-template-columns: 30px minmax(0, 1fr); gap: 10px; align-items: start; font-size: 14px; line-height: 1.4; }
+.areas.two-col .cl { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; }
+.cl i { width: 30px; height: 30px; border-radius: 8px; border: 1px solid rgba(0,0,0,.12); }
+.tag { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); }
+.xgrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 8px; }
+.x { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; font-size: 14px; line-height: 1.45; min-width: 0; }
+.x.inc { border-color: var(--brand); }
+.xtag { display: inline-block; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; background: var(--accent-soft); color: var(--accent); padding: 1px 6px; border-radius: 5px; }
+.tbl { overflow-x: auto; }
+.tbl table { border-collapse: collapse; width: 100%; font-size: 14px; min-width: 520px; }
+.tbl th, .tbl td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+.tbl th { font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); }
+.score { display: flex; flex-wrap: wrap; gap: 12px 24px; align-items: center; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--line); }
+.score b { font-family: var(--font-display); font-size: 28px; font-variant-numeric: tabular-nums; }
+.verdict { font-weight: 700; padding: 4px 10px; border-radius: 8px; }
+.verdict.pass { background: var(--ok); color: var(--surface); }
+.verdict.fail { background: var(--warn); color: var(--surface); }
+.pager { display: flex; gap: 12px; justify-content: space-between; align-items: center; margin-top: 16px; }
+.btn { border: 1px solid var(--line); background: var(--surface); padding: 12px 18px; border-radius: 12px; font-weight: 700; display: inline-flex; gap: 8px; align-items: center; }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+.btn:disabled { opacity: .4; cursor: default; }
+.pager .count { color: var(--muted); font-size: 14px; font-variant-numeric: tabular-nums; }
+.small { font-size: 13px; color: var(--muted); }
+.linkish { background: none; border: 0; padding: 0; color: var(--accent); font-weight: 700; text-decoration: underline; font-size: 13px; }
+.timeline { list-style: none; padding: 0; margin: 0; display: grid; gap: 0; }
+.timeline li { display: grid; grid-template-columns: 28px minmax(0, 1fr); gap: 12px; padding-bottom: 14px; position: relative; }
+.timeline li::before { content: ""; width: 14px; height: 14px; border-radius: 50%; background: var(--accent); margin: 5px 0 0 7px; }
+.timeline li::after { content: ""; position: absolute; left: 13px; top: 22px; bottom: 0; width: 2px; background: var(--line); }
+.timeline li:last-child::after { display: none; }
+
+@media (max-width: 860px) {
+  .hero { grid-template-columns: 1fr; }
+  .cards, .svc-sec .cards { grid-template-columns: 1fr; }
+  .scope ul { columns: 1; }
+  .track { grid-template-columns: 1fr; }
+  .rail { position: static; max-height: none; padding: 8px; overflow: hidden; min-width: 0; }
+  .track > * { min-width: 0; }
+  .rail h3 { display: none; }
+  .rail ol { display: flex; overflow-x: auto; gap: 6px; padding-bottom: 4px; }
+  .rail li { flex: none; }
+  .rail button { white-space: nowrap; }
+  .rail button .lbl { display: none; }
+  .rail button[aria-current="step"] .lbl { display: inline; }
+  .two, .areas, .areas.two-col { grid-template-columns: 1fr; }
+  .step-head { grid-template-columns: auto minmax(0, 1fr); }
+  .band-wrap { grid-column: 1 / -1; min-width: 0; }
+  .band { width: 100%; grid-template-columns: repeat(5, minmax(0, 1fr)); }
+  .band span { padding: 2px 2px; overflow: hidden; text-overflow: ellipsis; }
+  .band-cap { grid-column: 1 / -1; text-align: left; }
+  .tabs { margin-left: 0; }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+
+/* single-page guides */
+.bar-in { justify-content: space-between; }
+.brand { cursor: default; }
+.toolbar { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; margin-bottom: 18px; }
+.seg { display: flex; padding: 3px; gap: 2px; background: var(--surface-2); border-radius: 10px; }
+.seg button { border: 0; background: none; padding: 7px 14px; border-radius: 8px; font-size: 14px; font-weight: 700; color: var(--muted); }
+.seg button[aria-pressed="true"] { background: var(--surface); color: var(--ink); box-shadow: 0 1px 2px rgba(0,0,0,.12); }
+.small-btn { padding: 8px 14px; font-size: 14px; }
+.small-btn svg { width: 16px; height: 16px; }
+.all { display: grid; gap: 18px; max-width: 920px; }
+.all-head { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: clamp(18px, 3vw, 32px); }
+.all-head h1 { font-size: clamp(26px, 4vw, 38px); }
+.toc { margin: 14px 0 0; padding-left: 22px; columns: 2; column-gap: 28px; }
+.toc li { break-inside: avoid; margin-bottom: 4px; }
+.toc a { color: var(--accent); font-weight: 600; }
+body.copying [data-nocopy] { display: none !important; }
+@media (max-width: 860px) { .toc { columns: 1; } }
+
+</style>
+<header class="bar">
+  <div class="bar-in">
+    <div class="brand">
+      <span class="brand-mark"><img src="data:image/png;base64,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" alt=""></span>
+      <span><b id="pname"></b><small>Top&amp;Shine · <span id="plabel"></span></small></span>
+    </div>
+    <div class="langs" id="langs" role="group" aria-label="Language"></div>
+  </div>
+</header>
+<main class="wrap" id="app"></main>
+<script>
+/* ---------- icons (24x24 stroke) ---------- */
+const ICONS = {
+  door: '<rect x="5" y="2.5" width="14" height="19" rx="1.5"/><circle cx="15" cy="12" r="1"/><path d="M2 21.5h20"/>',
+  star: '<path d="M12 3l2.6 5.6L20.5 9l-4.4 4 1.2 6L12 16.2 6.7 19l1.2-6L3.5 9l5.9-.4z"/>',
+  kit: '<path d="M4 9h16l-1.5 11h-13z"/><path d="M8 9V6a4 4 0 0 1 8 0v3"/><path d="M10 13h4"/>',
+  spray: '<path d="M8 8h6v13H6V11z"/><path d="M8 8V5h5l3-2"/><path d="M17 7h2M18 10h3M17 13h2"/>',
+  fan: '<circle cx="12" cy="12" r="2"/><path d="M12 10c0-5 2-7 5-7 1 3-1 6-5 7zM14 12c5 0 7 2 7 5-3 1-6-1-7-5zM12 14c0 5-2 7-5 7-1-3 1-6 5-7zM10 12c-5 0-7-2-7-5 3-1 6 1 7 5z"/>',
+  blinds: '<rect x="4" y="3" width="16" height="18" rx="1"/><path d="M4 7h16M4 11h16M4 15h16M12 3v18"/>',
+  frame: '<rect x="3" y="4" width="18" height="14" rx="1.5"/><path d="M3 15l5-5 4 4 3-3 6 6"/><circle cx="16" cy="8.5" r="1.3"/>',
+  base: '<path d="M3 3v15h18"/><path d="M3 14h18"/><path d="M8 14v4M14 14v4"/>',
+  kitchen: '<rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="2"/><circle cx="15.5" cy="8.5" r="2"/><path d="M3 13h18M8 17h8"/>',
+  bath: '<path d="M3 12h18v3a5 5 0 0 1-5 5H8a5 5 0 0 1-5-5z"/><path d="M6 12V5a2 2 0 0 1 4 0"/><path d="M7 20l-1 2M17 20l1 2"/>',
+  bed: '<path d="M3 18V7M3 13h18v5M21 13a3 3 0 0 0-3-3h-8v3"/><circle cx="6.5" cy="10.5" r="1.5"/>',
+  trash: '<path d="M4 6h16M9 6V4h6v2M6 6l1 15h10l1-15"/><path d="M10 10v7M14 10v7"/>',
+  floor: '<path d="M14 3l-4 10"/><path d="M6 13h8l3 8H3z"/><path d="M8 17v4M12 17v4"/>',
+  check: '<circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.5 2.5L16 9.5"/>',
+  info: '<circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.5"/>',
+  calendar: '<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/>',
+  list: '<path d="M9 6h12M9 12h12M9 18h12"/><path d="M4 6l1 1 2-2M4 12l1 1 2-2M4 18l1 1 2-2"/>',
+  x: '<circle cx="12" cy="12" r="9"/><path d="M9 9l6 6M15 9l-6 6"/>',
+  chat: '<path d="M4 5h16v11H9l-5 4z"/><path d="M8 10h8M8 13h5"/>',
+  users: '<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><circle cx="17" cy="9" r="2.5"/><path d="M16 14a5 5 0 0 1 6 5"/>',
+  route: '<circle cx="6" cy="18" r="2.5"/><circle cx="18" cy="6" r="2.5"/><path d="M8.5 18H15a3 3 0 0 0 0-6H9a3 3 0 0 1 0-6h6.5"/>',
+  shield: '<path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/><path d="M9 12l2 2 4-4"/>',
+  target: '<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/>',
+  award: '<circle cx="12" cy="9" r="6"/><path d="M8.5 14L7 22l5-3 5 3-1.5-8"/>',
+  clip: '<rect x="5" y="4" width="14" height="18" rx="2"/><path d="M9 4V2.5h6V4M9 10h6M9 14h6M9 18h3"/>',
+  warn: '<path d="M12 3l10 18H2z"/><path d="M12 10v5M12 18v.5"/>',
+  bulb: '<path d="M9 18h6M10 21h4"/><path d="M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.3 1 2.1h5c0-.8.4-1.6 1-2.1A6 6 0 0 0 12 3z"/>',
+  tool: '<path d="M14 6a4 4 0 0 0 5 5l-9 9a2 2 0 0 1-3-3z"/>',
+  home: '<path d="M3 11l9-8 9 8"/><path d="M5 10v11h14V10"/><path d="M10 21v-6h4v6"/>',
+  clean: '<path d="M12 2v6M12 16v6M2 12h6M16 12h6M5 5l3 3M16 16l3 3M19 5l-3 3M8 16l-3 3"/>'
+};
+const icon = (n, cls) => `<svg ${cls ? 'class="' + cls + '"' : ''} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICONS[n] || ICONS.info}</svg>`;
+
+/* ---------- interface words ---------- */
+const UI = {
+  en: { home: "Home", cleaners: "Cleaners", clients: "Clients", trainers: "Trainers & VA", back: "Back", next: "Next", step: "Step", of: "of", steps: "Steps", sections: "Sections",
+        do: "How to do it", avoid: "Never do this", tools: "What you need", done: "Done when…", tip: "Pro tip", why: "Why", band: "Work zone",
+        bands: ["Ceiling", "High", "Middle", "Low", "Floor"], reset: "Clear my checkmarks", finish: "Back to start", saved: "Your checkmarks stay on this device." },
+  pt: { home: "Início", cleaners: "Cleaners", clients: "Clientes", trainers: "Treinadores & VA", back: "Voltar", next: "Próximo", step: "Passo", of: "de", steps: "Passos", sections: "Seções",
+        do: "Como fazer", avoid: "Nunca faça isso", tools: "O que você precisa", done: "Pronto quando…", tip: "Dica de ouro", why: "Por quê", band: "Zona de trabalho",
+        bands: ["Teto", "Alto", "Meio", "Baixo", "Chão"], reset: "Limpar minhas marcações", finish: "Voltar ao início", saved: "Suas marcações ficam salvas neste aparelho." },
+  es: { home: "Inicio", cleaners: "Cleaners", clients: "Clientes", trainers: "Entrenadores & VA", back: "Atrás", next: "Siguiente", step: "Paso", of: "de", steps: "Pasos", sections: "Secciones",
+        do: "Cómo hacerlo", avoid: "Nunca hagas esto", tools: "Lo que necesitas", done: "Listo cuando…", tip: "Consejo de oro", why: "Por qué", band: "Zona de trabajo",
+        bands: ["Techo", "Alto", "Medio", "Bajo", "Piso"], reset: "Borrar mis marcas", finish: "Volver al inicio", saved: "Tus marcas se guardan en este aparato." }
+};
+
+const CLOTH = {
+  en: { title: "Cloth color code",
+    intro: "The result we promise includes never carrying dirt from one room to another: a bathroom cloth never goes to the kitchen. The logic is one pair of colors per area — one for wet, one for dry. Holding a cloth and can't remember where it came from? The color tells you.",
+    wet: "Wet", dry: "Dry",
+    areas: [
+      ["Kitchen", ["#2e9e4f", "Green", "Wet & greasy areas: sink, stovetop, inside the microwave"], ["#e9c42b", "Yellow", "Drying & polishing: counters, stainless steel, dry surfaces"]],
+      ["Bathroom", ["#e66aa5", "Pink", "Heavy cleaning & disinfecting: shower, tub, sink and toilet"], ["#1fb3c8", "Blue / turquoise", "Drying & polishing: mirror, fixtures, counter"]],
+      ["Other areas", ["#f08a24", "Orange", "Furniture, windows, sills, damp surfaces in bedrooms & living rooms"], ["#8a5cc7", "Purple", "Dusting & polishing: furniture, electronics, decor"]]
+    ],
+    spTitle: "Sponges",
+    sponges: [[["#e9c42b", "#2e9e4f"], "Yellow & green, double-sided: kitchen", "Yellow side for delicate surfaces. Green side only for stuck-on dirt on tough surfaces."],
+              [["#1fb3c8"], "Blue, non-abrasive: bathroom", "Tub, shower, shower glass, bathroom sink."]] },
+  pt: { title: "Código de cores dos panos",
+    intro: "O resultado contratado inclui não levar sujeira de um ambiente para outro: pano de banheiro nunca vai para a cozinha. A lógica é um par de cores por área — uma para o úmido, uma para o seco. Se você está com um pano na mão e não lembra de onde ele veio, a cor responde.",
+    wet: "Úmido", dry: "Seco",
+    areas: [
+      ["Cozinha", ["#2e9e4f", "Verde", "Área úmida e engordurada: pia, fogão, interior do micro-ondas"], ["#e9c42b", "Amarelo", "Secagem e polimento: bancada, aço inox e superfícies secas"]],
+      ["Banheiro", ["#e66aa5", "Rosa", "Limpeza pesada e desinfecção: box, banheira, pia e vaso sanitário"], ["#1fb3c8", "Azul / turquesa", "Secagem e polimento: espelho, metais e bancada"]],
+      ["Demais áreas", ["#f08a24", "Laranja", "Móvel, janela, parapeito e superfície úmida em quartos e salas"], ["#8a5cc7", "Roxo", "Pó e polimento: móvel, eletrônico e decoração"]]
+    ],
+    spTitle: "Esponjas",
+    sponges: [[["#e9c42b", "#2e9e4f"], "Amarela e verde (dupla face): cozinha", "Lado amarelo para superfície sensível; lado verde só para sujeira incrustada em superfície resistente."],
+              [["#1fb3c8"], "Azul, não abrasiva: banheiro", "Banheira, box, vidro do box, pia de banheiro."]] },
+  es: { title: "Código de colores de trapos",
+    intro: "El resultado contratado incluye no llevar suciedad de un cuarto a otro: un trapo del baño nunca va a la cocina. La lógica es un par de colores por área — uno para lo húmedo, uno para lo seco. Si tienes un trapo en la mano y no recuerdas de dónde vino, el color te responde.",
+    wet: "Húmedo", dry: "Seco",
+    areas: [
+      ["Cocina", ["#2e9e4f", "Verde", "Área húmeda y grasosa: fregadero, estufa, interior del microondas"], ["#e9c42b", "Amarillo", "Secado y pulido: mostrador, acero inoxidable y superficies secas"]],
+      ["Baño", ["#e66aa5", "Rosa", "Limpieza pesada y desinfección: regadera, tina, lavabo e inodoro"], ["#1fb3c8", "Azul / turquesa", "Secado y pulido: espejo, llaves y mostrador"]],
+      ["Demás áreas", ["#f08a24", "Naranja", "Muebles, ventanas, repisas y superficies húmedas en recámaras y salas"], ["#8a5cc7", "Morado", "Polvo y pulido: muebles, electrónicos y decoración"]]
+    ],
+    spTitle: "Esponjas",
+    sponges: [[["#e9c42b", "#2e9e4f"], "Amarilla y verde (doble cara): cocina", "Lado amarillo para superficies delicadas; lado verde solo para suciedad pegada en superficies resistentes."],
+              [["#1fb3c8"], "Azul, no abrasiva: baño", "Tina, regadera, vidrio de la regadera, lavabo del baño."]] }
+};
+function clothHTML(lang) {
+  const C = CLOTH[lang];
+  const sw = (c, n, u, tag) => `<div class="cl"><i style="background:${c}"></i><div><b>${esc(n)}</b> <span class="tag">${esc(tag)}</span><br><span class="small">${esc(u)}</span></div></div>`;
+  return `<div class="blk"><h3>${icon("tool")}${esc(C.title)}</h3><p class="small" style="margin-bottom:12px">${esc(C.intro)}</p>
+    <div class="areas">${C.areas.map(([a, w, d]) => `<div class="area"><h4>${esc(a)}</h4>${sw(w[0], w[1], w[2], C.wet)}${sw(d[0], d[1], d[2], C.dry)}</div>`).join("")}</div>
+    <h4 class="sp-h">${esc(C.spTitle)}</h4>
+    <div class="areas two-col">${C.sponges.map(([cs, n, u]) => `<div class="cl"><i style="background:${cs.length > 1 ? `linear-gradient(${cs[0]} 50%, ${cs[1]} 50%)` : cs[0]}"></i><div><b>${esc(n)}</b><br><span class="small">${esc(u)}</span></div></div>`).join("")}</div></div>`;
+}
+
+/* =========================================================
+   OPTIONAL UPGRADES — shared by every service
+   inc = services where the item is already part of the scope
+   ========================================================= */
+const EXTRAS = [
+  { price: "$50", inc: ["move", "post"],
+    en: { n: "Refrigerator interior care", d: "Shelves, drawers and walls inside the fridge cleaned.", c: "Take out one shelf of food at a time, wipe shelves, drawers and walls with the green cloth, dry with the yellow cloth and put everything back in the same place." },
+    pt: { n: "Geladeira por dentro", c: "Tire a comida de uma prateleira por vez, limpe prateleiras, gavetas e paredes com o pano verde, seque com o amarelo e coloque tudo de volta no mesmo lugar." },
+    es: { n: "Refrigerador por dentro", c: "Saca la comida de una repisa a la vez, limpia repisas, cajones y paredes con el trapo verde, seca con el amarillo y regresa todo al mismo lugar." } },
+  { price: "$30", inc: ["move", "post"],
+    en: { n: "Oven interior care", d: "Inside of the oven and racks degreased and scrubbed.", c: "Oven OFF and cool. Spray degreaser inside, let it sit, scrub with the green side of the sponge, wipe all residue out. Clean the racks in the sink." },
+    pt: { n: "Forno por dentro", c: "Forno DESLIGADO e frio. Borrife desengordurante por dentro, deixe agir, esfregue com o lado verde da esponja e tire todo o resíduo. Limpe as grades na pia." },
+    es: { n: "Horno por dentro", c: "Horno APAGADO y frío. Rocía desengrasante por dentro, deja actuar, talla con el lado verde de la esponja y quita todo el residuo. Limpia las parrillas en el fregadero." } },
+  { price: "$10 per window", inc: ["move", "post"],
+    en: { n: "Interior window care", d: "Inside glass, frame and sill of each window.", c: "Dust frame and sill first. Glass cleaner on the glass, wipe with the orange cloth, then polish with the purple cloth until there are no streaks." },
+    pt: { n: "Janelas por dentro", c: "Tire o pó do batente e do parapeito primeiro. Limpa-vidros no vidro, passe o pano laranja e dê polimento com o roxo até não ficar marca." },
+    es: { n: "Ventanas por dentro", c: "Quita el polvo del marco y la repisa primero. Limpiavidrios en el vidrio, pasa el trapo naranja y pule con el morado hasta que no queden marcas." } },
+  { price: "starting at $30", inc: [],
+    en: { n: "Patio / balcony care", d: "Swept, cobwebs removed, railings and outdoor furniture wiped.", c: "Remove cobwebs, wipe railings and outdoor furniture, then sweep the floor from the far side toward the door." },
+    pt: { n: "Pátio / varanda", c: "Tire as teias, limpe o guarda-corpo e os móveis de fora, depois varra do fundo em direção à porta." },
+    es: { n: "Patio / balcón", c: "Quita las telarañas, limpia el barandal y los muebles de afuera, luego barre desde el fondo hacia la puerta." } },
+  { price: "$15", inc: ["airbnb"],
+    en: { n: "Dishwashing", d: "Dishes in the sink washed, dried and put away or left on the rack.", c: "Wash, rinse and dry the dishes in the sink. Put them away if you know where they go, or leave them neat on the rack." },
+    pt: { n: "Lavar louça", c: "Lave, enxágue e seque a louça da pia. Guarde se souber onde vai, ou deixe arrumada no escorredor." },
+    es: { n: "Lavar platos", c: "Lava, enjuaga y seca los platos del fregadero. Guárdalos si sabes dónde van, o déjalos ordenados en el escurridor." } },
+  { price: "$30–$60", inc: [],
+    en: { n: "Garage sweeping", d: "Garage floor swept and cobwebs removed.", c: "Remove cobwebs, then sweep the garage floor from the back toward the door. Bag the debris." },
+    pt: { n: "Varrer a garagem", c: "Tire as teias, depois varra o chão da garagem do fundo em direção à porta. Ensaque a sujeira." },
+    es: { n: "Barrer el garaje", c: "Quita las telarañas, luego barre el piso del garaje desde el fondo hacia la puerta. Embolsa la basura." } },
+  { price: "$10 per room", inc: ["deluxe", "move", "post"],
+    en: { n: "Baseboards", d: "Baseboards dusted and hand wiped.", c: "Dust or vacuum first, then hand wipe with the damp orange cloth and dry with the purple cloth." },
+    pt: { n: "Rodapés", c: "Tire o pó ou aspire primeiro, depois passe o pano laranja úmido à mão e seque com o roxo." },
+    es: { n: "Zócalos", c: "Quita el polvo o aspira primero, luego limpia a mano con el trapo naranja húmedo y seca con el morado." } },
+  { price: "$10 each", inc: ["deluxe", "move"],
+    en: { n: "Blinds", d: "Slats dusted or vacuumed on both sides.", c: "Close the slats facing down, dust or vacuum top to bottom, turn them and repeat." },
+    pt: { n: "Persianas", c: "Feche as lâminas para baixo, tire o pó ou aspire de cima para baixo, vire e repita." },
+    es: { n: "Persianas", c: "Cierra las láminas hacia abajo, quita el polvo o aspira de arriba hacia abajo, voltéalas y repite." } },
+  { price: "Double the Standard Service rate", inc: [], only: "regular",
+    en: { n: "Deep Care Upgrade", d: "For Regular Cleaning: adds baseboards, blinds and detailed attention to your visit.", c: "Regular visit plus baseboards, blinds and detailed attention. Follow the Deluxe steps for those items." },
+    pt: { n: "Upgrade Deep Care", c: "Visita regular + rodapés, persianas e atenção aos detalhes. Siga os passos da Deluxe para esses itens." },
+    es: { n: "Mejora Deep Care", c: "Visita regular + zócalos, persianas y atención al detalle. Sigue los pasos de Deluxe para esos puntos." } }
+];
+const EXTRAS_UI = {
+  en: { h: "Extras (upgrades)", lead: "Only do an extra when it is on the job order. Items marked INCLUDED are already part of this service.", inc: "Included" },
+  pt: { h: "Extras (upgrades)", lead: "Só faça um extra quando ele estiver na ordem de serviço. Itens marcados INCLUÍDO já fazem parte deste serviço.", inc: "Incluído" },
+  es: { h: "Extras (mejoras)", lead: "Solo haz un extra cuando esté en la orden de trabajo. Los puntos marcados INCLUIDO ya son parte de este servicio.", inc: "Incluido" }
+};
+function extrasCleanerHTML(lang) {
+  const U = EXTRAS_UI[lang];
+  return `<div class="blk"><h3>${icon("star")}${esc(U.h)}</h3><p class="small" style="margin-bottom:10px">${esc(U.lead)}</p>
+    <div class="xgrid">${EXTRAS.filter(x => !x.only || x.only === state.service).map(x => { const inc = x.inc.includes(state.service);
+      return `<div class="x${inc ? " inc" : ""}"><b>${esc(x[lang].n)}</b>${inc ? ` <span class="xtag">${esc(U.inc)}</span>` : ""}<br><span class="small">${esc(x[lang].c)}</span></div>`; }).join("")}</div></div>`;
+}
+function extrasClientHTML() {
+  return `<div class="blk do tbl"><table><thead><tr><th>Upgrade</th><th>What it covers</th><th>Price</th></tr></thead><tbody>${EXTRAS.filter(x => !x.only || x.only === state.service).map(x => {
+    const inc = x.inc.includes(state.service);
+    return `<tr><td><b>${esc(x.en.n)}</b></td><td>${esc(x.en.d)}</td><td>${inc ? `<span class="xtag">Included in this service</span>` : esc(x.price)}</td></tr>`; }).join("")}</tbody></table></div>`;
+}
+const UPGRADES_STEP = { icon: "star", t: "Optional upgrades", lead: "Optional service upgrades are available, if needed. Add them when you book, or ask us before your visit.", upgrades: true,
+  tip: "Upgrades are done only when they are on your booking, so our team has the time to do them well." };
+
+
+const PAGE = {"key": "post-client", "audience": "client", "service": "post", "langs": ["en"], "name": {"en": "Post-Construction Cleaning"}, "label": {"en": "Client Guide"}};
+/* =========================================================
+   POST-CONSTRUCTION — CLIENT GUIDE (EN)
+   ========================================================= */
+const DATA = { en: {
+  title: "Post-Construction Cleaning · Client Guide",
+  intro: "Everything you need to know about your Post-Construction Cleaning.",
+  steps: [
+    { icon: "tool", t: "What is Post-Construction Cleaning?", lead: "A detailed clean after a renovation, remodel or new build. It removes the fine dust and residue that construction leaves behind, so your space is ready to move into, open or sell.",
+      html: `<div class="two">
+        <div class="blk do"><h3>${icon("users")}Who it's for</h3><ul><li>Homeowners after a renovation or remodel</li><li>Builders and contractors handing over a new home</li><li>Businesses opening a renovated space</li><li>Realtors preparing a newly finished property</li></ul></div>
+        <div class="blk tip"><h3>${icon("clean")}Why it's different</h3><p>Construction dust is very fine and settles everywhere, even inside cabinets and drawers. We work in passes: debris first, then dust from top to bottom, then detail, then a <b>final dust pass</b> to catch what settled while we worked.</p></div></div>
+        <div class="blk"><h3>${icon("shield")}Safe, careful work</h3><p>Our team wears protective equipment, checks the space for hazards before starting, and treats new surfaces with care. Before and after photos are taken of every room.</p></div>` },
+
+    { icon: "list", t: "What's included", lead: "Every item below is part of your Post-Construction Cleaning.",
+      groups: [
+        ["Debris & dust", ["Small debris picked up and bagged", "Dust removed top to bottom with HEPA vacuums", "Ceiling corners, vents and registers", "Walls dry dusted", "Light fixtures and ceiling fans"]],
+        ["Windows", ["Stickers and labels removed", "Paint specks removed from glass", "Glass, frames, tracks and sills cleaned"]],
+        ["Cabinets & kitchen", ["Cabinets and drawers cleaned inside and outside", "Shelves and countertops", "Appliances cleaned inside and outside", "Sink and faucet"]],
+        ["Bathrooms", ["Tubs and showers", "Toilets, sinks and counters", "Mirrors and fixtures", "Caulk and paint smears removed from fixtures"]],
+        ["Details", ["Doors and frames", "Baseboards", "Switch and outlet covers", "Railings and stairs"]],
+        ["Floors & final pass", ["Floors HEPA vacuumed", "Hard floors damp mopped twice", "Final dust pass on every horizontal surface", "Before and after photos"]]
+      ] },
+
+    { icon: "calendar", t: "How your cleaning day works", lead: "Here is what happens from the moment our team arrives.",
+      timeline: [
+        ["Safety check", "We confirm the site is released, put on protective equipment and check every room for hazards."],
+        ["Before photos", "Every room is photographed, including paint or caulk marks we will work on."],
+        ["Debris", "Small debris is picked up and bagged so floors are clear."],
+        ["First dust pass", "Ceilings, vents, frames, fixtures and walls are dusted with HEPA vacuums, top to bottom."],
+        ["Windows", "Labels, paint specks and dust are removed from glass, tracks and sills."],
+        ["Cabinets, kitchen & bathrooms", "Inside and outside of cabinets, appliances and every bathroom fixture."],
+        ["Details", "Doors, baseboards, covers, vents, railings and stairs."],
+        ["Floors", "Vacuumed, then mopped twice to remove the white construction film."],
+        ["Final pass & photos", "A last dust pass, a flashlight check and after photos of every room."]
+      ] },
+
+    { icon: "clip", t: "How to prepare", lead: "A few things make your Post-Construction Cleaning safe and complete.",
+      checklist: ["Make sure all construction work is finished, including paint touch-ups", "Have the contractor remove large debris, leftover materials and tools", "Make sure water and power are on", "Tell us which surfaces are new or delicate (natural stone, special finishes)", "Tell us if protective film on appliances or windows should stay on", "Give us access: key, lockbox code or site contact", "Change or schedule a change of your HVAC filters after the clean"],
+      tip: "If painters or other trades are still working, dust will come back. Book your clean for after the last trade leaves." },
+
+    { icon: "info", t: "What's not included", lead: "To keep the work safe and focused, these items are not part of Post-Construction Cleaning.",
+      notIncluded: ["Removing large construction waste, lumber, drywall or leftover materials", "Washing walls or removing paint from walls", "Exterior windows and pressure washing", "Air duct cleaning", "Carpet shampoo or steam cleaning", "Hazardous materials", "Heavy grout haze or acid treatments on stone", "Anything above 2-step ladder reach"],
+      tip: "A small amount of dust may keep falling from air vents for a few days after construction. That is normal and settles quickly." },
+
+    UPGRADES_STEP,
+
+    { icon: "shield", t: "Our promise", lead: "A space that is truly ready to use.",
+      html: `<div class="blk do"><h3>${icon("check")}What you can count on</h3><ol>
+        <li>A trained team using protective equipment and HEPA vacuums.</li>
+        <li>Careful work on new surfaces, with tests before scraping or using any product.</li>
+        <li>Before and after photos of every room.</li>
+        <li>If something was missed, tell us and we will make it right.</li></ol></div>` }
+  ]
+}};
+
+/* ---------- one page = one cleaning type + one audience ----------
+   PAGE (set by build.py): { key, audience: "cleaner"|"client"|"trainer", service, langs, name: {lang: "..."}, label: {lang: "..."} }
+   DATA: { lang: { title, intro, steps } }, META (cleaner pages only), SCORE (trainer page only) */
+const VIEW_UI = {
+  en: { steps: "Step by step", all: "Full guide", copy: "Copy text", copied: "Copied. Paste it anywhere.", copyFail: "Copy is blocked here. The text is selected: press Ctrl+C (or ⌘C).", prep: "Before we arrive", notInc: "Not part of this service", good: "Good to know" },
+  pt: { steps: "Passo a passo", all: "Guia completo", copy: "Copiar texto", copied: "Copiado. Cole onde quiser.", copyFail: "A cópia está bloqueada aqui. O texto está selecionado: aperte Ctrl+C (ou ⌘C)." },
+  es: { steps: "Paso a paso", all: "Guía completa", copy: "Copiar texto", copied: "Copiado. Pégalo donde quieras.", copyFail: "Copiar está bloqueado aquí. El texto está seleccionado: presiona Ctrl+C (o ⌘C)." }
+};
+const store = {
+  get(k, d) { try { const v = localStorage.getItem("tsp:" + PAGE.key + ":" + k); return v === null ? d : JSON.parse(v); } catch (e) { return d; } },
+  set(k, v) { try { localStorage.setItem("tsp:" + PAGE.key + ":" + k, JSON.stringify(v)); } catch (e) {} }
+};
+const esc = s => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+const savedLang = store.get("lang", PAGE.langs[0]);
+const state = { service: PAGE.service, lang: PAGE.langs.includes(savedLang) ? savedLang : PAGE.langs[0], step: 0, mode: store.get("mode", "steps") === "all" ? "all" : "steps" };
+let checks = store.get("checks", {});
+const app = document.getElementById("app");
+const VU = () => Object.assign({}, VIEW_UI.en, VIEW_UI[state.lang]);
+
+/* client pages always offer the upgrades table before "Our promise" */
+if (PAGE.audience === "client" && typeof UPGRADES_STEP !== "undefined")
+  Object.values(DATA).forEach(d => { if (!d.steps.some(s => s.upgrades)) d.steps.splice(d.steps.length - 1, 0, UPGRADES_STEP); });
+
+function renderHeader() {
+  document.getElementById("pname").textContent = PAGE.name[state.lang] || PAGE.name.en;
+  document.getElementById("plabel").textContent = PAGE.label[state.lang] || PAGE.label.en;
+  document.title = (PAGE.name.en) + " " + PAGE.label.en;
+  document.getElementById("langs").innerHTML = PAGE.langs.length > 1 ? PAGE.langs.map(l =>
+    `<button class="lang" type="button" data-lang="${l}" aria-pressed="${state.lang === l}">${l.toUpperCase()}</button>`).join("") : "";
+}
+
+function bandHTML(b, L) {
+  if (!b || !b.length) return "";
+  return `<div class="band-wrap" data-nocopy><div class="band" aria-label="${esc(L.band)}">${L.bands.map((n, i) => `<span class="${b.includes(i) ? "on" : ""}">${esc(n)}</span>`).join("")}</div><div class="band-cap">${esc(L.band)}</div></div>`;
+}
+const list = (items, ordered) => `<${ordered ? "ol" : "ul"}>${items.map(i => `<li>${esc(i)}</li>`).join("")}</${ordered ? "ol" : "ul"}>`;
+function checkList(key, items) {
+  return `<ul class="checks">${items.map((it, i) => {
+    const id = `${key}-${i}`;
+    return `<li><label><input type="checkbox" id="c-${id}" data-check="${id}" ${checks[id] ? "checked" : ""}><span>${esc(it)}</span></label></li>`;
+  }).join("")}</ul>`;
+}
+
+function stepBody(idx, s, L) {
+  const lang = state.lang, V = VU();
+  let h = "";
+  if (PAGE.audience === "cleaner") {
+    const meta = META[idx];
+    if (s.do) h += `<div class="blk do"><h3>${icon("list")}${L.do}</h3>${list(s.do, true)}</div>`;
+    if (meta.colors) h += clothHTML(lang) + extrasCleanerHTML(lang);
+    if (s.tools) h += `<div class="blk"><h3>${icon("kit")}${L.tools}</h3><div class="chips">${s.tools.map(t => `<span>${esc(t)}</span>`).join("")}</div></div>`;
+    const side = [];
+    if (s.avoid) side.push(`<div class="blk avoid"><h3>${icon("warn")}${L.avoid}</h3>${list(s.avoid)}</div>`);
+    if (s.tip) side.push(`<div class="blk tip"><h3>${icon("bulb")}${L.tip}</h3><p>${esc(s.tip)}</p></div>`);
+    if (side.length) h += side.length > 1 ? `<div class="two">${side.join("")}</div>` : side[0];
+    if (s.done) h += `<div class="blk done"><h3>${icon("check")}${L.done}</h3>${checkList(meta.id, s.done)}</div>`;
+  } else if (PAGE.audience === "client") {
+    if (s.html) h += s.html;
+    if (s.groups) h += `<div class="two">${s.groups.map(([g, items]) => `<div class="blk do"><h3>${icon("check")}${esc(g)}</h3>${list(items)}</div>`).join("")}</div>`;
+    if (s.timeline) h += `<div class="blk do"><ol class="timeline">${s.timeline.map(([a, b]) => `<li><div><b>${esc(a)}</b><br><span class="small">${esc(b)}</span></div></li>`).join("")}</ol></div>`;
+    if (s.checklist) h += `<div class="blk done"><h3>${icon("check")}${V.prep}</h3>${checkList("prep", s.checklist)}</div>`;
+    if (s.upgrades) h += extrasClientHTML();
+    if (s.notIncluded) h += `<div class="blk avoid"><h3>${icon("x")}${V.notInc}</h3><ul>${s.notIncluded.map(t => `<li>${esc(t)}</li>`).join("")}</ul></div>`;
+    if (s.tip) h += `<div class="blk tip"><h3>${icon("bulb")}${V.good}</h3><p>${esc(s.tip)}</p></div>`;
+  } else {
+    if (s.blocks) s.blocks.forEach(b => {
+      const ic = { do: "list", tip: "bulb", avoid: "warn", done: "check" }[b.k];
+      const body = b.list ? (b.k === "done" ? checkList(`tr-${idx}-${b.h.length}`, b.list) : list(b.list, b.k === "do")) : `<p>${esc(b.p)}</p>`;
+      h += `<div class="blk ${b.k}"><h3>${icon(ic)}${esc(b.h)}</h3>${body}</div>`;
+    });
+    if (s.table) h += `<div class="blk do tbl"><table><thead><tr>${s.table.head.map(c => `<th>${esc(c)}</th>`).join("")}</tr></thead><tbody>${s.table.rows.map(r => `<tr>${r.map((c, i) => `<td>${i === 0 ? "<b>" + esc(c) + "</b>" : esc(c)}</td>`).join("")}</tr>`).join("")}</tbody></table></div>`;
+    if (s.scorecard) h += `<div class="blk do"><h3>${icon("clip")}${lang === "pt" ? "Itens avaliados" : "Items evaluated"}</h3>${checkList("score", SCORE[lang])}<div class="score" id="score" data-nocopy></div></div>`;
+  }
+  return h;
+}
+
+function stepArticle(D, idx, L) {
+  const s = D.steps[idx], n = D.steps.length;
+  const ic = PAGE.audience === "cleaner" ? META[idx].icon : s.icon;
+  const band = PAGE.audience === "cleaner" ? META[idx].band : null;
+  return `<article class="step" id="s${idx + 1}">
+    <div class="step-head">
+      <div class="step-ic" data-nocopy>${icon(ic)}</div>
+      <div>
+        <div class="step-kicker">${L.step} ${idx + 1} ${L.of} ${n}</div>
+        <h2>${esc(s.t)}</h2>
+      </div>
+      ${bandHTML(band, L)}
+    </div>
+    ${idx === 0 && state.mode === "steps" ? `<p class="lead"><b>${esc(D.intro)}</b></p>` : ""}
+    <p class="lead">${esc(s.lead)}</p>
+    <div class="blocks">${stepBody(idx, s, L)}</div>
+  </article>`;
+}
+
+function stepDone(D, i) {
+  if (PAGE.audience !== "cleaner") return false;
+  const d = D.steps[i].done; if (!d) return false;
+  return d.every((_, j) => checks[`${META[i].id}-${j}`]);
+}
+
+function render() {
+  renderHeader();
+  const L = UI[state.lang], V = VU(), D = DATA[state.lang], n = D.steps.length;
+  const idx = state.step = Math.min(state.step, n - 1);
+  const toolbar = `<div class="toolbar" data-nocopy>
+      <div class="seg" role="group" aria-label="View">
+        <button type="button" data-mode="steps" aria-pressed="${state.mode === "steps"}">${esc(V.steps)}</button>
+        <button type="button" data-mode="all" aria-pressed="${state.mode === "all"}">${esc(V.all)}</button>
+      </div>
+      <button class="btn small-btn" type="button" data-copy="1">${icon("clip")}${esc(V.copy)}</button>
+      <span class="small" id="copymsg" role="status"></span>
+    </div>`;
+  const savedNote = PAGE.audience !== "client" ? `<p class="small" style="margin-top:12px" data-nocopy>${L.saved} <button class="linkish" type="button" data-reset="1">${L.reset}</button></p>` : "";
+  if (state.mode === "all") {
+    app.innerHTML = `${toolbar}
+      <div class="all" id="copyzone">
+        <header class="all-head"><h1>${esc(D.title)}</h1><p class="lead">${esc(D.intro)}</p>
+          <ol class="toc" data-nocopy>${D.steps.map((s, i) => `<li><a href="#s${i + 1}">${esc(s.t)}</a></li>`).join("")}</ol></header>
+        ${D.steps.map((_, i) => stepArticle(D, i, L)).join("")}
+      </div>${savedNote}`;
+  } else {
+    app.innerHTML = `${toolbar}
+    <div class="track">
+      <aside class="rail" data-nocopy>
+        <h3>${esc(PAGE.audience === "cleaner" ? L.steps : L.sections)}</h3>
+        <ol>${D.steps.map((st, i) => `<li><button type="button" data-step="${i}" ${i === idx ? 'aria-current="step"' : ""}><span class="num ${stepDone(D, i) ? "done" : ""}">${stepDone(D, i) ? "✓" : i + 1}</span><span class="lbl">${esc(st.t)}</span></button></li>`).join("")}</ol>
+      </aside>
+      <section>
+        <div class="progress" aria-hidden="true"><i style="width:${((idx + 1) / n) * 100}%"></i></div>
+        <div id="copyzone">${stepArticle(D, idx, L)}</div>
+        <div class="pager" data-nocopy>
+          <button class="btn" type="button" data-nav="-1" ${idx === 0 ? "disabled" : ""}>← ${L.back}</button>
+          <span class="count">${idx + 1} / ${n}</span>
+          ${idx === n - 1
+            ? `<button class="btn primary" type="button" data-nav="first">${L.finish} ↺</button>`
+            : `<button class="btn primary" type="button" data-nav="1">${L.next} →</button>`}
+        </div>
+        ${savedNote}
+      </section>
+    </div>`;
+    const cur = app.querySelector('.rail [aria-current="step"]'), rail = cur && cur.closest("ol");
+    if (rail && rail.scrollWidth > rail.clientWidth) rail.scrollLeft = cur.parentElement.offsetLeft - rail.clientWidth / 2 + cur.offsetWidth / 2;
+  }
+  updateScore();
+}
+
+function updateScore() {
+  const el = document.getElementById("score"); if (!el || typeof SCORE === "undefined") return;
+  const lang = state.lang, total = SCORE[lang].length;
+  const got = SCORE[lang].filter((_, i) => checks[`score-${i}`]).length;
+  const pct = Math.round(got / total * 100), pass = pct >= 90;
+  const t = lang === "pt" ? { s: "Nota", p: "Aprovada", f: "Ainda não aprovada", r: "Mínimo 90%" } : { s: "Score", p: "Pass", f: "Not yet", r: "Minimum 90%" };
+  el.innerHTML = `<span>${t.s}</span><b>${pct}%</b><span class="small">${got} / ${total}</span><span class="verdict ${pass ? "pass" : "fail"}">${pass ? t.p : t.f}</span><span class="small">${t.r}</span>`;
+}
+
+function copyText() {
+  const zone = document.getElementById("copyzone"), msg = document.getElementById("copymsg"), V = VU();
+  document.body.classList.add("copying");
+  /* plain-text markers so pasted lists stay readable in WhatsApp, SMS or email */
+  const tmp = [];
+  zone.querySelectorAll("li").forEach(li => {
+    const cb = li.querySelector("input[type=checkbox]"), m = document.createElement("span");
+    m.textContent = cb ? (cb.checked ? "☑ " : "☐ ") : li.parentElement.tagName === "OL" ? ([...li.parentElement.children].indexOf(li) + 1) + ". " : "• ";
+    (li.querySelector("label > span, div") || li).prepend(m); tmp.push(m);
+  });
+  zone.querySelectorAll(".blk h3, .all-head ~ .step h2").forEach(h => { const br = document.createElement("br"); h.before(br); tmp.push(br); });
+  const head = state.mode === "steps" ? `${PAGE.name[state.lang] || PAGE.name.en} · ${PAGE.label[state.lang] || PAGE.label.en}\n\n` : "";
+  const text = head + zone.innerText.replace(/\n{3,}/g, "\n\n").trim();
+  tmp.forEach(n => n.remove());
+  document.body.classList.remove("copying");
+  const fallback = () => { const r = document.createRange(); r.selectNodeContents(zone); const sel = getSelection(); sel.removeAllRanges(); sel.addRange(r); msg.textContent = V.copyFail; };
+  try { navigator.clipboard.writeText(text).then(() => { msg.textContent = V.copied; }, fallback); } catch (e) { fallback(); }
+}
+
+document.addEventListener("click", e => {
+  const a = e.target.closest('.toc a');
+  if (a) { e.preventDefault(); document.querySelector(a.getAttribute("href"))?.scrollIntoView({ behavior: "smooth" }); return; }
+  const t = e.target.closest("button"); if (!t) return;
+  if (t.dataset.lang) { state.lang = t.dataset.lang; store.set("lang", state.lang); return render(); }
+  if (t.dataset.mode) { state.mode = t.dataset.mode; store.set("mode", state.mode); render(); return window.scrollTo({ top: 0 }); }
+  if (t.dataset.copy) return copyText();
+  if (t.dataset.step) { state.step = +t.dataset.step; render(); return window.scrollTo({ top: 0 }); }
+  if (t.dataset.nav) {
+    const n = DATA[state.lang].steps.length;
+    state.step = t.dataset.nav === "first" ? 0 : Math.max(0, Math.min(n - 1, state.step + +t.dataset.nav));
+    render(); return window.scrollTo({ top: 0 });
+  }
+  if (t.dataset.reset) { checks = {}; store.set("checks", checks); render(); }
+});
+document.addEventListener("change", e => {
+  const c = e.target.closest("[data-check]"); if (!c) return;
+  checks[c.dataset.check] = c.checked; store.set("checks", checks);
+  if (PAGE.audience === "cleaner" && state.mode === "steps") { const keep = window.scrollY; render(); window.scrollTo({ top: keep }); }
+  else updateScore();
+});
+document.addEventListener("keydown", e => {
+  if (state.mode !== "steps" || e.target.matches("input, textarea")) return;
+  if (e.key === "ArrowRight") document.querySelector('[data-nav="1"]')?.click();
+  if (e.key === "ArrowLeft") document.querySelector('[data-nav="-1"]')?.click();
+});
+render();
+
+</script>
